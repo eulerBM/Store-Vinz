@@ -3,6 +3,7 @@ package com.example.vinz.controller;
 import com.example.vinz.dtp.loginRequestDTP;
 import com.example.vinz.dtp.registerRequestDTP;
 import com.example.vinz.response.responseLogin;
+import com.example.vinz.response.responseRegister;
 import com.example.vinz.service.loginService;
 import com.example.vinz.service.registerService;
 import jakarta.validation.Valid;
@@ -31,9 +32,9 @@ public class auth {
     }
 
     @PostMapping("register")
-    public ResponseEntity<?> Register(@Valid @RequestBody registerRequestDTP data){
+    public ResponseEntity<responseRegister> Register(@Valid @RequestBody registerRequestDTP data){
 
-        return registerservice.registerService(data);
+        return registerservice.RegisterService(data);
 
     }
 }

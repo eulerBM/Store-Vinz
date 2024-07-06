@@ -1,7 +1,12 @@
 package com.example.vinz.controller;
 
 import com.example.vinz.dtp.loginRequestDTP;
+import com.example.vinz.dtp.registerRequestDTP;
+import com.example.vinz.response.responseLogin;
+import com.example.vinz.service.loginService;
+import com.example.vinz.service.registerService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,17 +17,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("auth/")
 public class auth {
 
-    @PostMapping("login")
-    public ResponseEntity<loginRequestDTP> Login(@Valid @RequestBody loginRequestDTP data){
+    @Autowired
+    private loginService loginservice;
 
-        return ResponseEntity.ok(data);
+    @Autowired
+    private registerService registerservice;
+
+    @PostMapping("login")
+    public ResponseEntity<responseLogin> Login(@Valid @RequestBody loginRequestDTP data){
+
+        return loginservice.LoginService(data);
 
     }
 
     @PostMapping("register")
-    public ResponseEntity<String> Register(){
+    public ResponseEntity<?> Register(@Valid @RequestBody registerRequestDTP data){
 
-        return ResponseEntity.ok().build();
+        return registerservice.registerService(data);
 
     }
 }

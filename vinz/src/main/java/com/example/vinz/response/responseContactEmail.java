@@ -1,4 +1,6 @@
 package com.example.vinz.response;
 
-public record responseContactEmail( ) {
+import com.example.vinz.dtp.contactEmailRequestDTP;
+
+public record responseContactEmail(contactEmailRequestDTP data) {
 }

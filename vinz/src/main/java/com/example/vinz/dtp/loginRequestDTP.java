@@ -16,5 +16,4 @@ public record loginRequestDTP(
         String senha
 
 ) {
-
 }

@@ -10,6 +10,7 @@ public class contactEmailService {
 
     public ResponseEntity<responseContactEmail> contactemailservice(contactEmailRequestDTP data){
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new responseContactEmail(data));
+
     }
 }

@@ -24,5 +24,4 @@ public class contactMy {
         return contactEmailService.contactemailservice(data);
 
     }
-
 }

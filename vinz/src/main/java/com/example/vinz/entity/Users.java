@@ -1,6 +1,7 @@
 package com.example.vinz.entity;
 
 
+import com.example.vinz.dtp.registerRequestDTP;
 import jakarta.persistence.*;
 
 @Table(name = "users")
@@ -19,4 +20,13 @@ public class Users {
     @Column(length = 300, nullable = false)
     private String password;
 
+    public Users(registerRequestDTP data) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Users(registerRequestDTP data) {
+    }
 }

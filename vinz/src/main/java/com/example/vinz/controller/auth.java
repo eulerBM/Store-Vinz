@@ -32,7 +32,7 @@ public class auth {
     }
 
     @PostMapping("register")
-    public ResponseEntity<responseRegister> Register(@Valid @RequestBody registerRequestDTP data){
+    public ResponseEntity<?> Register(@Valid @RequestBody registerRequestDTP data){
 
         return registerservice.RegisterService(data);
 

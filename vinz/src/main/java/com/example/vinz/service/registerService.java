@@ -19,6 +19,7 @@ public class registerService {
     public ResponseEntity<?> RegisterService(registerRequestDTP data){
 
         try {
+
             Users user = new Users(data);
 
             repository.save(user);

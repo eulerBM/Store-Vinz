@@ -27,7 +27,9 @@ public class registerService {
             return ResponseEntity.ok(new responseRegister(data));
 
         } catch (Exception e){
+
             return ResponseEntity.badRequest().build();
+
         }
 
     }

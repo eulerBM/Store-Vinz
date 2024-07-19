@@ -22,17 +22,19 @@ public class loginService {
 
             Optional<Users> user = repository.findByEmail(data.email());
 
+            System.out.println(user.toString());
+
             if (user.isEmpty()){
 
                 return ResponseEntity.badRequest().build();
 
             }
 
-            var userGet = user.get();
+            Users userGet = user.get();
 
-            var userPassword = userGet.getPassword();
+            String userPassword = userGet.getPassword();
 
-            if (userPassword != data.senha()){
+            if (!userPassword.equals(data.senha())){
 
                 return ResponseEntity.badRequest().build();
 

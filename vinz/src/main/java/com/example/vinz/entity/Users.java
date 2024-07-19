@@ -3,6 +3,9 @@ package com.example.vinz.entity;
 
 import com.example.vinz.dtp.registerRequestDTP;
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Table(name = "users")
 @Entity(name = "users")
@@ -22,10 +25,15 @@ public class Users {
 
     public Users(registerRequestDTP data) {
 
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
         this.name = data.nome();
         this.email = data.email();
-        this.password = data.password();
+        this.password = passwordEncoder.encode(data.password());
 
+    }
+
+    public Users() {
     }
 
     public long getId() {
@@ -58,5 +66,15 @@ public class Users {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

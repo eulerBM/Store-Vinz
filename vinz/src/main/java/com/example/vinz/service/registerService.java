@@ -16,7 +16,9 @@ public class registerService {
     @Autowired
     private UserRepository repository;
 
-    public ResponseEntity<?> RegisterService(registerRequestDTP data){
+
+
+    public ResponseEntity<responseRegister> RegisterService(registerRequestDTP data){
 
         try {
 

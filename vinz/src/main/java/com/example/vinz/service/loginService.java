@@ -6,6 +6,7 @@ import com.example.vinz.repository.UserRepository;
 import com.example.vinz.response.responseLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,6 +16,9 @@ public class loginService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public ResponseEntity<responseLogin> LoginService(loginRequestDTP data){
 
@@ -31,10 +35,11 @@ public class loginService {
             }
 
             Users userGet = user.get();
+            String hashedPassword = userGet.getPassword();
+            boolean passwordMatches = passwordEncoder.matches(data.senha(), hashedPassword);
 
-            String userPassword = userGet.getPassword();
 
-            if (!userPassword.equals(data.senha())){
+            if (!passwordMatches){
 
                 return ResponseEntity.badRequest().build();
 
@@ -44,9 +49,8 @@ public class loginService {
 
         } catch (Exception e) {
 
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.internalServerError().build();
 
         }
-
     }
 }

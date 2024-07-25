@@ -26,8 +26,6 @@ public class loginService {
 
             Optional<Users> user = repository.findByEmail(data.email());
 
-            System.out.println(user.toString());
-
             if (user.isEmpty()){
 
                 return ResponseEntity.badRequest().build();

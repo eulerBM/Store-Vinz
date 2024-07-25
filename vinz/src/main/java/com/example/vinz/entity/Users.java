@@ -2,6 +2,7 @@ package com.example.vinz.entity;
 
 
 import com.example.vinz.dtp.registerRequestDTP;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,6 +23,7 @@ public class Users {
 
     @Column(length = 300, nullable = false)
     private String password;
+
 
     public Users(registerRequestDTP data) {
 

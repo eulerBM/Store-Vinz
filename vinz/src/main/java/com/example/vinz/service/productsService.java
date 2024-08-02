@@ -34,6 +34,20 @@ public class productsService {
         } catch (Exception e) {
 
             return ResponseEntity.internalServerError().build();
+
         }
     }
+
+    public ResponseEntity<?> ProductsCreate (){
+        return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<?> ProductsEdite (){
+        return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<?> ProductsDelete (){
+        return ResponseEntity.ok().build();
+    }
+
 }

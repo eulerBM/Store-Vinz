@@ -25,4 +25,12 @@ public class Product {
     @Column(length = 50, nullable = false)
     private LocalDateTime published_data;
 
+    public Product(UUID id_public, String name, String description, LocalDateTime published_data) {
+
+        this.id_public = UUID.randomUUID();
+        this.name = name;
+        this.description = description;
+        this.published_data = published_data;
+
+    }
 }

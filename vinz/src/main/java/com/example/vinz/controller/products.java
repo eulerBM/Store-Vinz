@@ -5,10 +5,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("products/")
 @RestController
@@ -17,17 +14,38 @@ public class products {
     @Autowired
     private productsService productsService;
 
-    @PostMapping("all")
+    @GetMapping("all")
     public ResponseEntity<?> ProductsAll () {
 
         return ResponseEntity.ok().build();
 
     }
 
-    @PostMapping("get/{id}")
+    @GetMapping("get/{id}")
     public ResponseEntity<?> ProductsGet (@PathVariable @Min(1) long id) {
 
         return productsService.ProductsGet(id);
 
     }
+
+    @PutMapping("criar-produto")
+    public ResponseEntity<?> ProductsCreate (){
+
+        return productsService.ProductsCreate();
+    }
+
+    @PostMapping("edite/{id}")
+    public ResponseEntity<?> ProductsEdite (){
+
+        return productsService.ProductsEdite();
+
+    }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<?> productsDelete (){
+
+        return productsService.ProductsDelete();
+    }
+
+
 }

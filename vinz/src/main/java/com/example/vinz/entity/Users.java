@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 @Table(name = "users")
 @Entity(name = "users")
 public class Users {
@@ -23,6 +25,9 @@ public class Users {
 
     @Column(length = 300, nullable = false)
     private String password;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Product> products;
 
 
     public Users(registerRequestDTP data) {

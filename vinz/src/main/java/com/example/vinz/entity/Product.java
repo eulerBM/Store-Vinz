@@ -25,6 +25,10 @@ public class Product {
     @Column(length = 50, nullable = false)
     private LocalDateTime published_data;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false)
+    private Users users;
+
     public Product(UUID id_public, String name, String description, LocalDateTime published_data) {
 
         this.id_public = UUID.randomUUID();

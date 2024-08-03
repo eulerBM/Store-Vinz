@@ -35,14 +35,14 @@ public class products {
     }
 
     @PostMapping("edite/{id}")
-    public ResponseEntity<?> ProductsEdite (){
+    public ResponseEntity<?> ProductsEdite (@PathVariable long id){
 
         return productsService.ProductsEdite();
 
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<?> productsDelete (){
+    public ResponseEntity<?> productsDelete (@PathVariable long id){
 
         return productsService.ProductsDelete();
     }

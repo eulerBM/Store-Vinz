@@ -1,6 +1,8 @@
 package com.example.vinz.controller;
 
+import com.example.vinz.dtp.productCreateDTP;
 import com.example.vinz.service.productsService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +31,15 @@ public class products {
     }
 
     @PutMapping("criar-produto")
-    public ResponseEntity<?> ProductsCreate (){
+    public ResponseEntity<?> ProductsCreate (@Valid productCreateDTP data){
 
-        return productsService.ProductsCreate();
+        return productsService.ProductsCreate(data);
     }
 
     @PostMapping("edite/{id}")
     public ResponseEntity<?> ProductsEdite (@PathVariable long id){
 
-        return productsService.ProductsEdite();
+        return productsService.ProductsEdite(id);
 
     }
 

@@ -26,10 +26,6 @@ public class Users {
     @Column(length = 300, nullable = false)
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Product> products;
-
-
     public Users(registerRequestDTP data) {
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

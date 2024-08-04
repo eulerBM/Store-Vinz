@@ -1,5 +1,6 @@
 package com.example.vinz.entity;
 
+import com.example.vinz.dtp.productCreateDTP;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -25,16 +26,15 @@ public class Product {
     @Column(length = 50, nullable = false)
     private LocalDateTime published_data;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false)
-    private Users users;
-
-    public Product(UUID id_public, String name, String description, LocalDateTime published_data) {
+    public Product(String name, String description) {
 
         this.id_public = UUID.randomUUID();
         this.name = name;
         this.description = description;
-        this.published_data = published_data;
+        this.published_data = LocalDateTime.now();
 
+    }
+
+    public Product(productCreateDTP data) {
     }
 }

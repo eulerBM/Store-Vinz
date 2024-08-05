@@ -65,8 +65,27 @@ public class productsService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> ProductsDelete (){
-        return ResponseEntity.ok().build();
-    }
+    public ResponseEntity<?> ProductsDelete (long id){
 
+        try {
+
+            Optional<Product> product = repositoryProduct.findById(id);
+
+            if (product.isEmpty()){
+
+                return ResponseEntity.notFound().build();
+
+            } else {
+
+                repositoryProduct.deleteById(id);
+
+                return ResponseEntity.ok().build();
+
+            }
+
+        } catch (Exception e) {
+
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }

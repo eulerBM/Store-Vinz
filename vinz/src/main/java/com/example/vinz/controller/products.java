@@ -44,9 +44,9 @@ public class products {
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<?> productsDelete (@PathVariable long id){
+    public ResponseEntity<?> productsDelete (@PathVariable @Min(1) long id){
 
-        return productsService.ProductsDelete();
+        return productsService.ProductsDelete(id);
     }
 
 

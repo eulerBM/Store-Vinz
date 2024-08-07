@@ -1,11 +1,9 @@
 package com.example.vinz.service;
 
-import ch.qos.logback.core.status.Status;
 import com.example.vinz.dtp.productCreateDTP;
+import com.example.vinz.dtp.productEditeDTP;
 import com.example.vinz.entity.Product;
-import com.example.vinz.entity.Users;
 import com.example.vinz.repository.ProductRepository;
-import com.example.vinz.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +59,26 @@ public class productsService {
         }
     }
 
-    public ResponseEntity<?> ProductsEdite (long id){
+    public ResponseEntity<?> ProductsEdite (long id, productEditeDTP data){
+
+        Optional<Product> product = repositoryProduct.findById(id);
+
+        if (product.isEmpty()){
+
+            return ResponseEntity.notFound().build();
+
+        } else {
+
+            Product productGet = product.get();
+
+            productGet.setName(data.nomeProduto());
+            productGet.setDescription(data.descriçãoProduto());
+
+            repositoryProduct.save(productGet);
+
+        }
+
+
         return ResponseEntity.ok().build();
     }
 

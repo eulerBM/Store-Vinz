@@ -1,6 +1,7 @@
 package com.example.vinz.controller;
 
 import com.example.vinz.dtp.productCreateDTP;
+import com.example.vinz.dtp.productEditeDTP;
 import com.example.vinz.service.productsService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -37,9 +38,9 @@ public class products {
     }
 
     @PostMapping("edite/{id}")
-    public ResponseEntity<?> ProductsEdite (@PathVariable long id){
+    public ResponseEntity<?> ProductsEdite (@Valid @PathVariable long id, productEditeDTP data){
 
-        return productsService.ProductsEdite(id);
+        return productsService.ProductsEdite(id, data);
 
     }
 

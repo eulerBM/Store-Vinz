@@ -33,6 +33,5 @@ public class registerService {
             return ResponseEntity.badRequest().build();
 
         }
-
     }
 }

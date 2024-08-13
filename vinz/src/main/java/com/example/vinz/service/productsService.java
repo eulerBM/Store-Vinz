@@ -4,6 +4,7 @@ import com.example.vinz.dtp.productCreateDTP;
 import com.example.vinz.dtp.productEditeDTP;
 import com.example.vinz.entity.Product;
 import com.example.vinz.repository.ProductRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,16 +25,17 @@ public class productsService {
 
         try {
 
-            Optional<Product> product = repositoryUser.findById(id);
+            Optional<Product> product = repositoryProduct.findById(id);
 
             if (product.isEmpty()){
 
                 return ResponseEntity.notFound().build();
 
+            } else {
+
+                return ResponseEntity.status(HttpStatus.OK).build();
+
             }
-
-            return ResponseEntity.status(HttpStatus.OK).build();
-
 
         } catch (Exception e) {
 
@@ -45,10 +47,13 @@ public class productsService {
     public ResponseEntity<HttpStatus> ProductsCreate (productCreateDTP data){
 
         try {
+            System.out.println(data);
 
-            Product product = new Product(data);
+            Product productModel = new Product(data);
 
-            repositoryProduct.save(product);
+            System.out.println(productModel.getName());
+
+            repositoryProduct.save(productModel);
 
             return ResponseEntity.status(HttpStatus.CREATED).build();
 
@@ -77,7 +82,6 @@ public class productsService {
             repositoryProduct.save(productGet);
 
         }
-
 
         return ResponseEntity.ok().build();
     }

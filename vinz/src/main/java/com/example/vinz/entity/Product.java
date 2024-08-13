@@ -14,7 +14,6 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(unique = true)
     private UUID id_public;
 
     @Column(length = 200, nullable = false)
@@ -26,6 +25,18 @@ public class Product {
     @Column(length = 50, nullable = false)
     private LocalDateTime published_data;
 
+    public Product() {
+    }
+
+    public Product(productCreateDTP data) {
+
+        this.id_public = UUID.randomUUID();
+        this.name = data.name();
+        this.description = data.description();
+        this.published_data = LocalDateTime.now();
+
+    }
+
     public Product(String name, String description) {
 
         this.id_public = UUID.randomUUID();
@@ -33,9 +44,6 @@ public class Product {
         this.description = description;
         this.published_data = LocalDateTime.now();
 
-    }
-
-    public Product(productCreateDTP data) {
     }
 
     public String getName() {

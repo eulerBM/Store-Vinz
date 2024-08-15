@@ -1,10 +1,10 @@
 package com.example.vinz.service;
 
+import com.example.vinz.dto.InfosUserDTO;
 import com.example.vinz.dtp.productCreateDTP;
 import com.example.vinz.dtp.productEditeDTP;
 import com.example.vinz.entity.Product;
 import com.example.vinz.repository.ProductRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class productsService {
     @Autowired
     private ProductRepository repositoryProduct;
 
-    public ResponseEntity<HttpStatus> ProductsGet (long id) {
+    public ResponseEntity<InfosUserDTO> ProductsGet (long id) {
 
         try {
 
@@ -33,7 +33,11 @@ public class productsService {
 
             } else {
 
-                return ResponseEntity.status(HttpStatus.OK).build();
+                Product productGET = product.get();
+
+                InfosUserDTO userResponse = new InfosUserDTO(productGET);
+
+                return ResponseEntity.status(HttpStatus.OK).body(userResponse);
 
             }
 
@@ -47,11 +51,8 @@ public class productsService {
     public ResponseEntity<HttpStatus> ProductsCreate (productCreateDTP data){
 
         try {
-            System.out.println(data);
 
             Product productModel = new Product(data);
-
-            System.out.println(productModel.getName());
 
             repositoryProduct.save(productModel);
 
@@ -107,6 +108,7 @@ public class productsService {
         } catch (Exception e) {
 
             return ResponseEntity.internalServerError().build();
+
         }
     }
 }

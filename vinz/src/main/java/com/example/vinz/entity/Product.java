@@ -46,6 +46,18 @@ public class Product {
 
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public UUID getId_public() {
+        return id_public;
+    }
+
+    public LocalDateTime getPublished_data() {
+        return published_data;
+    }
+
     public String getName() {
         return name;
     }

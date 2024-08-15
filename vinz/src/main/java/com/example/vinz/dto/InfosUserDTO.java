@@ -23,5 +23,6 @@ public class InfosUserDTO {
         this.name = data.getName();
         this.description = data.getDescription();
         this.published_data =data.getPublished_data();
+
     }
 }

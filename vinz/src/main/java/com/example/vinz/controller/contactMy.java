@@ -22,6 +22,5 @@ public class contactMy {
     public ResponseEntity<responseContactEmail> ContactEmail(@Valid @RequestBody contactEmailRequestDTP data){
 
         return contactEmailService.contactemailservice(data);
-
     }
 }

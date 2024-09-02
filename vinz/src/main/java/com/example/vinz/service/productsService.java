@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,7 +22,23 @@ public class productsService {
     @Autowired
     private ProductRepository repositoryProduct;
 
-    public ResponseEntity<InfosUserDTO> ProductsGet (long id) {
+    public ResponseEntity<?> ProductsAll (){
+
+        try {
+
+            List<Product> product = repositoryProduct.findAll();
+
+            return ResponseEntity.ok().body(product);
+
+        } catch (Exception e) {
+
+            return ResponseEntity.internalServerError().build();
+
+        }
+
+    }
+
+    public ResponseEntity<?> ProductsGet (long id) {
 
         try {
 
@@ -35,9 +52,7 @@ public class productsService {
 
                 Product productGET = product.get();
 
-                InfosUserDTO userResponse = new InfosUserDTO(productGET);
-
-                return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(productGET);
 
             }
 
@@ -77,8 +92,17 @@ public class productsService {
 
             Product productGet = product.get();
 
-            productGet.setName(data.nomeProduto());
-            productGet.setDescription(data.descriçãoProduto());
+            if (data.nomeProduto() != null && !data.nomeProduto().trim().isEmpty()){
+
+                productGet.setName(data.nomeProduto());
+
+            }
+
+            if (data.descriçãoProduto() != null && !data.descriçãoProduto().trim().isEmpty()){
+
+                productGet.setDescription(data.descriçãoProduto());
+
+            }
 
             repositoryProduct.save(productGet);
 
@@ -113,3 +137,6 @@ public class productsService {
         }
     }
 }
+
+
+

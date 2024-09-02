@@ -1,5 +1,6 @@
 package com.example.vinz.controller;
 
+import com.example.vinz.dto.InfosUserDTO;
 import com.example.vinz.dtp.productCreateDTP;
 import com.example.vinz.dtp.productEditeDTP;
 import com.example.vinz.service.productsService;
@@ -21,7 +22,7 @@ public class products {
     @GetMapping("all")
     public ResponseEntity<?> ProductsAll () {
 
-        return ResponseEntity.ok().build();
+        return productsService.ProductsAll();
 
     }
 
@@ -36,6 +37,7 @@ public class products {
     public ResponseEntity<HttpStatus> ProductsCreate (@Valid @RequestBody productCreateDTP data){
 
         return productsService.ProductsCreate(data);
+
     }
 
     @PostMapping("edite/{id}")

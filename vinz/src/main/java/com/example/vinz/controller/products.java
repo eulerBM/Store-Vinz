@@ -37,13 +37,14 @@ public class products {
     public ResponseEntity<HttpStatus> ProductsCreate (@Valid @RequestBody productCreateDTP data){
 
         return productsService.ProductsCreate(data);
-
+/
     }
 
     @PostMapping("edite/{id}")
     public ResponseEntity<?> ProductsEdite (@Valid @PathVariable @RequestBody long id, productEditeDTP data){
 
         return productsService.ProductsEdite(id, data);
+
 
     }
 

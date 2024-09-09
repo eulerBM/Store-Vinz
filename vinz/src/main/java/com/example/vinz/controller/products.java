@@ -37,7 +37,7 @@ public class products {
     public ResponseEntity<HttpStatus> ProductsCreate (@Valid @RequestBody productCreateDTP data){
 
         return productsService.ProductsCreate(data);
-/
+
     }
 
     @PostMapping("edite/{id}")

@@ -1,9 +1,11 @@
 package com.example.vinz.controller;
 
+import com.example.vinz.dtp.ChangePasswordDTP;
 import com.example.vinz.dtp.loginRequestDTP;
 import com.example.vinz.dtp.registerRequestDTP;
 import com.example.vinz.response.responseLogin;
 import com.example.vinz.response.responseRegister;
+import com.example.vinz.service.changeUser;
 import com.example.vinz.service.loginService;
 import com.example.vinz.service.registerService;
 import jakarta.validation.Valid;
@@ -24,6 +26,9 @@ public class auth {
     @Autowired
     private registerService registerservice;
 
+    @Autowired
+    private changeUser changeuser;
+
     @PostMapping("login")
     public ResponseEntity<responseLogin> Login(@Valid @RequestBody loginRequestDTP data){
 
@@ -35,6 +40,13 @@ public class auth {
     public ResponseEntity<?> Register(@Valid @RequestBody registerRequestDTP data){
 
         return registerservice.RegisterService(data);
+
+    }
+
+    @PostMapping("change_Password")
+    public ResponseEntity<?> ChangePassword(@Valid @RequestBody ChangePasswordDTP data){
+
+        return changeuser.changePassword(data);
 
     }
 }

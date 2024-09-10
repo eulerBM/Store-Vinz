@@ -1,5 +1,6 @@
 package com.example.vinz.controller;
 
+import com.example.vinz.dtp.ChangeNameDTP;
 import com.example.vinz.dtp.ChangePasswordDTP;
 import com.example.vinz.dtp.loginRequestDTP;
 import com.example.vinz.dtp.registerRequestDTP;
@@ -47,6 +48,13 @@ public class auth {
     public ResponseEntity<?> ChangePassword(@Valid @RequestBody ChangePasswordDTP data){
 
         return changeuser.changePassword(data);
+
+    }
+
+    @PostMapping("change_Name")
+    public ResponseEntity<?> ChangeName (@Valid @RequestBody ChangeNameDTP data){
+
+        return changeuser.changeName(data);
 
     }
 }

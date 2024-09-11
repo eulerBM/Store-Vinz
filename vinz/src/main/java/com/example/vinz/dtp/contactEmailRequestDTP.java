@@ -9,7 +9,11 @@ public record contactEmailRequestDTP(
         @NotBlank(message = "O campo email não pode ser branco ! ")
         @Size(min = 1, max = 200, message = "O tamanho do email deve estar entre 1 e 200 caracteres")
         @Email(message = "E-mail invalido")
-        String email
+        String email,
+
+        @NotBlank(message = "O campo conteudo não pode ser branco ! ")
+        @Size(min = 1, max = 1500, message = "O tamanho do conteudo deve estar entre 1 e 1500 caracteres")
+        String content
 
 ) {
 }

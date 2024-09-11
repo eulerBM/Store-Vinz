@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("products/")
@@ -34,9 +35,9 @@ public class products {
     }
 
     @PutMapping("criar-produto")
-    public ResponseEntity<HttpStatus> ProductsCreate (@Valid @RequestBody productCreateDTP data){
+    public ResponseEntity<HttpStatus> ProductsCreate (@Valid @RequestBody productCreateDTP data, JwtAuthenticationToken token){
 
-        return productsService.ProductsCreate(data);
+        return productsService.ProductsCreate(data, token);
 
     }
 
@@ -44,7 +45,6 @@ public class products {
     public ResponseEntity<?> ProductsEdite (@Valid @PathVariable @RequestBody long id, productEditeDTP data){
 
         return productsService.ProductsEdite(id, data);
-
 
     }
 

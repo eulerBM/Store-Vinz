@@ -2,6 +2,7 @@ package com.example.vinz.service;
 
 import com.example.vinz.dtp.ChangeNameDTP;
 import com.example.vinz.dtp.ChangePasswordDTP;
+import com.example.vinz.dtp.DeleteUserDTP;
 import com.example.vinz.entity.Users;
 import com.example.vinz.repository.UserRepository;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -63,5 +64,22 @@ public class changeUser {
 
         return ResponseEntity.ok().build();
 
+    }
+
+    public ResponseEntity<?> deleteUser (long id, DeleteUserDTP data){
+
+        Optional<Users> user = repository.findById(id);
+
+        if (user.isEmpty()){
+
+            return ResponseEntity.notFound().build();
+
+        } else {
+
+            repository.deleteById(id);
+
+            return ResponseEntity.ok().build();
+
+        }
     }
 }

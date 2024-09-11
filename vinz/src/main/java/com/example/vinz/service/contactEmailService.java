@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class contactEmailService {
 
-    public ResponseEntity<responseContactEmail> contactemailservice(contactEmailRequestDTP data){
+    public ResponseEntity<?> contactemailservice(contactEmailRequestDTP data){
 
-        return ResponseEntity.ok(new responseContactEmail(data));
+        return ResponseEntity.ok().body(data);
 
     }
 }

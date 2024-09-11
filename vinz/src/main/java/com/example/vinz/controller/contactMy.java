@@ -19,7 +19,7 @@ public class contactMy {
     private contactEmailService contactEmailService;
 
     @PostMapping("email")
-    public ResponseEntity<responseContactEmail> ContactEmail(@Valid @RequestBody contactEmailRequestDTP data){
+    public ResponseEntity<?> ContactEmail(@Valid @RequestBody contactEmailRequestDTP data){
 
         return contactEmailService.contactemailservice(data);
 

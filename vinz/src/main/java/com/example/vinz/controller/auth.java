@@ -1,9 +1,6 @@
 package com.example.vinz.controller;
 
-import com.example.vinz.dtp.ChangeNameDTP;
-import com.example.vinz.dtp.ChangePasswordDTP;
-import com.example.vinz.dtp.loginRequestDTP;
-import com.example.vinz.dtp.registerRequestDTP;
+import com.example.vinz.dtp.*;
 import com.example.vinz.response.responseLogin;
 import com.example.vinz.response.responseRegister;
 import com.example.vinz.service.changeUser;
@@ -12,10 +9,7 @@ import com.example.vinz.service.registerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("auth/")
@@ -55,6 +49,13 @@ public class auth {
     public ResponseEntity<?> ChangeName (@Valid @RequestBody ChangeNameDTP data){
 
         return changeuser.changeName(data);
+
+    }
+
+    @DeleteMapping("delete_User/{id}")
+    public ResponseEntity<?> DeleteUser (@Valid @PathVariable @RequestBody long id, DeleteUserDTP data){
+
+        return changeuser.deleteUser(id, data);
 
     }
 }

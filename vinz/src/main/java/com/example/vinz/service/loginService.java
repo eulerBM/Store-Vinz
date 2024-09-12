@@ -4,21 +4,33 @@ import com.example.vinz.dtp.loginRequestDTP;
 import com.example.vinz.entity.Users;
 import com.example.vinz.repository.UserRepository;
 import com.example.vinz.response.responseLogin;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.time.Instant;
 import java.util.Optional;
 
 @Service
 public class loginService {
+
+    private static final Logger logger = LoggerFactory.getLogger(loginService.class);
 
     @Autowired
     private UserRepository repository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtEncoder jwtEncoder;
 
     public ResponseEntity<responseLogin> LoginService(loginRequestDTP data){
 
@@ -37,15 +49,28 @@ public class loginService {
             boolean passwordMatches = passwordEncoder.matches(data.senha(), hashedPassword);
 
 
-            if (!passwordMatches){
+            if (passwordMatches){
 
-                return ResponseEntity.badRequest().build();
+                var expiresIn = 500L;
+
+                var claims = JwtClaimsSet.builder()
+                        .issuer("storeVinz")
+                        .subject(String.valueOf(userGet.getIdPublic()))
+                        .issuedAt(Instant.now())
+                        .expiresAt(Instant.now().plusSeconds(expiresIn))
+                        .claim("scope", userGet.getRole().name())
+                        .build();
+
+                var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+
+                return ResponseEntity.ok(new responseLogin(jwtValue, expiresIn, userGet));
 
             }
 
-            return ResponseEntity.ok(new responseLogin(data));
+            return ResponseEntity.badRequest().build();
 
         } catch (Exception e) {
+            logger.error("Erro durante o login", e);
 
             return ResponseEntity.internalServerError().build();
 

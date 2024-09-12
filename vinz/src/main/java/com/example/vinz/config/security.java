@@ -42,11 +42,18 @@ public class security {
         http
                 .authorizeHttpRequests(authorize -> authorize
 
-                        .requestMatchers(HttpMethod.POST, "/user/v1/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/change_Password").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/auth/change_Name").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/delete_User/{id}").authenticated()
+
+                        .requestMatchers(HttpMethod.PUT, "/products/criar-produto").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/products/edite/{id}").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/products/delete/{id}").authenticated()
 
                         .anyRequest().permitAll())
 
                 .csrf(AbstractHttpConfigurer::disable)
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();

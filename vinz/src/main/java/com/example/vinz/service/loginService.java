@@ -63,7 +63,14 @@ public class loginService {
 
                 var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-                return ResponseEntity.ok(new responseLogin(jwtValue, expiresIn, userGet));
+                return ResponseEntity.ok(new responseLogin(jwtValue,
+                        expiresIn,
+                        userGet.getName(),
+                        userGet.getIdPrivate(),
+                        userGet.getIdPublic(),
+                        userGet.getEmail(),
+                        userGet.getRole(),
+                        userGet.getCreateAccount()));
 
             }
 

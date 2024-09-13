@@ -66,6 +66,14 @@ public class Users {
         }
     }
 
+    public LocalDateTime getCreateAccount() {
+        return createAccount;
+    }
+
+    public void setCreateAccount(LocalDateTime createAccount) {
+        this.createAccount = createAccount;
+    }
+
     public Users() {
     }
 

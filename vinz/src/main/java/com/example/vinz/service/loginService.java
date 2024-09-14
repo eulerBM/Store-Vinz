@@ -3,6 +3,7 @@ package com.example.vinz.service;
 import com.example.vinz.dtp.loginRequestDTP;
 import com.example.vinz.entity.Users;
 import com.example.vinz.repository.UserRepository;
+import com.example.vinz.response.dto.UserDTO;
 import com.example.vinz.response.responseLogin;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,14 +64,16 @@ public class loginService {
 
                 var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-                return ResponseEntity.ok(new responseLogin(jwtValue,
-                        expiresIn,
-                        userGet.getName(),
+                UserDTO userResponseDTO = new UserDTO(
                         userGet.getIdPrivate(),
                         userGet.getIdPublic(),
+                        userGet.getName(),
                         userGet.getEmail(),
                         userGet.getRole(),
-                        userGet.getCreateAccount()));
+                        userGet.getCreateAccount()
+                );
+
+                return ResponseEntity.ok(new responseLogin(jwtValue, expiresIn, userResponseDTO));
 
             }
 

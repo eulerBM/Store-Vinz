@@ -80,7 +80,6 @@ public class loginService {
             return ResponseEntity.badRequest().build();
 
         } catch (Exception e) {
-            logger.error("Erro durante o login", e);
 
             return ResponseEntity.internalServerError().build();
 

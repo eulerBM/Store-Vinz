@@ -66,20 +66,29 @@ public class changeUser {
 
     }
 
-    public ResponseEntity<?> deleteUser (long id, DeleteUserDTP data){
+    public ResponseEntity<?> deleteUser (long id, DeleteUserDTP data) {
 
-        Optional<Users> user = repository.findById(id);
+        try {
 
-        if (user.isEmpty()){
+            Optional<Users> user = repository.findById(id);
 
-            return ResponseEntity.notFound().build();
+            if (user.isEmpty()) {
 
-        } else {
+                return ResponseEntity.notFound().build();
 
-            repository.deleteById(id);
+            } else {
 
-            return ResponseEntity.ok().build();
+                repository.deleteById(id);
+
+                return ResponseEntity.ok().build();
+            }
+
+        } catch (Exception e) {
+
+            return ResponseEntity.internalServerError().body(e);
 
         }
+
     }
+
 }

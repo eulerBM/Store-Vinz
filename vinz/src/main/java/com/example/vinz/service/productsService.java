@@ -1,6 +1,5 @@
 package com.example.vinz.service;
 
-import com.example.vinz.dto.InfosUserDTO;
 import com.example.vinz.dtp.productCreateDTP;
 import com.example.vinz.dtp.productEditeDTP;
 import com.example.vinz.entity.Product;
@@ -33,7 +32,7 @@ public class productsService {
 
         } catch (Exception e) {
 
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().body(e);
 
         }
 
@@ -59,12 +58,12 @@ public class productsService {
 
         } catch (Exception e) {
 
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().body(e);
 
         }
     }
 
-    public ResponseEntity<HttpStatus> ProductsCreate (productCreateDTP data, JwtAuthenticationToken token){
+    public ResponseEntity<?> ProductsCreate (productCreateDTP data, JwtAuthenticationToken token){
 
         try {
 
@@ -76,40 +75,48 @@ public class productsService {
 
         } catch (Exception e) {
 
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().body(e);
 
         }
     }
 
     public ResponseEntity<?> ProductsEdite (long id, productEditeDTP data){
 
-        Optional<Product> product = repositoryProduct.findById(id);
+        try {
 
-        if (product.isEmpty()){
+            Optional<Product> product = repositoryProduct.findById(id);
 
-            return ResponseEntity.notFound().build();
+            if (product.isEmpty()){
 
-        } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não existe.");
 
-            Product productGet = product.get();
+            } else {
 
-            if (data.nomeProduto() != null && !data.nomeProduto().trim().isEmpty()){
+                Product productGet = product.get();
 
-                productGet.setName(data.nomeProduto());
+                if (data.nomeProduto() != null && !data.nomeProduto().trim().isEmpty()){
+
+                    productGet.setName(data.nomeProduto());
+
+                }
+
+                if (data.descriçãoProduto() != null && !data.descriçãoProduto().trim().isEmpty()){
+
+                    productGet.setDescription(data.descriçãoProduto());
+
+                }
+
+                repositoryProduct.save(productGet);
+
+                return ResponseEntity.status(HttpStatus.OK).body(productGet);
 
             }
 
-            if (data.descriçãoProduto() != null && !data.descriçãoProduto().trim().isEmpty()){
+        } catch (Exception e) {
 
-                productGet.setDescription(data.descriçãoProduto());
-
-            }
-
-            repositoryProduct.save(productGet);
+            return ResponseEntity.internalServerError().body(e);
 
         }
-
-        return ResponseEntity.ok().build();
 
     }
 
@@ -121,19 +128,19 @@ public class productsService {
 
             if (product.isEmpty()){
 
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item não encontrado.");
 
             } else {
 
                 repositoryProduct.deleteById(id);
 
-                return ResponseEntity.ok().build();
+                return ResponseEntity.status(HttpStatus.OK).body("Item excluido com sucesso.");
 
             }
 
         } catch (Exception e) {
 
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().body(e);
 
         }
     }

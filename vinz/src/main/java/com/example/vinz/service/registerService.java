@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 public class registerService {
@@ -16,7 +15,7 @@ public class registerService {
     @Autowired
     private UserRepository repository;
 
-    public ResponseEntity<responseRegister> RegisterService(registerRequestDTP data){
+    public ResponseEntity<?> RegisterService(registerRequestDTP data){
 
         try {
 
@@ -28,7 +27,7 @@ public class registerService {
 
         } catch (Exception e){
 
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.internalServerError().body(e);
 
         }
     }

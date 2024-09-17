@@ -9,6 +9,7 @@ import com.example.vinz.service.registerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,7 +26,7 @@ public class auth {
     private changeUser changeuser;
 
     @PostMapping("login")
-    public ResponseEntity<responseLogin> Login(@Valid @RequestBody loginRequestDTP data){
+    public ResponseEntity<?> Login(@Valid @RequestBody loginRequestDTP data){
 
         return loginservice.LoginService(data);
 
@@ -46,16 +47,16 @@ public class auth {
     }
 
     @PostMapping("change_Name")
-    public ResponseEntity<?> ChangeName (@Valid @RequestBody ChangeNameDTP data){
+    public ResponseEntity<?> ChangeName (@Valid @RequestBody ChangeNameDTP data, JwtAuthenticationToken token){
 
-        return changeuser.changeName(data);
+        return changeuser.changeName(data, token);
 
     }
 
     @DeleteMapping("delete_User/{id}")
-    public ResponseEntity<?> DeleteUser (@Valid @PathVariable @RequestBody long id, DeleteUserDTP data){
+    public ResponseEntity<?> DeleteUser (@Valid @PathVariable @RequestBody long id, DeleteUserDTP data, JwtAuthenticationToken token){
 
-        return changeuser.deleteUser(id, data);
+        return changeuser.deleteUser(id, data, token);
 
     }
 }

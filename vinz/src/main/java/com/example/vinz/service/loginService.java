@@ -7,6 +7,7 @@ import com.example.vinz.response.dto.UserDTO;
 import com.example.vinz.response.responseLogin;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -14,7 +15,6 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -33,7 +33,7 @@ public class loginService {
     @Autowired
     private JwtEncoder jwtEncoder;
 
-    public ResponseEntity<responseLogin> LoginService(loginRequestDTP data){
+    public ResponseEntity<?> LoginService(loginRequestDTP data){
 
         try {
 
@@ -41,7 +41,7 @@ public class loginService {
 
             if (user.isEmpty()){
 
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
             }
 
@@ -56,7 +56,7 @@ public class loginService {
 
                 var claims = JwtClaimsSet.builder()
                         .issuer("storeVinz")
-                        .subject(String.valueOf(userGet.getIdPublic()))
+                        .subject(String.valueOf(userGet.getIdPrivate()))
                         .issuedAt(Instant.now())
                         .expiresAt(Instant.now().plusSeconds(expiresIn))
                         .claim("scope", userGet.getRole().name())
@@ -77,11 +77,11 @@ public class loginService {
 
             }
 
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha incorreta.");
 
         } catch (Exception e) {
 
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().body(e);
 
         }
     }

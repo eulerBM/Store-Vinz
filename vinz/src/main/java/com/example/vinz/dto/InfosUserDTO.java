@@ -25,4 +25,5 @@ public class InfosUserDTO {
         this.published_data =data.getPublished_data();
 
     }
+
 }

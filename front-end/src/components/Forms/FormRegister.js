@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-function FormLogin () {
-
+function FormRegister() {
+    const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -14,9 +14,10 @@ function FormLogin () {
         
         try {
 
-            const response = await axios.post('http://localhost:8080/auth/login', {
+            const response = await axios.post('http://localhost:8080/auth/register', {
+                nome: nome,
                 email: email,
-                senha: senha
+                password: senha
             });
 
             if (response.status === 200) {
@@ -37,27 +38,32 @@ function FormLogin () {
             }
         }
     }
-
-    return (
+    
+    return(
 
         <form onSubmit={handleSubmit}>
 
-            <h1>Login</h1>
+        <h1>Register</h1>
 
-            <input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input type="text" name="nome" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
 
-            <br/>
+        <br/>
 
-            <input type="password" name="password" placeholder="Senha" value={senha} onChange={(e) => setSenha(e.target.value)} />
+        <input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
-            <br/>
+        <br/>
 
-            <button type="submit">Entrar</button>
+        <input type="password" name="password" placeholder="Senha" value={senha} onChange={(e) => setSenha(e.target.value)} />
 
-            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+        <br/>
+
+        <button type="submit">Cadastrar</button>
+
+        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
         </form>
-    )  
+
+    )
 }
 
-export default FormLogin;
+export default FormRegister;

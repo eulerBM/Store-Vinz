@@ -41,7 +41,7 @@ public class loginService {
 
             if (user.isEmpty()){
 
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("E-mail ou senha incorreta.");
 
             }
 
@@ -77,7 +77,7 @@ public class loginService {
 
             }
 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha incorreta.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("E-mail ou senha incorreta.");
 
         } catch (Exception e) {
 

@@ -40,6 +40,13 @@ public class auth {
 
     }
 
+    @PostMapping("user")
+    public ResponseEntity<?> User(@Valid @RequestBody registerRequestDTP data){
+
+        return registerservice.RegisterService(data);
+
+    }
+
     @PostMapping("change_Password")
     public ResponseEntity<?> ChangePassword(@Valid @RequestBody ChangePasswordDTP data){
 

@@ -1,10 +1,17 @@
-function Home () {
+import NavBar from "../components/Forms/NavBar";
 
+function Home () {
     return (
 
-        <h1>Pagina inicial</h1>
+        <div>
+
+            <NavBar />
+
+            <h1>Pagina inicial</h1>
+
+        </div>
         
-    )
+    );
 }
 
 export default Home;

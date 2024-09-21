@@ -42,17 +42,25 @@ function FormLogin () {
 
         <form onSubmit={handleSubmit}>
 
-            <h1>Login</h1>
+            <div class="row mb-3">
 
-            <input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <label for="inputEmail3" class="col-sm-1 col-form-label">Email</label>
+                <div class="col-sm-5">
+                    <input type="email" name='email' placeholder="Email" value={email} class="form-control" id="inputEmail3" onChange={(e) => setEmail(e.target.value)}/>
+                </div>
 
-            <br/>
+            </div>
 
-            <input type="password" name="password" placeholder="Senha" value={senha} onChange={(e) => setSenha(e.target.value)} />
+            <div class="row mb-3">
 
-            <br/>
+                <label for="inputPassword3" class="col-sm-1 col-form-label">Password</label>
+                <div class="col-sm-5">
+                    <input type="password" name="password" placeholder="Senha" value={senha} class="form-control" id="inputPassword3" onChange={(e) => setSenha(e.target.value)}/>
+                </div>
 
-            <button type="submit">Entrar</button>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Entrar</button>
 
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 

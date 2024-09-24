@@ -13,11 +13,31 @@ function App() {
 
     <Router>
       <Routes>
-        <Route path="/home" element={<ProtectedRoute />} />
+
+        {/* Rotas públicas */}
+        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/user" element={<User />} />
-        <Route path="/user/change_password" element={<ChangePassword />} />
+
+         {/* Rotas protegidas */}
+         <Route 
+          path="/user" 
+          element={
+            <ProtectedRoute>
+              <User />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/user/change_password" 
+          element={
+            <ProtectedRoute>
+              <ChangePassword />
+            </ProtectedRoute>
+          } 
+        />
+
       </Routes>
     </Router>
 

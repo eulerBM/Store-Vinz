@@ -23,7 +23,19 @@ function FormLogin () {
             
                 const data = response.data;
 
+                const { acessToken, expiresIn, user } = response.data;
+
+                if (!acessToken){
+
+                    return navigate('/login')
+
+                }
+
+                localStorage.setItem('token', acessToken);
+                localStorage.setItem('userInfo', JSON.stringify(user));
+
                 navigate('/home'); 
+
             }
         } catch (error) {
             

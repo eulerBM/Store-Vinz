@@ -1,10 +1,10 @@
 import './App.css';
-import Login from './pages/outh/Login';
+import Login from './components/pages/outh/Login';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
-import Register from './pages/outh/Register';
-import ChangePassword from './pages/outh/ChangePassword';
-import User from './pages/User';
+import Home from './components/pages/Home';
+import Register from './components/pages/outh/Register';
+import ChangePassword from './components/pages/outh/ChangePassword';
+import User from './components/pages/User';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {

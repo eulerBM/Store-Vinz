@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../../css/FormLogin.css';
 import axios from 'axios';
 
 function FormLogin () {
@@ -52,31 +53,29 @@ function FormLogin () {
 
     return (
 
-        <form onSubmit={handleSubmit}>
+        <div class="page">
 
-            <div class="row mb-3">
+            <form onSubmit={handleSubmit} class="formLogin">
 
-                <label for="inputEmail3" class="col-sm-1 col-form-label">Email</label>
-                <div class="col-sm-5">
-                    <input type="email" name='email' placeholder="Email" value={email} class="form-control" id="inputEmail3" onChange={(e) => setEmail(e.target.value)}/>
-                </div>
+                <h1>Login</h1>
+                <p>Digite os seus dados de acesso no campo abaixo.</p>
+                <label for="email">E-mail</label>
 
-            </div>
+                    <input type="email" name='email' placeholder="Digite seu e-mail" autofocus="true" value={email} onChange={(e) => setEmail(e.target.value)} />
 
-            <div class="row mb-3">
+                <label for="password">Senha</label>
 
-                <label for="inputPassword3" class="col-sm-1 col-form-label">Password</label>
-                <div class="col-sm-5">
-                    <input type="password" name="password" placeholder="Senha" value={senha} class="form-control" id="inputPassword3" onChange={(e) => setSenha(e.target.value)}/>
-                </div>
+                    <input type="password" name='password' placeholder="Digite seu e-mail" value={senha} onChange={(e) => setSenha(e.target.value)} />
 
-            </div>
+                <a href="/">Esqueci minha senha</a>
 
-            <button type="submit" class="btn btn-primary">Entrar</button>
+                    <input type="submit" value="Acessar" class="btn" />
 
-            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+                    {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
-        </form>
+            </form>
+
+        </div>
     )  
 }
 

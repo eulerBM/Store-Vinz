@@ -1,4 +1,5 @@
-import FormLogin from "../../components/Forms/FormLogin";
+import FormLogin from "../../Forms/FormLogin";
+
 
 function Login () {
     return (
@@ -6,7 +7,6 @@ function Login () {
         <FormLogin />
 
     )
-  
 
 }
 

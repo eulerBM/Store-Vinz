@@ -1,4 +1,4 @@
-import NavBar from "../components/Forms/NavBar";
+import NavBar from "../Forms/NavBar";
 
 function Home () {
     return (

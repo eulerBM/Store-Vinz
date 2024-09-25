@@ -11,14 +11,15 @@ function Logout () {
 
         navigate('/login');
 
+    }
+
     return (
 
-        <button onClick={handleLogout}>
+        <button class="nav-link" onClick={handleLogout}>
             Sair
         </button>
 
     );
-
 }
 
 export default Logout;

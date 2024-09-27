@@ -1,5 +1,6 @@
 import '../../css/HomeCss.css';
 import Logout from '../pages/outh/Logout';
+import { Link } from 'react-router-dom';
 
 function NavBar (){
     return (
@@ -12,18 +13,24 @@ function NavBar (){
 
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
 
-                <a class="navbar-brand" href="#">Store-Vinz</a>
+                <a class="navbar-brand">Store-Vinz</a>
 
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Principal</a>
+
+                    <Link class="nav-link active" aria-current="page" to="/">Principal</Link>
+
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Conta</a>
+                
+                    <Link class="nav-link" to="/conta">Conta</Link>
+                
                 </li>
                 <li class="nav-item">
+
                     <a><Logout/></a>
+
                 </li>
 
             </ul>

@@ -35,7 +35,7 @@ function FormLogin () {
                 localStorage.setItem('token', acessToken);
                 localStorage.setItem('userInfo', JSON.stringify(user));
 
-                navigate('/home'); 
+                navigate('/'); 
 
             }
         } catch (error) {

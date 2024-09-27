@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/pages/Home';
 import Register from './components/pages/outh/Register';
 import ChangePassword from './components/pages/outh/ChangePassword';
-import User from './components/pages/User';
+import Conta from './components/pages/Conta';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -15,16 +15,16 @@ function App() {
       <Routes>
 
         {/* Rotas públicas */}
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
          {/* Rotas protegidas */}
          <Route 
-          path="/user" 
+          path="/conta" 
           element={
             <ProtectedRoute>
-              <User />
+              <Conta />
             </ProtectedRoute>
           } 
         />

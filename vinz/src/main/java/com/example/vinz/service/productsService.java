@@ -144,6 +144,21 @@ public class productsService {
 
         }
     }
+
+    public ResponseEntity<?> SearchProductName(String productName) {
+
+        List<Product> product = repositoryProduct.findByNameContainingIgnoreCase(productName);
+
+        if (product.isEmpty()){
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item não encontrado");
+
+        } else {
+
+            return ResponseEntity.status(HttpStatus.OK).body(product);
+
+        }
+    }
 }
 
 

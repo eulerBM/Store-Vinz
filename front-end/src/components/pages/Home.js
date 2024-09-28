@@ -25,7 +25,7 @@ function Home () {
         };
 
         fetchProducts();
-    }, []); // O array vazio como segundo argumento faz com que o efeito seja executado apenas uma vez ao montar o componente
+    }, []); 
 
     return (
 

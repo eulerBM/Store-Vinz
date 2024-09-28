@@ -1,14 +1,10 @@
 package com.example.vinz.controller;
 
-import com.example.vinz.dto.InfosUserDTO;
 import com.example.vinz.dtp.productCreateDTP;
 import com.example.vinz.dtp.productEditeDTP;
 import com.example.vinz.service.productsService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +49,13 @@ public class products {
     public ResponseEntity<?> productsDelete (@PathVariable long id){
 
         return productsService.ProductsDelete(id);
+
+    }
+
+    @GetMapping("search")
+    public ResponseEntity<?> SearchProductName (@RequestParam("name") String productName){
+
+        return productsService.SearchProductName(productName);
 
     }
 }

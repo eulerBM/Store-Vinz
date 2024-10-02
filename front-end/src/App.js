@@ -6,6 +6,7 @@ import Register from './components/pages/outh/Register';
 import ChangePassword from './components/pages/outh/ChangePassword';
 import Conta from './components/pages/Conta';
 import ProtectedRoute from './components/ProtectedRoute';
+import Search from './components/pages/Search';
 
 function App() {
 
@@ -18,6 +19,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/product" element={<Search />} />
 
          {/* Rotas protegidas */}
          <Route 

@@ -1,33 +1,21 @@
 import '../../css/HomeCss.css';
 import Logout from '../pages/outh/Logout';
-import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import '../../css/FormLogin.css';
-import axios from 'axios';
 
 function NavBar() {
+
     const [searchTerm, setSearchTerm] = useState('');
-    const [results, setResults] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+  const navigate = useNavigate(); // Hook para navegação programática
 
-    const handleSearch = async (e) => {
-        e.preventDefault(); // Previne o comportamento padrão do formulário
-
-        setLoading(true);
-        setError(null); // Limpa qualquer erro anterior
-
-        try {
-            const response = await axios.get(`http://localhost:8080/products/search`, {
-                params: { name: searchTerm } // Muda o nome do parâmetro para 'name'
-            });
-            setResults(response.data); // Salva os resultados da busca
-        } catch (err) {
-            setError('Erro ao buscar resultados. Tente novamente mais tarde.');
-        } finally {
-            setLoading(false); // Finaliza o estado de carregamento
-        }
-    };
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      // Redireciona para a página de busca, passando o termo de busca como query param
+      navigate(`/search?name=${searchTerm}`);
+    }
+  };
 
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -51,33 +39,18 @@ function NavBar() {
                         </li>
                     </ul>
 
-                    {/* Formulário de busca */}
                     <form className="d-flex" role="search" onSubmit={handleSearch}>
-                        <input 
-                            className="form-control me-2" 
-                            type="search" 
-                            placeholder="Buscar..." 
-                            aria-label="Search"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)} // Atualiza o estado do termo de busca
+                        <input
+                        className="form-control me-2"
+                        type="search"
+                        placeholder="Buscar..."
+                        aria-label="Search"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                         />
-                        <button className="btn btn-outline-success" type="submit" disabled={loading}>
-                            {loading ? 'Buscando...' : 'Procurar'}
-                        </button>
+                        <button className="btn btn-outline-success" type="submit">Procurar</button>
                     </form>
                 </div>
-            </div>
-
-            {/* Exibição dos resultados */}
-            <div>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-                {results.length > 0 && (
-                    <ul>
-                        {results.map((result) => (
-                            <li key={result.id}>{result.name}</li> // Mostra o nome de cada resultado
-                        ))}
-                    </ul>
-                )}
             </div>
         </nav>
     );

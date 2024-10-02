@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("products/")
 @RestController
 public class products {
@@ -25,7 +24,7 @@ public class products {
     }
 
     @GetMapping("get/{id}")
-    public ResponseEntity<?> ProductsGet (@PathVariable long id) {
+    public ResponseEntity<?> ProductsGet (@RequestParam("id") @PathVariable long id) {
 
         return productsService.ProductsGet(id);
 

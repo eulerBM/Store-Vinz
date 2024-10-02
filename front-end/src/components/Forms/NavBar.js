@@ -1,21 +1,30 @@
 import '../../css/HomeCss.css';
 import Logout from '../pages/outh/Logout';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '../../css/FormLogin.css';
 
 function NavBar() {
-
     const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate(); // Hook para navegação programática
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate(); // Hook para navegação programática
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      // Redireciona para a página de busca, passando o termo de busca como query param
-      navigate(`/search?name=${searchTerm}`);
-    }
-  };
+    // Função para tratar a busca
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchTerm.trim()) {
+            // Redireciona para a página de busca com o termo de busca como query param
+            navigate(`/search?name=${searchTerm}`);
+        }
+    };
+
+    useEffect(() => {
+        // Verifica se o token existe no localStorage ou outro mecanismo de autenticação
+        const token = localStorage.getItem('token'); // Pode ser 'authToken', depende do que você usa
+        if (token) {
+            setIsLoggedIn(true);
+        }
+    }, []);
 
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -35,18 +44,24 @@ function NavBar() {
                             <Link className="nav-link" to="/conta">Conta</Link>
                         </li>
                         <li className="nav-item">
-                            <a><Logout /></a>
+                            <Link className="nav-link" to="/">Publicar</Link>
                         </li>
+
+                        {isLoggedIn && ( // Renderiza o Logout somente se o usuário estiver logado
+                            <li className="nav-item">
+                                <a><Logout /></a>
+                            </li>
+                        )}
                     </ul>
 
                     <form className="d-flex" role="search" onSubmit={handleSearch}>
                         <input
-                        className="form-control me-2"
-                        type="search"
-                        placeholder="Buscar..."
-                        aria-label="Search"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                            className="form-control me-2"
+                            type="search"
+                            placeholder="Buscar..."
+                            aria-label="Search"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                         />
                         <button className="btn btn-outline-success" type="submit">Procurar</button>
                     </form>

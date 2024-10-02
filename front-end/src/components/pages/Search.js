@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 
-function Search () {
+function Search() {
 
     const [searchParams] = useSearchParams();
     const [results, setResults] = useState([]);
@@ -15,54 +15,55 @@ function Search () {
     useEffect(() => {
 
         const fetchResults = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/products/search', {
+                    params: { name: searchTerm }
+                });
 
-        try {
-
-            const response = await axios.get('http://localhost:8080/products/search', {
-
-            params: { name: searchTerm }
-
-            });
-
-            setResults(response.data);
-
-        } catch (err) {
-
-            setError('Erro ao buscar os resultados');
-
-        } finally {
-
-            setLoading(false);
-
-        }
+                setResults(response.data);
+            } catch (err) {
+                setError('Erro ao buscar os resultados');
+            } finally {
+                setLoading(false);
+            }
         };
 
         if (searchTerm) {
-
             fetchResults();
-
         }
     }, [searchTerm]);
 
     if (loading) return <p>Carregando...</p>;
     if (error) return <p>{error}</p>;
 
-
-    
     return (
-
         <div>  
             <NavBar/>
-                <div>
-                    <h2>Resultados para: {searchTerm}</h2>
-                    <ul>
-                        {results.length > 0 ? (
-                        results.map((result) => <li key={result.id}>{result.name}</li>)
-                        ) : (
+            <div>
+                <h2>Resultados para: {searchTerm}</h2>
+                <ul style={{ listStyleType: 'none', padding: 0 }}>
+                    {results.length > 0 ? (
+                        results.map((result) => (
+                            <li key={result.id}>
+                                <div className="card" style={{ width: '18rem', marginBottom: '1rem' }}>
+                                    <img src={result.imageUrl || 'default.jpg'} className="card-img-top" alt={result.name} />
+                                    <div className="card-body">
+                                        <h5 className="card-title">{result.name}</h5>
+                                        <p className="card-text">
+                                            {result.description || 'Descrição não disponível'}
+                                        </p>
+                                        <a href={`/products/${result.id}`} className="btn btn-primary">
+                                            Ver mais
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        ))
+                    ) : (
                         <p>Nenhum resultado encontrado.</p>
-                        )}
-                    </ul>
-                </div>
+                    )}
+                </ul>
+            </div>
         </div>
     );
 }

@@ -51,7 +51,7 @@ public class security {
                         .requestMatchers(HttpMethod.DELETE, "/delete_user/{id}").authenticated()
 
 
-                        .requestMatchers(HttpMethod.PUT, "/products/criar-produto").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/products/criar").authenticated()
                         .requestMatchers(HttpMethod.POST, "/products/edite/{id}").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/products/delete/{id}").authenticated()
 
@@ -83,24 +83,6 @@ public class security {
     @Bean
     public JwtDecoder jwtDecoder(){
         return NimbusJwtDecoder.withPublicKey(publicKey).build();
-
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-
-        // Configurar o Cors Aqui tambem por questãoes de segurança...
-
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Permitir origem do front-end
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-        configuration.setExposedHeaders(Arrays.asList("Authorization"));
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
 
     }
 }

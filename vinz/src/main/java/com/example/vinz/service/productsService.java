@@ -67,9 +67,11 @@ public class productsService {
 
         try {
 
+            System.out.println("1");
             Product productModel = new Product(data);
-
+            System.out.print("2");
             repositoryProduct.save(productModel);
+            System.out.print("3");
 
             return ResponseEntity.status(HttpStatus.CREATED).build();
 

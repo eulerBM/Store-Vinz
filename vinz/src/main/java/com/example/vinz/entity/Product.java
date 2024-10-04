@@ -3,6 +3,7 @@ package com.example.vinz.entity;
 import com.example.vinz.dtp.productCreateDTP;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -22,6 +23,9 @@ public class Product {
     @Column(length = 500, nullable = false)
     private String description;
 
+    @Column(nullable = false)
+    private BigDecimal price;
+
     @Column(length = 50, nullable = false)
     private LocalDateTime published_data;
 
@@ -29,19 +33,20 @@ public class Product {
     }
 
     public Product(productCreateDTP data) {
+        System.out.println("Valor original do preço: " + data.price());
+        BigDecimal price;
+
+        try {
+            price = new BigDecimal(data.price());
+            System.out.println("Valor convertido para BigDecimal: " + price);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Preço inválido: " + data.price());
+        }
 
         this.id_public = UUID.randomUUID();
         this.name = data.name();
         this.description = data.description();
-        this.published_data = LocalDateTime.now();
-
-    }
-
-    public Product(String name, String description) {
-
-        this.id_public = UUID.randomUUID();
-        this.name = name;
-        this.description = description;
+        this.price = price;
         this.published_data = LocalDateTime.now();
 
     }
@@ -72,5 +77,13 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

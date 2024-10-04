@@ -7,6 +7,7 @@ import ChangePassword from './components/pages/outh/ChangePassword';
 import Conta from './components/pages/Conta';
 import ProtectedRoute from './components/ProtectedRoute';
 import Search from './components/pages/Search';
+import CreateProduct from './components/pages/CreateProduct';
 
 function App() {
 
@@ -28,6 +29,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Conta />
+            </ProtectedRoute>
+          } 
+        />
+
+          <Route 
+          path="/criar_produto" 
+          element={
+            <ProtectedRoute>
+              <CreateProduct />
             </ProtectedRoute>
           } 
         />

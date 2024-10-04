@@ -44,7 +44,7 @@ function NavBar() {
                             <Link className="nav-link" to="/conta">Conta</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/">Publicar</Link>
+                            <Link className="nav-link" to="/criar_produto">Publicar</Link>
                         </li>
 
                         {isLoggedIn && ( // Renderiza o Logout somente se o usuário estiver logado

@@ -37,34 +37,33 @@ function Search() {
     if (error) return <p>{error}</p>;
 
     return (
-        <div>  
-            <NavBar/>
-            <div>
-                <h2>Resultados para: {searchTerm}</h2>
-                <ul style={{ listStyleType: 'none', padding: 0 }}>
-                    {results.length > 0 ? (
-                        results.map((result) => (
-                            <li key={result.id}>
-                                <div className="card" style={{ width: '18rem', marginBottom: '1rem' }}>
-                                    <img src={result.imageUrl || 'default.jpg'} className="card-img-top" alt={result.name} />
-                                    <div className="card-body">
-                                        <h5 className="card-title">{result.name}</h5>
-                                        <p className="card-text">
-                                            {result.description || 'Descrição não disponível'}
-                                        </p>
-                                        <a href={`/products/${result.id}`} className="btn btn-primary">
-                                            Ver mais
-                                        </a>
-                                    </div>
+        <div>
+        <NavBar />
+        <div className="container">
+            <div className="row">
+                {results.length > 0 ? (
+                    results.map((result) => (
+                        <div key={result.id} className="col-md-4 mb-4">
+                            <div className="card" style={{ width: '18rem' }}>
+                                <img src={result.imageUrl || 'default.jpg'} className="card-img-top" alt={result.name} />
+                                <div className="card-body">
+                                    <h5 className="card-title">{result.name}</h5>
+                                    <p className="card-text">
+                                        {result.description || 'Descrição não disponível'}
+                                    </p>
+                                    <a href={`/products/${result.id}`} className="btn btn-primary">
+                                        Ver mais
+                                    </a>
                                 </div>
-                            </li>
-                        ))
-                    ) : (
-                        <p>Nenhum resultado encontrado.</p>
-                    )}
-                </ul>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <p>Nenhum resultado encontrado.</p>
+                )}
             </div>
         </div>
+    </div>
     );
 }
 

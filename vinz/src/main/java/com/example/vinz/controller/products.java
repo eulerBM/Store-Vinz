@@ -30,7 +30,7 @@ public class products {
 
     }
 
-    @PutMapping("criar-produto")
+    @PostMapping("criar")
     public ResponseEntity<?> ProductsCreate (@Valid @RequestBody productCreateDTP data, JwtAuthenticationToken token){
 
         return productsService.ProductsCreate(data, token);

@@ -3,6 +3,9 @@ package com.example.vinz.service;
 import com.example.vinz.dtp.productCreateDTP;
 import com.example.vinz.dtp.productEditeDTP;
 import com.example.vinz.entity.Product;
+import com.example.vinz.entity.Users;
+import com.example.vinz.repository.UserRepository;
+import com.example.vinz.utils.getIdToken;
 import com.example.vinz.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,10 +20,13 @@ import java.util.Optional;
 public class productsService {
 
     @Autowired
-    private ProductRepository repositoryUser;
+    private UserRepository repositoryUser;
 
     @Autowired
     private ProductRepository repositoryProduct;
+
+    @Autowired
+    private getIdToken getIdToken;
 
     public ResponseEntity<?> ProductsAll (){
 
@@ -67,11 +73,14 @@ public class productsService {
 
         try {
 
-            System.out.println("1");
             Product productModel = new Product(data);
-            System.out.print("2");
+
+            Long getTokenId = getIdToken.extrairTokenId(token);
+            Optional<Users> user = repositoryUser.findById(getTokenId);
+
+            productModel.setUsers(user);
+
             repositoryProduct.save(productModel);
-            System.out.print("3");
 
             return ResponseEntity.status(HttpStatus.CREATED).build();
 

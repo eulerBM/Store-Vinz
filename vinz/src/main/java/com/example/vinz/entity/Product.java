@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -29,8 +30,9 @@ public class Product {
     @Column(length = 50, nullable = false)
     private LocalDateTime published_data;
 
-    public Product() {
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Users users;
 
     public Product(productCreateDTP data) {
         System.out.println("Valor original do preço: " + data.price());
@@ -49,6 +51,17 @@ public class Product {
         this.price = price;
         this.published_data = LocalDateTime.now();
 
+    }
+
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
+    }
+
+    public Product() {
     }
 
     public long getId() {

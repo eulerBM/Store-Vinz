@@ -30,10 +30,6 @@ public class Product {
     @Column(length = 50, nullable = false)
     private LocalDateTime published_data;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Users users;
-
     public Product(productCreateDTP data) {
         System.out.println("Valor original do preço: " + data.price());
         BigDecimal price;
@@ -51,14 +47,6 @@ public class Product {
         this.price = price;
         this.published_data = LocalDateTime.now();
 
-    }
-
-    public Users getUsers() {
-        return users;
-    }
-
-    public void setUsers(Users users) {
-        this.users = users;
     }
 
     public Product() {

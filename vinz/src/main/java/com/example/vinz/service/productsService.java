@@ -75,11 +75,6 @@ public class productsService {
 
             Product productModel = new Product(data);
 
-            Long getTokenId = getIdToken.extrairTokenId(token);
-            Optional<Users> user = repositoryUser.findById(getTokenId);
-
-            productModel.setUsers(user);
-
             repositoryProduct.save(productModel);
 
             return ResponseEntity.status(HttpStatus.CREATED).build();

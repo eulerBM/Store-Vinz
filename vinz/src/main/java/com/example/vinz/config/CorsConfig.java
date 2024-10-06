@@ -21,6 +21,7 @@ public class CorsConfig {
                         .exposedHeaders("Authorization", "Link") // Headers expostos para o cliente
                         .allowCredentials(true) // Permitir envio de cookies
                         .maxAge(3600); // Tempo que as requisições podem ser armazenadas no cache do browser
+
             }
         };
     }

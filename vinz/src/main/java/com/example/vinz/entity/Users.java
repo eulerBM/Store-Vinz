@@ -39,9 +39,6 @@ public class Users {
     @Column(nullable = false)
     private LocalDateTime createAccount;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<Product> product;
-
     public Users(registerRequestDTP data) {
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

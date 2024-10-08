@@ -24,7 +24,7 @@ function FormRegister() {
             
                 const data = response.data;
 
-                navigate('/home'); 
+                navigate('/'); 
             }
         } catch (error) {
             

@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RequestMapping("products/")
 @RestController
 public class products {
@@ -24,7 +26,7 @@ public class products {
     }
 
     @GetMapping("get/{id}")
-    public ResponseEntity<?> ProductsGet (@RequestParam("id") @PathVariable long id) {
+    public ResponseEntity<?> ProductsGet (@RequestParam("id") @PathVariable UUID id) {
 
         return productsService.ProductsGet(id);
 

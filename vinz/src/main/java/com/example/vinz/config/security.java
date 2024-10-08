@@ -46,11 +46,10 @@ public class security {
         http
                 .authorizeHttpRequests(authorize -> authorize
 
+                        // Rotas que precisa de Autorização
                         .requestMatchers(HttpMethod.POST, "/auth/change_Password").authenticated()
                         .requestMatchers(HttpMethod.POST, "/auth/change_Name").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/delete_user/{id}").authenticated()
-
-
                         .requestMatchers(HttpMethod.POST, "/products/criar").authenticated()
                         .requestMatchers(HttpMethod.POST, "/products/edite/{id}").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/products/delete/{id}").authenticated()

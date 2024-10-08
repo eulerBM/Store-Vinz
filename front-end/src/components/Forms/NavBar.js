@@ -40,17 +40,28 @@ function NavBar() {
                         <li className="nav-item">
                             <Link className="nav-link active" aria-current="page" to="/">Principal</Link>
                         </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/conta">Conta</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/criar_produto">Publicar</Link>
-                        </li>
 
-                        {isLoggedIn && ( // Renderiza o Logout somente se o usuário estiver logado
-                            <li className="nav-item">
-                                <a><Logout /></a>
-                            </li>
+                        {isLoggedIn ? ( // Se estiver logado, exibe as opções de usuário logado
+                            <>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/conta">Conta</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/criar_produto">Publicar</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <a><Logout /></a>
+                                </li>
+                            </>
+                        ) : ( // Caso contrário, exibe os botões de Login e Registro
+                            <>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/login">Entrar</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/register">Registrar</Link>
+                                </li>
+                            </>
                         )}
                     </ul>
 

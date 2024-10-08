@@ -43,7 +43,7 @@ function Home () {
                                 <p className="card-text">
                                     {product.description || 'Descrição não disponível'}
                                 </p>
-                                <a href={`/products/${product.id}`} className="btn btn-primary">
+                                <a href={`/products/get/${product.id_public}`} className="btn btn-primary">
                                     Ver mais
                                 </a>
                             </div>

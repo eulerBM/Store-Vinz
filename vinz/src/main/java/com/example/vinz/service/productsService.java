@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class productsService {
@@ -44,11 +45,11 @@ public class productsService {
 
     }
 
-    public ResponseEntity<?> ProductsGet (long id) {
+    public ResponseEntity<?> ProductsGet (UUID id) {
 
         try {
 
-            Optional<Product> product = repositoryProduct.findById(id);
+            Optional<Product> product = repositoryProduct.findByIdPublic(id);
 
             if (product.isEmpty()){
 

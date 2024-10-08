@@ -16,7 +16,8 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private UUID id_public;
+    @Column(unique = true)
+    private UUID idPublic;
 
     @Column(length = 200, nullable = false)
     private String name;
@@ -41,7 +42,7 @@ public class Product {
             throw new IllegalArgumentException("Preço inválido: " + data.price());
         }
 
-        this.id_public = UUID.randomUUID();
+        this.idPublic = UUID.randomUUID();
         this.name = data.name();
         this.description = data.description();
         this.price = price;
@@ -57,7 +58,7 @@ public class Product {
     }
 
     public UUID getId_public() {
-        return id_public;
+        return idPublic;
     }
 
     public LocalDateTime getPublished_data() {

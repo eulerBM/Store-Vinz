@@ -1,69 +1,99 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../../css/FormLogin.css';
 import axios from 'axios';
 
 function FormRegister() {
-    const [nome, setNome] = useState('');
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
+    const [formData, setFormData] = useState({
+        nome: '',
+        email: '',
+        password: ''
+    });
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
+
     const handleSubmit = async (event) => {
-        event.preventDefault(); 
+        event.preventDefault();
         
         try {
-
             const response = await axios.post('http://localhost:8080/auth/register', {
-                nome: nome,
-                email: email,
-                password: senha
+                nome: formData.nome,
+                email: formData.email,
+                password: formData.password
             });
 
             if (response.status === 200) {
-            
-                const data = response.data;
-
-                navigate('/'); 
+                navigate('/');
             }
         } catch (error) {
-            
-            if (error.response && error.response.status === 401) {
-            
-                setErrorMessage('Email ou senha incorretos');
-
+            if (error.response && error.response.status === 400) {
+                setErrorMessage('Falha no cadastro. Verifique os dados e tente novamente.');
             } else {
-      
-                setErrorMessage('Erro ao tentar fazer login. Tente novamente mais tarde.');
+                setErrorMessage('Erro ao tentar fazer cadastro. Tente novamente mais tarde.');
             }
         }
-    }
-    
-    return(
+    };
 
-        <form onSubmit={handleSubmit}>
+    return (
+        <div class="page">
 
-        <h1>Register</h1>
+            <div className="form-container">
 
-        <input type="text" name="nome" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
+                        <form onSubmit={handleSubmit} class="formLogin">
+                            <h2>Cadastro</h2>
 
-        <br/>
+                            
+                            <label for="email">Nome</label>
+                                <input 
+                                    type="text" 
+                                    id="nome" 
+                                    name="nome" 
+                                    value={formData.nome} 
+                                    onChange={handleChange} 
+                                    placeholder="Digite seu nome"
+                                    required
+                                />
+                            
+                                <label for="email">E-mail</label>
+                                <input 
+                                    type="email" 
+                                    id="email" 
+                                    name="email" 
+                                    value={formData.email} 
+                                    onChange={handleChange} 
+                                    placeholder="Digite seu email"
+                                    required
+                                />
 
-        <input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <label for="password">Senha</label>
+                                <input 
+                                    type="password" 
+                                    id="password" 
+                                    name="password" 
+                                    value={formData.password} 
+                                    onChange={handleChange} 
+                                    placeholder="Digite sua senha"
+                                    required
+                                />
 
-        <br/>
+                            <input type="submit" value="Cadastrar" class="btn" />
 
-        <input type="password" name="password" placeholder="Senha" value={senha} onChange={(e) => setSenha(e.target.value)} />
+                            {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-        <br/>
+                        </form>
+                    </div>
 
-        <button type="submit">Cadastrar</button>
-
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-
-        </form>
-
-    )
+        </div>
+        
+    );
 }
 
 export default FormRegister;

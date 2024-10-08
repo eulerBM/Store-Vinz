@@ -45,11 +45,11 @@ public class productsService {
 
     }
 
-    public ResponseEntity<?> ProductsGet (UUID id) {
+    public ResponseEntity<?> ProductsGet (UUID idPublic) {
 
         try {
 
-            Optional<Product> product = repositoryProduct.findByIdPublic(id);
+            Optional<Product> product = repositoryProduct.findByIdPublic(idPublic);
 
             if (product.isEmpty()){
 

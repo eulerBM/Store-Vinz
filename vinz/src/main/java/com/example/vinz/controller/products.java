@@ -25,10 +25,10 @@ public class products {
 
     }
 
-    @GetMapping("get/{id}")
-    public ResponseEntity<?> ProductsGet (@RequestParam("id") @PathVariable UUID id) {
+    @GetMapping("get/{idPublic}")
+    public ResponseEntity<?> ProductsGet (@PathVariable("idPublic") UUID idPublic) {
 
-        return productsService.ProductsGet(id);
+        return productsService.ProductsGet(idPublic);
 
     }
 

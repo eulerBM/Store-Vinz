@@ -5,27 +5,34 @@ import axios from 'axios';
 
 
 function Product() {
-    const {idPulbic} = useParams(); // Captura o id_public da URL
+    const {idPublic} = useParams(); // Captura o id_public da URL
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchResults = async () => {
+        
             try {
-                const response = await axios.get(`http://localhost:8080/products/get/${idPulbic}`);
+
+                const response = await axios.get(`http://localhost:8080/products/get/${idPublic}`);
                 setResults(response.data);
+
             } catch (err) {
+
                 setError('Erro ao buscar os resultados');
+
             } finally {
+
                 setLoading(false);
+
             }
         };
 
-        if (idPulbic) {
+        if (idPublic) {
             fetchResults();
         }
-    }, [idPulbic]);
+    }, [idPublic]);
 
     if (loading) return <p>Carregando...</p>;
     if (error) return <p>{error}</p>;

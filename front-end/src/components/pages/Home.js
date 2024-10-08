@@ -29,7 +29,7 @@ function Home () {
 
     return (
 
-        <div>
+    <div>
         <NavBar />
 
         <div className="container">

@@ -7,6 +7,7 @@ import com.example.vinz.entity.Users;
 import com.example.vinz.repository.UserRepository;
 import com.example.vinz.utils.getIdToken;
 import com.example.vinz.repository.ProductRepository;
+import jdk.jshell.Snippet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -154,15 +155,23 @@ public class productsService {
 
     public ResponseEntity<?> SearchProductName(String productName) {
 
-        List<Product> product = repositoryProduct.findByNameContainingIgnoreCase(productName);
+        try {
 
-        if (product.isEmpty()){
+            List<Product> product = repositoryProduct.findByNameContainingIgnoreCase(productName);
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item não encontrado");
+            if (product.isEmpty()){
 
-        } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item não encontrado!");
 
-            return ResponseEntity.status(HttpStatus.OK).body(product);
+            } else {
+
+                return ResponseEntity.status(HttpStatus.OK).body(product);
+
+            }
+
+        } catch (Exception e) {
+
+            return ResponseEntity.internalServerError().body(e);
 
         }
     }

@@ -42,10 +42,13 @@ public class Product {
         BigDecimal price;
 
         try {
+
             price = new BigDecimal(data.price());
-            System.out.println("Valor convertido para BigDecimal: " + price);
+
         } catch (NumberFormatException e) {
+
             throw new IllegalArgumentException("Preço inválido: " + data.price());
+
         }
 
         this.idPublic = UUID.randomUUID();

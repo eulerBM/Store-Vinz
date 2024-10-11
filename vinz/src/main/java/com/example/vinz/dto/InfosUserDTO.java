@@ -18,6 +18,7 @@ public class InfosUserDTO {
     private LocalDateTime published_data;
 
     public InfosUserDTO(Product data) {
+
         this.id = data.getId();
         this.id_public = data.getId_public();
         this.name = data.getName();

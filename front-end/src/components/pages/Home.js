@@ -41,7 +41,11 @@ function Home () {
                             <div className="card-body">
                                 <h5 className="card-title">{product.name}</h5>
                                 <p className="card-text">
-                                    {product.description || 'Descrição não disponível'}
+                                {product.description
+                                    ? product.description.length > 40 
+                                        ? `${product.description.substring(0, 40)}...` 
+                                        : product.description
+                                    : 'Descrição não disponível'}
                                 </p>
                                 <a href={`/products/get/${product.id_public}`} className="btn btn-primary">
                                     Ver mais

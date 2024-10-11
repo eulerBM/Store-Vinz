@@ -3,6 +3,7 @@ package com.example.vinz.entity;
 
 import com.example.vinz.dtp.registerRequestDTP;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,6 +40,10 @@ public class Users {
     @Column(nullable = false)
     private LocalDateTime createAccount;
 
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Product> product;
+
     public Users(registerRequestDTP data) {
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -63,6 +68,14 @@ public class Users {
             idPublic = UUID.randomUUID();
 
         }
+    }
+
+    public List<Product> getProduct() {
+        return product;
+    }
+
+    public void setProduct(List<Product> product) {
+        this.product = product;
     }
 
     public LocalDateTime getCreateAccount() {

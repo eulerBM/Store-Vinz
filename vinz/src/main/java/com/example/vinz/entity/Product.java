@@ -1,6 +1,7 @@
 package com.example.vinz.entity;
 
 import com.example.vinz.dtp.productCreateDTP;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -31,8 +32,13 @@ public class Product {
     @Column(length = 50, nullable = false)
     private LocalDateTime published_data;
 
-    public Product(productCreateDTP data) {
-        System.out.println("Valor original do preço: " + data.price());
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    private Users users;
+
+    public Product(productCreateDTP data, Users user) {
+
         BigDecimal price;
 
         try {
@@ -47,10 +53,19 @@ public class Product {
         this.description = data.description();
         this.price = price;
         this.published_data = LocalDateTime.now();
+        this.users = user;
 
     }
 
     public Product() {
+    }
+
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
     }
 
     public long getId() {

@@ -8,11 +8,9 @@ public class getIdToken {
 
     public Long extrairTokenId (JwtAuthenticationToken token) {
 
-        var getAtributes = token.getTokenAttributes();
+        var getTokenString = token.getToken().getSubject();
 
-        String userId = (String) getAtributes.get("sub");
-
-        return Long.parseLong(userId);
+        return Long.parseLong(getTokenString);
 
     }
 }

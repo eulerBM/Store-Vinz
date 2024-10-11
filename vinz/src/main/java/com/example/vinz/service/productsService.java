@@ -75,7 +75,11 @@ public class productsService {
 
         try {
 
-            Product productModel = new Product(data);
+            Long userId = getIdToken.extrairTokenId(token);
+
+            Optional<Users> userGet = repositoryUser.findById(userId);
+
+            Product productModel = new Product(data, userGet.get());
 
             repositoryProduct.save(productModel);
 

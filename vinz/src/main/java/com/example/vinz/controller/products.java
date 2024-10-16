@@ -5,6 +5,7 @@ import com.example.vinz.dtp.productEditeDTP;
 import com.example.vinz.service.productsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +51,13 @@ public class products {
     public ResponseEntity<?> productsDelete (@PathVariable long id){
 
         return productsService.ProductsDelete(id);
+
+    }
+
+    @GetMapping("meus_publicados/{idPublic}")
+    public ResponseEntity<?> myPublished (@PathVariable("idPublic") UUID idPublic, JwtAuthenticationToken token){
+
+        return productsService.MyPublished(idPublic);
 
     }
 

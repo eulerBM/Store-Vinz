@@ -157,6 +157,24 @@ public class productsService {
         }
     }
 
+    public ResponseEntity<?> MyPublished(UUID idPublic){
+
+        List<Product> productsMy = repositoryProduct.findByUsers_IdPublic(idPublic);
+
+        if (productsMy.isEmpty()) {
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Você não tem produtos publicados!");
+
+        } else {
+
+            return ResponseEntity.status(HttpStatus.OK).body(productsMy);
+
+        }
+
+
+
+    }
+
     public ResponseEntity<?> SearchProductName(String productName) {
 
         try {

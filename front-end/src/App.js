@@ -9,6 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Search from './components/pages/Search';
 import CreateProduct from './components/pages/CreateProduct';
 import Product from './components/pages/Product';
+import MyPubli from './components/pages/MyPubli';
 
 function App() {
 
@@ -30,6 +31,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Conta />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/meus_publicados" 
+          element={
+            <ProtectedRoute>
+              <MyPubli />
             </ProtectedRoute>
           } 
         />

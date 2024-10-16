@@ -7,20 +7,18 @@ import '../../css/FormLogin.css';
 function NavBar() {
     const [searchTerm, setSearchTerm] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const navigate = useNavigate(); // Hook para navegação programática
+    const navigate = useNavigate();
 
     // Função para tratar a busca
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchTerm.trim()) {
-            // Redireciona para a página de busca com o termo de busca como query param
             navigate(`/search?name=${searchTerm}`);
         }
     };
 
     useEffect(() => {
-        // Verifica se o token existe no localStorage ou outro mecanismo de autenticação
-        const token = localStorage.getItem('token'); // Pode ser 'authToken', depende do que você usa
+        const token = localStorage.getItem('token');
         if (token) {
             setIsLoggedIn(true);
         }
@@ -48,6 +46,9 @@ function NavBar() {
                                 </li>
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/criar_produto">Publicar</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/meus_publicados">Meus publicados</Link>
                                 </li>
                                 <li className="nav-item">
                                     <a><Logout /></a>

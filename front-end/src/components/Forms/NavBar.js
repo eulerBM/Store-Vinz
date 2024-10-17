@@ -8,6 +8,7 @@ function NavBar() {
     const [searchTerm, setSearchTerm] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
+    
 
     // Função para tratar a busca
     const handleSearch = (e) => {

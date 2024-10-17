@@ -1,11 +1,12 @@
 import NavBar from "../Forms/NavBar";
 import { useState, useEffect } from 'react';
+import Carrinho from "../utils/Carrinho";
 import axios from 'axios';
 
 function Home () {
 
     const [errorMessage, setErrorMessage] = useState('');
-    const [products, setProducts] = useState([]); // Para armazenar os produtos retornados pela API
+    const [products, setProducts] = useState([]);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -13,7 +14,7 @@ function Home () {
                 const response = await axios.get('http://localhost:8080/products/all');
 
                 if (response.status === 200) {
-                    setProducts(response.data); // Armazena os produtos no estado
+                    setProducts(response.data);
                 }
             } catch (error) {
                 if (error.response && error.response.status === 500) {
@@ -49,8 +50,13 @@ function Home () {
                                     : 'Descrição não disponível'}
                                     
                                 </p>
+                                
+
                                 <a href={`/products/get/${product.id_public}`} className="btn btn-primary">
                                     Ver mais
+                                </a>
+                                <a className="btn btn-primary">
+                                    + Carrinho
                                 </a>
                             </div>
                         </div>

@@ -61,6 +61,7 @@ public class security {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
+
     }
 
     @Bean

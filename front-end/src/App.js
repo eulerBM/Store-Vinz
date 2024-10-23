@@ -10,6 +10,7 @@ import Search from './components/pages/Search';
 import CreateProduct from './components/pages/CreateProduct';
 import Product from './components/pages/Product';
 import MyPubli from './components/pages/MyPubli';
+import CarrinhoPage from './components/pages/CarrinhoPage';
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/carrinho" element={<CarrinhoPage />} />
         <Route path="/products/get/:idPublic" element={<Product />} />
 
          {/* Rotas protegidas */}

@@ -11,8 +11,14 @@ function NavBar() {
     const { length } = Carrinho();
     const navigate = useNavigate();
     const getIdPublicUser = JSON.parse(localStorage.getItem("userInfo"));
-    
 
+    function CarrinhoButton() {
+
+        navigate('/carrinho')
+    
+    };
+    
+    
     // Função para tratar a busca
     const handleSearch = (e) => {
         e.preventDefault();
@@ -70,7 +76,7 @@ function NavBar() {
                         )}
                     </ul>
 
-                    <button type="button" class="btn btn-primary position-relative">
+                    <button type="button" class="btn btn-primary position-relative" onClick={CarrinhoButton}>
                         Carrinho
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             {length(getIdPublicUser.idPublic)}

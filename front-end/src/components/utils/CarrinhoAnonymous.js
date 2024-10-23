@@ -1,34 +1,20 @@
 import { useState, useEffect } from 'react';
-import Anonymous from './Anonymous';
 
-function Carrinho() {
+function CarrinhoAnonymous() {
 
-    const generateId = Anonymous(); 
     const [cartItems, setCartItems] = useState([]);
 
     function add(idPublic, idUser) {
+    
+        const userCartKey = `cart_Anonymous${idUser}`;
         
         const itemExists = cartItems.some(item => item.idPublic === idPublic);
-
-        if (idUser === undefined){
-
-            console.log("Usuario anonymo")
-
-            const updatedCart = [...cartItems, { idPublic }]; 
-            setCartItems(updatedCart); 
-            localStorage.setItem(generateId.generateId, JSON.stringify(updatedCart)); 
-            
-        }
     
         
         if (!itemExists) {
-
             const updatedCart = [...cartItems, { idPublic }]; 
-
             setCartItems(updatedCart); 
-
-            localStorage.setItem(`cart_${idUser}`, JSON.stringify(updatedCart)); 
-
+            localStorage.setItem(userCartKey, JSON.stringify(updatedCart)); 
         }
     }
 
@@ -58,4 +44,4 @@ function Carrinho() {
     return { add, remove, length, cartItems };
 }
 
-export default Carrinho;
+export default CarrinhoAnonymous;

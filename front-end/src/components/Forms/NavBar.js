@@ -2,12 +2,15 @@ import '../../css/HomeCss.css';
 import Logout from '../pages/outh/Logout';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import Carrinho from '../utils/Carrinho';
 import '../../css/FormLogin.css';
 
 function NavBar() {
     const [searchTerm, setSearchTerm] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { length } = Carrinho();
     const navigate = useNavigate();
+    const getIdPublicUser = JSON.parse(localStorage.getItem("userInfo"));
     
 
     // Função para tratar a busca
@@ -66,6 +69,14 @@ function NavBar() {
                             </>
                         )}
                     </ul>
+
+                    <button type="button" class="btn btn-primary position-relative">
+                        Carrinho
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {length(getIdPublicUser.idPublic)}
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </button>
 
                     <form className="d-flex" role="search" onSubmit={handleSearch}>
                         <input

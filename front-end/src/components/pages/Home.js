@@ -7,6 +7,9 @@ function Home () {
 
     const [errorMessage, setErrorMessage] = useState('');
     const [products, setProducts] = useState([]);
+    const { add } = Carrinho();
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -55,9 +58,11 @@ function Home () {
                                 <a href={`/products/get/${product.id_public}`} className="btn btn-primary">
                                     Ver mais
                                 </a>
-                                <a className="btn btn-primary">
+
+                                <a className="btn btn-primary" onClick={() => add(product.id_public, userInfo.idPublic)}>
                                     + Carrinho
                                 </a>
+
                             </div>
                         </div>
                     </div>

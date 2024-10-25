@@ -9,8 +9,10 @@ function Anonymous() {
 
     }
 
-    return IdGenerator;
+    return {IdGenerator}
 
 }
 
 export default Anonymous;
+
+

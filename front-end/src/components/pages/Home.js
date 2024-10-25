@@ -9,6 +9,9 @@ function Home () {
     const [products, setProducts] = useState([]);
     const { add } = Carrinho();
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userStatus = userInfo ? userInfo : false;
+
+    
 
 
     useEffect(() => {
@@ -59,7 +62,7 @@ function Home () {
                                     Ver mais
                                 </a>
 
-                                <a className="btn btn-primary" onClick={() => add(product.id_public, userInfo.idPublic)}>
+                                <a className="btn btn-primary" onClick={() => add(product.id_public, userStatus)}>
                                     + Carrinho
                                 </a>
 

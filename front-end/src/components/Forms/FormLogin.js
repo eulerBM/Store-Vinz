@@ -21,8 +21,6 @@ function FormLogin () {
             });
 
             if (response.status === 200) {
-            
-                const data = response.data;
 
                 const { acessToken, expiresIn, user } = response.data;
 
@@ -33,11 +31,13 @@ function FormLogin () {
                 }
 
                 localStorage.setItem('token', acessToken);
+
                 localStorage.setItem('userInfo', JSON.stringify(user));
 
                 navigate('/'); 
 
             }
+            
         } catch (error) {
             
             if (error.response && error.response.status === 401) {

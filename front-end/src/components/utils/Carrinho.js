@@ -3,33 +3,37 @@ import Anonymous from './Anonymous';
 
 function Carrinho() {
 
-    const generateId = Anonymous(); 
+    const anonymous = Anonymous(); 
+    const nameStorageAnony = anonymous.IdGenerator();
     const [cartItems, setCartItems] = useState([]);
+    
 
-    function add(idPublic, idUser) {
+    function add(idPublic, userInfo) {
+
+        let nameStorage = `cart_` + userInfo
+
+        console.log(userInfo)
+ 
+        if ( userInfo === false ){
+
+            nameStorage = `cart_anonymous_` + nameStorageAnony
+
+
+        }
+
+    
+
+
         
         const itemExists = cartItems.some(item => item.idPublic === idPublic);
 
-        if (idUser === undefined){
 
-            console.log("Usuario anonymo")
+        const updatedCart = [...cartItems, { idPublic }]; 
 
-            const updatedCart = [...cartItems, { idPublic }]; 
-            setCartItems(updatedCart); 
-            localStorage.setItem(generateId.generateId, JSON.stringify(updatedCart)); 
+        setCartItems(updatedCart); 
             
-        }
-    
-        
-        if (!itemExists) {
-
-            const updatedCart = [...cartItems, { idPublic }]; 
-
-            setCartItems(updatedCart); 
-
-            localStorage.setItem(`cart_${idUser}`, JSON.stringify(updatedCart)); 
-
-        }
+        localStorage.setItem("", JSON.stringify(updatedCart));  
+            
     }
 
     function remove(idPublic, idUser) {

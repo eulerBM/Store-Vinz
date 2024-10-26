@@ -11,9 +11,6 @@ function Home () {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const userStatus = userInfo ? userInfo : false;
 
-    
-
-
     useEffect(() => {
         const fetchProducts = async () => {
             try {

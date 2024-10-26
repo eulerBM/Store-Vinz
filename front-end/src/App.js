@@ -24,7 +24,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/carrinho" element={<CarrinhoPage />} />
         <Route path="/products/get/:idPublic" element={<Product />} />
 
          {/* Rotas protegidas */}
@@ -42,6 +41,15 @@ function App() {
           element={
             <ProtectedRoute>
               <MyPubli />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/carrinho" 
+          element={
+            <ProtectedRoute>
+              <CarrinhoPage />
             </ProtectedRoute>
           } 
         />

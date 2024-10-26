@@ -1,39 +1,35 @@
 import { useState, useEffect } from 'react';
-import Anonymous from './Anonymous';
+
 
 function Carrinho() {
 
-    const anonymous = Anonymous(); 
-    const nameStorageAnony = anonymous.IdGenerator();
-    const [cartItems, setCartItems] = useState([]);
-    
+    const [cartItems, setCartItems] = useState(() => {
+        const savedCart = localStorage.getItem("cart_");
+        return savedCart ? JSON.parse(savedCart) : [];
+    });
 
     function add(idPublic, userInfo) {
+        
+        const isAnonymous = !userInfo;
+        const cartKey = isAnonymous ? "cart_" : `cart_${userInfo.idPublic}`;
 
-        let nameStorage = `cart_` + userInfo
+        const isItemInCart = cartItems.includes(idPublic);
+        if (isItemInCart)return;
+    
+    
+        const updatedCart = [...cartItems, idPublic];
+        setCartItems(updatedCart);
+    
+        
+        localStorage.setItem(cartKey, JSON.stringify(updatedCart));
+    
+        
+        if (!isAnonymous) {
 
-        console.log(userInfo)
- 
-        if ( userInfo === false ){
-
-            nameStorage = `cart_anonymous_` + nameStorageAnony
-
+            localStorage.removeItem("cart_");
 
         }
-
-    
-
-
         
-        const itemExists = cartItems.some(item => item.idPublic === idPublic);
-
-
-        const updatedCart = [...cartItems, { idPublic }]; 
-
-        setCartItems(updatedCart); 
-            
-        localStorage.setItem("", JSON.stringify(updatedCart));  
-            
     }
 
     function remove(idPublic, idUser) {

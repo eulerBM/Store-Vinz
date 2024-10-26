@@ -1,6 +1,8 @@
 import NavBar from "../Forms/NavBar";
 
 function CarrinhoPage() {
+
+    
     return (    
         <div>
             <NavBar/>

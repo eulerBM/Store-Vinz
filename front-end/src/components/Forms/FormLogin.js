@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../css/FormLogin.css';
+import Carrinho from '../utils/Carrinho';
 import axios from 'axios';
 
 function FormLogin () {
@@ -9,6 +10,7 @@ function FormLogin () {
     const [senha, setSenha] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
+    const { renameLocalStorageKeyCart } = Carrinho();
 
     const handleSubmit = async (event) => {
         event.preventDefault(); 
@@ -33,6 +35,8 @@ function FormLogin () {
                 localStorage.setItem('token', acessToken);
 
                 localStorage.setItem('userInfo', JSON.stringify(user));
+
+                renameLocalStorageKeyCart(user.idPublic) 
 
                 navigate('/'); 
 

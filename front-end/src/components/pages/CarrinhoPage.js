@@ -1,7 +1,7 @@
 import NavBar from "../Forms/NavBar";
+import Carrinho from "../utils/Carrinho";
 
 function CarrinhoPage() {
-
     
     return (    
         <div>

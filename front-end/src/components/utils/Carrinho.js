@@ -40,9 +40,30 @@ function Carrinho() {
     }
 
     function length(idUser) {
-        const userCartKey = `cart_${idUser}`;
-        const existingCart = JSON.parse(localStorage.getItem(userCartKey));
-        return existingCart ? existingCart.length : 0;
+
+        const cartKey = idUser ? `cart_${idUser}` : 'cart_';
+        
+        const cartData = JSON.parse(localStorage.getItem(cartKey));
+
+        return cartData ? cartData.length : 0;
+
+    }
+
+    function renameLocalStorageKeyCart(newKey) {
+        
+        console.log(newKey)
+
+        const nameStorageCartOld = "cart_"
+
+        const value = localStorage.getItem(nameStorageCartOld);
+
+        if (value !== null) {
+    
+            localStorage.setItem("cart_"+newKey, value);
+
+            localStorage.removeItem(nameStorageCartOld);
+
+        }
     }
 
     // Carrega o carrinho do localStorage na primeira vez que o componente é montado
@@ -55,7 +76,7 @@ function Carrinho() {
         }
     }, []);
 
-    return { add, remove, length, cartItems };
+    return { add, remove, length, renameLocalStorageKeyCart, cartItems };
 }
 
 export default Carrinho;

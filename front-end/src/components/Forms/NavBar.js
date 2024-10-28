@@ -12,6 +12,8 @@ function NavBar() {
     const navigate = useNavigate();
 
     const getIdPublicUser = JSON.parse(localStorage.getItem("userInfo"));
+    const idPublicUserOrFalse = getIdPublicUser && getIdPublicUser.idPublic ? getIdPublicUser.idPublic : false;
+    
 
     function CarrinhoButton() {
 
@@ -80,7 +82,7 @@ function NavBar() {
                     <button type="button" class="btn btn-primary position-relative" onClick={CarrinhoButton}>
                         Carrinho
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                
+                            {length(idPublicUserOrFalse)}
                             <span class="visually-hidden">unread messages</span>
                         </span>
                     </button>

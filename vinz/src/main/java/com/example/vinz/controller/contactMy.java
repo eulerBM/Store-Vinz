@@ -1,7 +1,6 @@
 package com.example.vinz.controller;
 
 import com.example.vinz.dtp.contactEmailRequestDTP;
-import com.example.vinz.response.responseContactEmail;
 import com.example.vinz.service.contactEmailService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

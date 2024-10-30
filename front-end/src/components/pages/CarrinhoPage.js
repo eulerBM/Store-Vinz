@@ -1,21 +1,26 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import NavBar from "../Forms/NavBar";
-import Carrinho from "../utils/Carrinho";
 
 function CarrinhoPage() {
     const [products, setProducts] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
-    const [idPublicList, setIdPublicList] = useState([]); // Suponha que você tenha a lista de IDs aqui
+    const [idPublicList, setIdPublicList] = useState([]);
+
+    useEffect(() => {
+        const getInfosUser = JSON.parse(localStorage.getItem("userInfo"));
+        const storedCart = JSON.parse(localStorage.getItem("cart_" + getInfosUser.idPublic)) || [];
+        setIdPublicList(storedCart);
+    }, []);
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.post('http://localhost:8080/products/get/list', idPublicList, {
-                    headers: {
-                        'Content-Type': 'application/json' // Certifique-se de enviar o cabeçalho correto
-                    }
-                });
+                const response = await axios.post(
+                    'http://localhost:8080/products/get/list',
+                    idPublicList,
+                    { headers: { 'Content-Type': 'application/json' } }
+                );
 
                 if (response.status === 200) {
                     setProducts(response.data);
@@ -29,17 +34,14 @@ function CarrinhoPage() {
             }
         };
 
-        if (idPublicList.length > 0) { // Verifique se a lista de IDs não está vazia
-            fetchProducts();
-        }
-    }, [idPublicList]); // Dependência para recarregar quando a lista de IDs mudar
+        if (idPublicList.length > 0) fetchProducts();
+    }, [idPublicList]);
 
     return (    
         <div>
             <NavBar />
             <h1>Página do carrinho</h1>
-            {errorMessage && <p>{errorMessage}</p>} {/* Exibir mensagem de erro se existir */}
-            {/* Renderizar produtos aqui, se necessário */}
+            {errorMessage && <p>{errorMessage}</p>}
             {products.length > 0 ? (
                 products.map((product) => (
                     <div key={product.idPublic}>
@@ -48,7 +50,7 @@ function CarrinhoPage() {
                     </div>
                 ))
             ) : (
-                <p>Nenhum produto encontrado.</p>
+                <p>{idPublicList.length > 0 ? "Carregando produtos..." : "Nenhum produto encontrado."}</p>
             )}
         </div>
     );

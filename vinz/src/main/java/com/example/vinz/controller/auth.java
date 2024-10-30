@@ -1,8 +1,6 @@
 package com.example.vinz.controller;
 
 import com.example.vinz.dtp.*;
-import com.example.vinz.response.responseLogin;
-import com.example.vinz.response.responseRegister;
 import com.example.vinz.service.changeUser;
 import com.example.vinz.service.loginService;
 import com.example.vinz.service.registerService;

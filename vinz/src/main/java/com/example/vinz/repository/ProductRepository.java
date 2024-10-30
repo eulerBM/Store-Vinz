@@ -1,7 +1,6 @@
 package com.example.vinz.repository;
 
 import com.example.vinz.entity.Product;
-import com.example.vinz.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

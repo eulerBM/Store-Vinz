@@ -50,8 +50,6 @@ function Carrinho() {
     }
 
     function renameLocalStorageKeyCart(newKey) {
-        
-        console.log(newKey)
 
         const nameStorageCartOld = "cart_"
 

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("products/")
@@ -30,6 +31,13 @@ public class products {
     public ResponseEntity<?> ProductsGet (@PathVariable("idPublic") UUID idPublic) {
 
         return productsService.ProductsGet(idPublic);
+
+    }
+
+    @GetMapping("get/list")
+    public ResponseEntity<?> ProductsListGet (@RequestBody List<String> data){
+
+        return productsService.ProductsListGet(data);
 
     }
 

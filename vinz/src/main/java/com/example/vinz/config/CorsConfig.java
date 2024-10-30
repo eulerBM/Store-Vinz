@@ -22,9 +22,7 @@ public class CorsConfig {
                         .allowCredentials(true) // Permitir envio de cookies
                         .maxAge(3600); // Tempo que as requisições podem ser armazenadas no cache do browser
 
-
             }
         };
     }
-
 }

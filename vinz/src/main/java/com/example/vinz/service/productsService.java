@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class productsService {
@@ -192,6 +193,26 @@ public class productsService {
         } catch (Exception e) {
 
             return ResponseEntity.internalServerError().body(e);
+
+        }
+    }
+
+    public ResponseEntity<?> ProductsListGet(List<String> data) {
+
+        List<UUID> idPublicsToUuid = data.stream()
+                .map(UUID::fromString)
+                .collect(Collectors.toList());
+
+
+        List<Product> products = repositoryProduct.findAllByIdPublicIn(idPublicsToUuid);
+
+        if (products.isEmpty()){
+
+            return ResponseEntity.notFound().build();
+
+        } else {
+
+            return ResponseEntity.status(HttpStatus.OK).body(products);
 
         }
     }

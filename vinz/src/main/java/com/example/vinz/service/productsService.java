@@ -8,6 +8,9 @@ import com.example.vinz.repository.UserRepository;
 import com.example.vinz.utils.getIdToken;
 import com.example.vinz.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -31,9 +34,11 @@ public class productsService {
 
         try {
 
-            List<Product> product = repositoryProduct.findAll();
+            Pageable pageable = PageRequest.of(0,2);
 
-            return ResponseEntity.ok().body(product);
+            Page<Product> product = repositoryProduct.findAll(pageable);
+
+            return ResponseEntity.ok().body(product.getContent());
 
         } catch (Exception e) {
 

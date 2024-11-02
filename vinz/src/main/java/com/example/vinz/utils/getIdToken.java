@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class getIdToken {
 
-    public Long extrairTokenId (JwtAuthenticationToken token) {
+    public static Long extrairTokenId (JwtAuthenticationToken token) {
 
         var getTokenString = token.getToken().getSubject();
 

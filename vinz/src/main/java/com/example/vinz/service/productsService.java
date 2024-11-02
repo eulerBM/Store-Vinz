@@ -27,9 +27,6 @@ public class productsService {
     @Autowired
     private ProductRepository repositoryProduct;
 
-    @Autowired
-    private getIdToken getIdToken;
-
     public ResponseEntity<?> ProductsAll (){
 
         try {
@@ -198,20 +195,28 @@ public class productsService {
 
     public ResponseEntity<?> ProductsListGet(List<String> data) {
 
-        List<UUID> idPublicsToUuid = data.stream()
-                .map(UUID::fromString)
-                .collect(Collectors.toList());
+        try {
+
+            List<UUID> idPublicsToUuid = data.stream()
+                    .map(UUID::fromString)
+                    .collect(Collectors.toList());
 
 
-        List<Product> products = repositoryProduct.findAllByIdPublicIn(idPublicsToUuid);
+            List<Product> products = repositoryProduct.findAllByIdPublicIn(idPublicsToUuid);
 
-        if (products.isEmpty()){
+            if (products.isEmpty()){
 
-            return ResponseEntity.notFound().build();
+                return ResponseEntity.notFound().build();
 
-        } else {
+            } else {
 
-            return ResponseEntity.status(HttpStatus.OK).body(products);
+                return ResponseEntity.status(HttpStatus.OK).body(products);
+
+            }
+
+        } catch (Exception e) {
+
+            return ResponseEntity.internalServerError().body(e);
 
         }
     }

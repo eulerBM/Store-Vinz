@@ -22,8 +22,6 @@ import java.util.Optional;
 @Service
 public class loginService {
 
-    private static final Logger logger = LoggerFactory.getLogger(loginService.class);
-
     @Autowired
     private UserRepository repository;
 

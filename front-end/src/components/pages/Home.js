@@ -7,6 +7,7 @@ function Home () {
 
     const [errorMessage, setErrorMessage] = useState('');
     const [products, setProducts] = useState([]);
+    let alertStatus = false;
     const { add } = Carrinho();
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const userStatus = userInfo ? userInfo : false;
@@ -59,7 +60,8 @@ function Home () {
                                     Ver mais
                                 </a>
 
-                                <a className="btn btn-primary" onClick={() => add(product.id_public, userStatus)}>
+                                <a className="btn btn-primary" onClick={() => 
+                                    add(product.id_public, userStatus)}>
                                     + Carrinho
                                 </a>
 
@@ -71,6 +73,7 @@ function Home () {
         </div>
 
         {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+        
     </div>
         
     );

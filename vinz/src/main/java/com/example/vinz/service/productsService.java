@@ -206,7 +206,6 @@ public class productsService {
                     .map(UUID::fromString)
                     .collect(Collectors.toList());
 
-
             List<Product> products = repositoryProduct.findAllByIdPublicIn(idPublicsToUuid);
 
             if (products.isEmpty()){

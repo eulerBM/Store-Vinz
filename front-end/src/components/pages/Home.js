@@ -1,6 +1,7 @@
 import NavBar from "../Forms/NavBar";
 import { useState, useEffect } from 'react';
 import Carrinho from "../utils/Carrinho";
+import Pagination from "../utils/Pagination";
 import axios from 'axios';
 
 function Home () {
@@ -11,14 +12,17 @@ function Home () {
     const { add } = Carrinho();
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const userStatus = userInfo ? userInfo : false;
+    const [totalPages, setTotalPages] = useState(1);
+    let page = 0
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/products/all');
+                const response = await axios.get(`http://localhost:8080/products/all/${page}`);
 
                 if (response.status === 200) {
                     setProducts(response.data);
+                    setTotalPages(response.data.totalPages)
                 }
             } catch (error) {
                 if (error.response && error.response.status === 500) {
@@ -30,7 +34,19 @@ function Home () {
         };
 
         fetchProducts();
-    }, []); 
+    }, []);
+    
+    const fetchProducts = (page) => {
+        
+        axios.get(`http://localhost:8080/products/all/${page}`).then((response) => {
+            setProducts(response.data.products);
+            setTotalPages(response.data.totalPages);
+        });
+    };
+
+    useEffect(() => {
+        fetchProducts(1);
+    }, []);
 
     return (
 
@@ -73,6 +89,8 @@ function Home () {
         </div>
 
         {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+
+        <Pagination totalPages={totalPages} onPageChange={fetchProducts} />
         
     </div>
         

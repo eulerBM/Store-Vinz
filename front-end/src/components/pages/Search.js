@@ -1,6 +1,7 @@
 import NavBar from "../Forms/NavBar";
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import Carrinho from "../utils/Carrinho";
 import axios from 'axios';
 
 function Search() {
@@ -8,6 +9,9 @@ function Search() {
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { add } = Carrinho();
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userStatus = userInfo ? userInfo : false;
 
     const searchTerm = searchParams.get('name');
 
@@ -72,8 +76,12 @@ function Search() {
                                             <p className="card-text">
                                                 {result.description || 'Descrição não disponível'}
                                             </p>
-                                            <a href={`/products/${result.id}`} className="btn btn-primary">
+                                            <a href={`/products/get/${result.id_public}`} className="btn btn-primary">
                                                 Ver mais
+                                            </a>
+                                            <a className="btn btn-primary" onClick={() => 
+                                                add(result.id_public, userStatus)}>
+                                                + Carrinho
                                             </a>
                                         </div>
                                     </div>

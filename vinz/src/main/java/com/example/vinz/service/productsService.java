@@ -30,11 +30,13 @@ public class productsService {
     @Autowired
     private ProductRepository repositoryProduct;
 
-    public ResponseEntity<?> ProductsAll (){
+    public ResponseEntity<?> ProductsAll (int page){
 
         try {
 
-            Pageable pageable = PageRequest.of(0,2);
+            if (page < 0) page = 0;
+
+            Pageable pageable = PageRequest.of(page,2);
 
             Page<Product> product = repositoryProduct.findAll(pageable);
 

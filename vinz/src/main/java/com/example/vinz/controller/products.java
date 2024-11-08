@@ -19,10 +19,10 @@ public class products {
     @Autowired
     private productsService productsService;
 
-    @GetMapping("all")
-    public ResponseEntity<?> ProductsAll () {
+    @GetMapping("all/{page}")
+    public ResponseEntity<?> ProductsAll (@PathVariable("page") int page) {
 
-        return productsService.ProductsAll();
+        return productsService.ProductsAll(page);
 
     }
 

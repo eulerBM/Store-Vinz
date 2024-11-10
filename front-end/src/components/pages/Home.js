@@ -6,23 +6,26 @@ import axios from 'axios';
 
 function Home() {
     const [errorMessage, setErrorMessage] = useState('');
-    const [products, setProducts] = useState([]); // Inicializado como um array vazio
+    const [products, setProducts] = useState([]);
     const { add } = Carrinho();
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const userStatus = userInfo ? userInfo : false;
-    const [totalPages, setTotalPages] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
     const [Pages, setPages] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0); // Página inicial 0
+    const [PageAtual, setPageAtual] = useState(0)
+
     
 
-    // Função para buscar produtos com paginação
-    const fetchProducts = async (page) => {
+    const fetchProducts = async () => {
         try {
             
             const response = await axios.get(`http://localhost:8080/products/all/${Pages}`);
             if (response.status === 200) {
-                setProducts(response.data || []); // Verifique se o conteúdo está correto
-                setTotalPages(response.data.totalPages || 1); // Verifica se o total de páginas é válido
+                
+                setProducts(response.data.products || []);
+                setTotalPages(response.data.totalPages -1 || 1);
+                setPageAtual(response.data.currentPage)
+
             }
         } catch (error) {
             if (error.response && error.response.status === 500) {
@@ -33,13 +36,14 @@ function Home() {
         }
     };
 
-    // Carrega os produtos na inicialização do componente e quando currentPage mudar
     useEffect(() => {
-        fetchProducts(currentPage);
-    }, [currentPage]);
+        fetchProducts();
+    }, [Pages]);
 
 
     const proximaPagina = () => {
+
+        if (Pages >= totalPages) return;
 
         setPages(Pages + 1)
 
@@ -97,8 +101,6 @@ function Home() {
 
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
-            <Pagination totalPages={totalPages} onPageChange={fetchProducts} />
-
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li class="page-item">
@@ -106,9 +108,18 @@ function Home() {
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                     </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+
+                    {totalPages > 0 ? (
+
+                        Array.from({ length: totalPages }, (_, index) => (
+                            <li className="page-item" key={index}>
+                                <a className="page-link" href="#">{index + 1}</a>
+                            </li>
+                        ))
+                    ) : (
+                        <p>Erro no sistema!</p>
+                    )}
+                                        
                     <li class="page-item">
                     <a class="page-link" aria-label="Next" onClick={proximaPagina}>
                         <span aria-hidden="true">&raquo;</span>

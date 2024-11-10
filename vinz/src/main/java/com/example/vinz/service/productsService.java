@@ -16,9 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +38,14 @@ public class productsService {
 
             Page<Product> product = repositoryProduct.findAll(pageable);
 
-            return ResponseEntity.ok().body(product.getContent());
+            Map<String, Object> response = new HashMap<>();
+
+            response.put("products", product.getContent());
+            response.put("totalPages", product.getTotalPages());
+            response.put("currentPage", product.getNumber());
+            response.put("totalElements", product.getTotalElements());
+
+            return ResponseEntity.ok().body(response);
 
         } catch (Exception e) {
 

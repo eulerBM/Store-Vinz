@@ -23,7 +23,7 @@ function Home() {
             if (response.status === 200) {
                 
                 setProducts(response.data.products || []);
-                setTotalPages(response.data.totalPages -1 || 1);
+                setTotalPages(response.data.totalPages || 1);
                 setPageAtual(response.data.currentPage)
 
             }
@@ -40,10 +40,34 @@ function Home() {
         fetchProducts();
     }, [Pages]);
 
+    
+
+    const paginaClikc = (page) => {
+
+        if (page > totalPages ) return;
+
+        // Remover "active" de outros links
+        const activeLinks = document.querySelectorAll('.page-link.active');
+        activeLinks.forEach(link => link.classList.remove('active'));
+
+        let links = document.getElementById(`pagination-${page}`);
+
+        if (links) {
+
+        links.classList.add("active");
+
+        }
+
+        setPages(page)
+
+        console.log(page)
+
+    };
+
 
     const proximaPagina = () => {
 
-        if (Pages >= totalPages) return;
+        if (Pages >= totalPages -1) return;
 
         setPages(Pages + 1)
 
@@ -104,7 +128,7 @@ function Home() {
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous" onClick={voltarPagina}>
+                    <a class="page-link" aria-label="Previous" onClick={voltarPagina}>
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                     </li>
@@ -113,7 +137,7 @@ function Home() {
 
                         Array.from({ length: totalPages }, (_, index) => (
                             <li className="page-item" key={index}>
-                                <a className="page-link" href="#">{index + 1}</a>
+                                <a className="page-link" id={`pagination-${index}`} onClick={() => paginaClikc(index)}>{index}</a>
                             </li>
                         ))
                     ) : (

@@ -10,21 +10,21 @@ function Home() {
     const { add } = Carrinho();
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const userStatus = userInfo ? userInfo : false;
-    const [totalPages, setTotalPages] = useState(0);
-    const [Pages, setPages] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
     const [PageAtual, setPageAtual] = useState(0)
-
-    
-
+   
     const fetchProducts = async () => {
         try {
             
-            const response = await axios.get(`http://localhost:8080/products/all/${Pages}`);
+            const response = await axios.get(`http://localhost:8080/products/all/${PageAtual}`);
             if (response.status === 200) {
                 
                 setProducts(response.data.products || []);
                 setTotalPages(response.data.totalPages || 1);
                 setPageAtual(response.data.currentPage)
+                activeCssInButtons(PageAtual)
+                console.log(PageAtual)
+             
 
             }
         } catch (error) {
@@ -38,51 +38,58 @@ function Home() {
 
     useEffect(() => {
         fetchProducts();
-    }, [Pages]);
+    }, [PageAtual]);
 
-    
+    function activeCssInButtons (pageAtualUser) {
 
-    const paginaClikc = (page) => {
-
-        if (page > totalPages ) return;
-
-        // Remover "active" de outros links
         const activeLinks = document.querySelectorAll('.page-link.active');
+
         activeLinks.forEach(link => link.classList.remove('active'));
 
-        let links = document.getElementById(`pagination-${page}`);
+        let links = document.getElementById(`pagination-${pageAtualUser}`);
 
         if (links) {
 
-        links.classList.add("active");
+            links.classList.add("active");
+
+        } 
+    }
+    
+    const pageViews = ({pageClick, proxima, voltar}) => {
+
+        if (pageClick > totalPages || PageAtual < 0) return;
+
+        if (pageClick){
+
+            setPageAtual(pageClick)  
+                
+            activeCssInButtons(PageAtual);
+
+        } 
+        else if ( proxima == true){
+
+            if (PageAtual >= totalPages -1){
+
+                setPageAtual(0)
+                activeCssInButtons(PageAtual);
+
+            } else {
+                
+                setPageAtual(PageAtual + 1)
+                activeCssInButtons(PageAtual);
+
+            }
+        }
+        else if (voltar == true){
+
+            setPageAtual(PageAtual - 1)
+
+            activeCssInButtons(PageAtual);
 
         }
-
-        setPages(page)
-
-        console.log(page)
-
     };
 
 
-    const proximaPagina = () => {
-
-        if (Pages >= totalPages -1) return;
-
-        setPages(Pages + 1)
-
-        console.log(Pages)
-
-    };
-
-    const voltarPagina = () => {
-
-        if (Pages <= 0) return;
-        
-        setPages(Pages - 1)
-
-        console.log(Pages)
-    };
 
     return (
         <div>
@@ -128,7 +135,7 @@ function Home() {
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li class="page-item">
-                    <a class="page-link" aria-label="Previous" onClick={voltarPagina}>
+                    <a class="page-link" aria-label="Previous" onClick={() => pageViews({voltar: true})}>
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                     </li>
@@ -137,7 +144,7 @@ function Home() {
 
                         Array.from({ length: totalPages }, (_, index) => (
                             <li className="page-item" key={index}>
-                                <a className="page-link" id={`pagination-${index}`} onClick={() => paginaClikc(index)}>{index}</a>
+                                <a className="page-link" id={`pagination-${index}`} onClick={() => pageViews({ pageClick: index})}>{index +1}</a>
                             </li>
                         ))
                     ) : (
@@ -145,7 +152,7 @@ function Home() {
                     )}
                                         
                     <li class="page-item">
-                    <a class="page-link" aria-label="Next" onClick={proximaPagina}>
+                    <a class="page-link" aria-label="Next" onClick={() => pageViews({proxima: true})}>
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                     </li>

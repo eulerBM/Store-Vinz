@@ -24,7 +24,7 @@ function Search() {
                 setError(null);
 
                 const response = await axios.get('http://localhost:8080/products/search', {
-                    params: { name: searchTerm }
+                    params: { nameProducts: searchTerm, page:0 }
                 });
 
                 setResults(response.data);

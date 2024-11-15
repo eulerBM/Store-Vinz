@@ -52,7 +52,6 @@ public class productsService {
             return ResponseEntity.internalServerError().body(e);
 
         }
-
     }
 
     public ResponseEntity<?> ProductsGet (UUID idPublic) {
@@ -181,11 +180,13 @@ public class productsService {
 
     }
 
-    public ResponseEntity<?> SearchProductName(String productName) {
+    public ResponseEntity<?> SearchProductName(String productName, int page) {
 
         try {
 
-            List<Product> product = repositoryProduct.findByNameContainingIgnoreCase(productName);
+            Pageable pageable = PageRequest.of(page, 2);
+
+            List<Product> product = repositoryProduct.findByNameContainingIgnoreCase(productName, pageable);
 
             if (product.isEmpty()){
 

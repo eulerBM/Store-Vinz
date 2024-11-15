@@ -69,9 +69,9 @@ public class products {
     }
 
     @GetMapping("search")
-    public ResponseEntity<?> SearchProductName (@RequestParam("name") String productName){
+    public ResponseEntity<?> SearchProductName (@RequestParam("nameProducts") String productName, @RequestParam("page") int page){
 
-        return productsService.SearchProductName(productName);
+        return productsService.SearchProductName(productName, page);
 
     }
 }

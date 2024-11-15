@@ -26,7 +26,7 @@ function NavBar() {
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchTerm.trim()) {
-            navigate(`/search?name=${searchTerm}`);
+            navigate(`/search?nameProducts=${searchTerm}&page=0`);
         }
     };
 

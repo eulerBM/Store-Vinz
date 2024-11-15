@@ -29,7 +29,6 @@ function Carrinho() {
             localStorage.removeItem("cart_");
 
         }
-        
     }
 
     function remove(idPublic, idUser) {

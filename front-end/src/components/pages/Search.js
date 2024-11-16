@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Carrinho from "../utils/Carrinho";
 import axios from 'axios';
+import Pagination from "../utils/Pagination"
 
 function Search() {
     const [searchParams] = useSearchParams();
@@ -10,10 +11,11 @@ function Search() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { add } = Carrinho();
+    
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const userStatus = userInfo ? userInfo : false;
 
-    const searchTerm = searchParams.get('name');
+    const searchTerm = searchParams.get('nameProducts');
 
     useEffect(() => {
 
@@ -24,11 +26,12 @@ function Search() {
                 setError(null);
 
                 const response = await axios.get('http://localhost:8080/products/search', {
-                    params: { nameProducts: searchTerm, page:0 }
+                    params: { nameProducts:searchTerm, page:0 }
                 });
 
-                setResults(response.data);
-
+                console.log(response)
+                setResults(response.data.products);
+                
             } catch (err) {
                 
                 setError(err.response.data)
@@ -44,6 +47,7 @@ function Search() {
             fetchResults();
         } else {
             setLoading(false);
+            
             setError('Nenhum termo de busca fornecido.');
         }
     }, [searchTerm]);
@@ -94,6 +98,9 @@ function Search() {
                     )}
                 </div>
             </div>
+
+            <Pagination totalPages={} />
+
         </div>
     );
 }

@@ -1,7 +1,6 @@
 import NavBar from "../Forms/NavBar";
 import { useState, useEffect } from 'react';
 import Carrinho from "../utils/Carrinho";
-import Pagination from "../utils/Pagination";
 import axios from 'axios';
 
 function Home() {
@@ -23,9 +22,7 @@ function Home() {
                 setTotalPages(response.data.totalPages || 1);
                 setPageAtual(response.data.currentPage)
                 activeCssInButtons(PageAtual)
-                console.log(PageAtual)
-             
-
+                
             }
         } catch (error) {
             if (error.response && error.response.status === 500) {

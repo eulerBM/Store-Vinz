@@ -180,13 +180,19 @@ public class productsService {
 
     }
 
-    public ResponseEntity<?> SearchProductName(String productName, int page) {
+    public ResponseEntity<?> SearchProductName(String nameProducts, int page) {
 
         try {
 
             Pageable pageable = PageRequest.of(page, 2);
 
-            List<Product> product = repositoryProduct.findByNameContainingIgnoreCase(productName, pageable);
+            Page<Product> product = repositoryProduct.findByNameContainingIgnoreCase(nameProducts, pageable);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("products", product.getContent());
+            response.put("totalPages", product.getTotalPages());
+            response.put("currentPage", product.getNumber());
+            response.put("totalElements", product.getTotalElements());
 
             if (product.isEmpty()){
 
@@ -194,7 +200,7 @@ public class productsService {
 
             } else {
 
-                return ResponseEntity.status(HttpStatus.OK).body(product);
+                return ResponseEntity.status(HttpStatus.OK).body(response);
 
             }
 

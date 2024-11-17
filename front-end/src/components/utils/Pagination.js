@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function Pagination({totalPages_, pageAtual_}) {
     const [totalPages, setTotalPages] = useState(1);
     const [PageAtual, setPageAtual] = useState(0)
 
-    setTotalPages(totalPages_)
-    setPageAtual(pageAtual_)
+    useEffect(() => {
+        setTotalPages(totalPages_);
+        setPageAtual(pageAtual_);
+    }, [totalPages_, pageAtual_]);
 
     function activeCssInButtons (pageAtualUser) {
 

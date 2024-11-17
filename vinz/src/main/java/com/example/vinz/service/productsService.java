@@ -184,7 +184,7 @@ public class productsService {
 
         try {
 
-            Pageable pageable = PageRequest.of(page, 2);
+            Pageable pageable = PageRequest.of(page, 1);
 
             Page<Product> product = repositoryProduct.findByNameContainingIgnoreCase(nameProducts, pageable);
 

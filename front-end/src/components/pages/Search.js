@@ -17,6 +17,9 @@ function Search() {
 
     const searchTerm = searchParams.get('nameProducts');
 
+    const [totalPages, setTotalPages] = useState(1);
+    const [pageAtual, setPageAtual] = useState(0);
+
     useEffect(() => {
 
         const fetchResults = async () => {
@@ -29,8 +32,10 @@ function Search() {
                     params: { nameProducts:searchTerm, page:0 }
                 });
 
-                console.log(response)
+                setTotalPages(response.data.totalPages || 1)
+                setPageAtual(response.data.currentPage)
                 setResults(response.data.products);
+
                 
             } catch (err) {
                 
@@ -99,7 +104,7 @@ function Search() {
                 </div>
             </div>
 
-            <Pagination totalPages={} />
+            <Pagination totalPages_={totalPages} pageAtual_={pageAtual} />
 
         </div>
     );

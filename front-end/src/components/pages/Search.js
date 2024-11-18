@@ -29,7 +29,7 @@ function Search() {
                 setError(null);
 
                 const response = await axios.get('http://localhost:8080/products/search', {
-                    params: { nameProducts:searchTerm, page:0 }
+                    params: { nameProducts:searchTerm, page:pageAtual }
                 });
 
                 setTotalPages(response.data.totalPages || 1)
@@ -55,7 +55,7 @@ function Search() {
             
             setError('Nenhum termo de busca fornecido.');
         }
-    }, [searchTerm]);
+    }, [searchTerm, pageAtual]);
 
     // Exibe "Carregando" enquanto a requisição está em andamento
     if (loading) return (
@@ -104,7 +104,7 @@ function Search() {
                 </div>
             </div>
 
-            <Pagination totalPages_={totalPages} pageAtual_={pageAtual} />
+            <Pagination totalPages_={totalPages} pageAtual_={pageAtual} onPageChange={setPageAtual} />
 
         </div>
     );

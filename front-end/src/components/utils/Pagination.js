@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
-function Pagination({totalPages_, pageAtual_}) {
-    const [totalPages, setTotalPages] = useState(1);
-    const [PageAtual, setPageAtual] = useState(0)
+function Pagination({totalPages_, pageAtual_, onPageChange}) {
+    const [totalPages, setTotalPages] = useState(totalPages_);
+    const [PageAtual, setPageAtual] = useState(pageAtual_)
 
     useEffect(() => {
         setTotalPages(totalPages_);
@@ -30,7 +30,7 @@ function Pagination({totalPages_, pageAtual_}) {
 
         if (pageClick){
 
-            setPageAtual(pageClick)  
+            onPageChange(pageClick)
                 
             activeCssInButtons(PageAtual);
 
@@ -39,19 +39,19 @@ function Pagination({totalPages_, pageAtual_}) {
 
             if (PageAtual >= totalPages -1){
 
-                setPageAtual(0)
+                onPageChange(0)
                 activeCssInButtons(PageAtual);
 
             } else {
                 
-                setPageAtual(PageAtual + 1)
+                onPageChange(PageAtual + 1)
                 activeCssInButtons(PageAtual);
 
             }
         }
         else if (voltar == true){
 
-            setPageAtual(PageAtual - 1)
+            onPageChange(PageAtual - 1)
 
             activeCssInButtons(PageAtual);
 

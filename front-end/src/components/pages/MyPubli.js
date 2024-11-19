@@ -1,23 +1,29 @@
 import NavBar from "../Forms/NavBar";
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import Pagination from "../utils/Pagination"
 
 function MyPubli() {
     const [products, setProducts] = useState([]);
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const idPublic = userInfo ? userInfo.idPublic : null;
+    const [totalPages, setTotalPages] = useState(0);
+    const [page, setPage] = useState(0);
 
     useEffect(() => {
         if (idPublic) {
-            axios.get(`http://localhost:8080/products/meus_publicados/${idPublic}`)
+            axios.get(`http://localhost:8080/products/meus_publicados/${idPublic}/${page}`)
                 .then(response => {
-                    setProducts(response.data);
+                    console.log(page, totalPages)
+                    setProducts(response.data.products);
+                    setTotalPages(response.data.totalPages || 1)
+                    setPage(response.data.currentPage)
                 })
                 .catch(error => {
                     console.error("Erro ao buscar produtos:", error);
                 });
         }
-    }, [idPublic]);
+    }, [idPublic, page]);
 
     return (
         <div>
@@ -49,6 +55,7 @@ function MyPubli() {
             </div>
         </div>
 
+        <Pagination totalPages_={totalPages} pageAtual_={page} onPageChange={setPage} />
         
     </div>
     );

@@ -61,10 +61,10 @@ public class products {
 
     }
 
-    @GetMapping("meus_publicados/{idPublic}")
-    public ResponseEntity<?> myPublished (@PathVariable("idPublic") UUID idPublic, JwtAuthenticationToken token){
+    @GetMapping("meus_publicados/{idPublic}/{page}")
+    public ResponseEntity<?> myPublished (@PathVariable("idPublic") UUID idPublic, @PathVariable("page") int page, JwtAuthenticationToken token){
 
-        return productsService.MyPublished(idPublic);
+        return productsService.MyPublished(idPublic, page);
 
     }
 

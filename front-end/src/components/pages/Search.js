@@ -35,8 +35,7 @@ function Search() {
                 setTotalPages(response.data.totalPages || 1)
                 setPageAtual(response.data.currentPage)
                 setResults(response.data.products);
-
-                
+  
             } catch (err) {
                 
                 setError(err.response.data)

@@ -164,17 +164,27 @@ public class productsService {
         }
     }
 
-    public ResponseEntity<?> MyPublished(UUID idPublic){
+    public ResponseEntity<?> MyPublished(UUID idPublic, int page){
 
-        List<Product> productsMy = repositoryProduct.findByUsers_IdPublic(idPublic);
+        Pageable pageable = PageRequest.of(page, 1);
 
-        if (productsMy.isEmpty()) {
+        Page<Product> product = repositoryProduct.findByUsers_IdPublic(idPublic, pageable);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("products", product.getContent());
+        response.put("totalPages", product.getTotalPages());
+        response.put("currentPage", product.getNumber());
+        response.put("totalElements", product.getTotalElements());
+
+        if (product.isEmpty()) {
 
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Você não tem produtos publicados!");
 
         } else {
 
-            return ResponseEntity.status(HttpStatus.OK).body(productsMy);
+            System.out.println(response);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
 
         }
 

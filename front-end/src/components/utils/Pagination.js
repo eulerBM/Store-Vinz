@@ -7,6 +7,7 @@ function Pagination({totalPages_, pageAtual_, onPageChange}) {
     useEffect(() => {
         setTotalPages(totalPages_);
         setPageAtual(pageAtual_);
+        activeCssInButtons(pageAtual_);
     }, [totalPages_, pageAtual_]);
 
     function activeCssInButtons (pageAtualUser) {
@@ -26,7 +27,7 @@ function Pagination({totalPages_, pageAtual_, onPageChange}) {
 
     const pageViews = ({pageClick, proxima, voltar}) => {
 
-        if (pageClick > totalPages || PageAtual < 0) return;
+        if (pageClick > totalPages || PageAtual < 0 ) return;
 
         if (pageClick){
 

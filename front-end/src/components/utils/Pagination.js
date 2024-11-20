@@ -27,13 +27,16 @@ function Pagination({totalPages_, pageAtual_, onPageChange}) {
 
     const pageViews = ({pageClick, proxima, voltar}) => {
 
-        if (pageClick > totalPages || PageAtual < 0 ) return;
+        if (pageClick === 0){
+            onPageChange(0)
+            activeCssInButtons(0)
+        }
 
         if (pageClick){
 
             onPageChange(pageClick)
                 
-            activeCssInButtons(PageAtual);
+            activeCssInButtons(pageClick);
 
         } 
         else if ( proxima == true){
@@ -41,7 +44,7 @@ function Pagination({totalPages_, pageAtual_, onPageChange}) {
             if (PageAtual >= totalPages -1){
 
                 onPageChange(0)
-                activeCssInButtons(PageAtual);
+                activeCssInButtons(0);
 
             } else {
                 
@@ -51,6 +54,8 @@ function Pagination({totalPages_, pageAtual_, onPageChange}) {
             }
         }
         else if (voltar == true){
+
+            if (PageAtual <= 0)return; 
 
             onPageChange(PageAtual - 1)
 

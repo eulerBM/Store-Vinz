@@ -182,12 +182,9 @@ public class productsService {
 
         } else {
 
-            System.out.println(response);
-
             return ResponseEntity.status(HttpStatus.OK).body(response);
 
         }
-
     }
 
     public ResponseEntity<?> SearchProductName(String nameProducts, int page) {

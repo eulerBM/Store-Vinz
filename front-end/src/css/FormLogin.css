@@ -100,3 +100,25 @@ body {
     background-color: #ff0676;
 
 }
+
+#olho {
+    position: absolute;
+    top: 30%;
+    right: 20px;
+    cursor: pointer;
+    width: 10px; 
+    height: 100px; 
+}
+
+input {
+    border-radius: 0;
+    padding: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.password-container{
+    position: relative;
+    width: 350px;
+}

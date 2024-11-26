@@ -24,9 +24,6 @@ function CreateProduct() {
 
         try {
 
-            
-
-            console.log(product)
 
             await axios.post("http://localhost:8080/products/criar", {
 

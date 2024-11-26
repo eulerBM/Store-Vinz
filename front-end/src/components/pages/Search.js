@@ -20,6 +20,12 @@ function Search() {
     const [totalPages, setTotalPages] = useState(1);
     const [pageAtual, setPageAtual] = useState(0);
 
+    function updatePageParameter(page) {
+        const url = new URL(window.location.href); 
+        url.searchParams.set('page', page);       
+        window.history.pushState({}, '', url);   
+    }
+
     useEffect(() => {
 
         const fetchResults = async () => {
@@ -35,6 +41,7 @@ function Search() {
                 setTotalPages(response.data.totalPages || 1)
                 setPageAtual(response.data.currentPage)
                 setResults(response.data.products);
+                updatePageParameter(pageAtual);
   
             } catch (err) {
                 
@@ -96,7 +103,7 @@ function Search() {
                                 </div>
                             ))
                         ) : (
-                            // Mostra mensagem de "Nenhum resultado encontrado" quando não há produtos
+                            
                             <p>Nenhum resultado encontrado.</p>
                         )
                     )}

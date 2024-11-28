@@ -22,10 +22,15 @@ function CreateProduct() {
         e.preventDefault();
 
         const formData = new FormData();
-        formData.append("name", product.name);
-        formData.append("description", product.description);
-        formData.append("price", product.price);
-        formData.append("image", product.image); 
+        formData.append(
+            "data",
+            new Blob([JSON.stringify({
+                name: product.name,
+                description: product.description,
+                price: product.price,
+            })], { type: "application/json" })
+        );
+        formData.append("image", product.image);
 
         try {
             const token = localStorage.getItem("token");

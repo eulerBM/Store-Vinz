@@ -17,7 +17,7 @@ public class contactMy {
     @Autowired
     private contactEmailService contactEmailService;
 
-    @PostMapping("email")
+    @PostMapping(value = "email")
     public ResponseEntity<?> ContactEmail(@Valid @RequestBody contactEmailRequestDTP data){
 
         return contactEmailService.contactemailservice(data);

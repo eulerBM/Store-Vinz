@@ -15,10 +15,7 @@ public record productCreateDTP(
         String description,
 
         @NotBlank(message = "O preço deve ser informado")
-        Long price,
-
-        @NotBlank(message = "Envie uma imagem do produto")
-        MultipartFile image
+        Long price
 
 ) {
 }

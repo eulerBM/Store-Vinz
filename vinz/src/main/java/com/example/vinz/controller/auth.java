@@ -23,42 +23,42 @@ public class auth {
     @Autowired
     private changeUser changeuser;
 
-    @PostMapping("login")
+    @PostMapping(value = "login")
     public ResponseEntity<?> Login(@Valid @RequestBody loginRequestDTP data){
 
         return loginservice.LoginService(data);
 
     }
 
-    @PostMapping("register")
+    @PostMapping(value = "register")
     public ResponseEntity<?> Register(@Valid @RequestBody registerRequestDTP data){
 
         return registerservice.RegisterService(data);
 
     }
 
-    @PostMapping("user")
+    @PostMapping(value = "user")
     public ResponseEntity<?> User(@Valid @RequestBody registerRequestDTP data){
 
         return registerservice.RegisterService(data);
 
     }
 
-    @PostMapping("change_Password")
+    @PostMapping(value = "change_Password")
     public ResponseEntity<?> ChangePassword(@Valid @RequestBody ChangePasswordDTP data){
 
         return changeuser.changePassword(data);
 
     }
 
-    @PostMapping("change_Name")
+    @PostMapping(value = "change_Name")
     public ResponseEntity<?> ChangeName (@Valid @RequestBody ChangeNameDTP data, JwtAuthenticationToken token){
 
         return changeuser.changeName(data, token);
 
     }
 
-    @DeleteMapping("delete_User/{id}")
+    @DeleteMapping(value = "delete_User/{id}")
     public ResponseEntity<?> DeleteUser (@Valid @PathVariable @RequestBody long id, DeleteUserDTP data, JwtAuthenticationToken token){
 
         return changeuser.deleteUser(id, data, token);

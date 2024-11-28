@@ -2,6 +2,7 @@ package com.example.vinz.dtp;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
 
 public record productCreateDTP(
 
@@ -13,8 +14,11 @@ public record productCreateDTP(
         @NotBlank
         String description,
 
-        @NotBlank
-        Long price
+        @NotBlank(message = "O preço deve ser informado")
+        Long price,
+
+        @NotBlank(message = "Envie uma imagem do produto")
+        MultipartFile image
 
 ) {
 }

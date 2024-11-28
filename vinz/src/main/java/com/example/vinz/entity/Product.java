@@ -4,6 +4,7 @@ import com.example.vinz.dtp.productCreateDTP;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -28,6 +29,10 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
+    @Lob
+    @Column(name = "image", nullable = true, columnDefinition = "BYTEA")
+    private byte[] image;
+
     @Column(length = 50, nullable = false)
     private LocalDateTime published_data;
 
@@ -36,26 +41,15 @@ public class Product {
     @JsonBackReference
     private Users users;
 
-    public Product(productCreateDTP data, Users user) {
-
-        BigDecimal price;
-
-        try {
-
-            price = new BigDecimal(data.price());
-
-        } catch (NumberFormatException e) {
-
-            throw new IllegalArgumentException("Preço inválido: " + data.price());
-
-        }
+    public Product(productCreateDTP data, Users user) throws IOException {
 
         this.idPublic = UUID.randomUUID();
         this.name = data.name();
         this.description = data.description();
-        this.price = price;
+        this.price = new BigDecimal(data.price());;
         this.published_data = LocalDateTime.now();
         this.users = user;
+        this.image = data.image().getBytes();
 
     }
 
@@ -76,6 +70,14 @@ public class Product {
 
     public UUID getId_public() {
         return idPublic;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public LocalDateTime getPublished_data() {

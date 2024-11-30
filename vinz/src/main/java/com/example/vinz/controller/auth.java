@@ -23,42 +23,42 @@ public class auth {
     @Autowired
     private changeUser changeuser;
 
-    @PostMapping(value = "login")
+    @PostMapping(path = "login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> Login(@Valid @RequestBody loginRequestDTP data){
 
         return loginservice.LoginService(data);
 
     }
 
-    @PostMapping(value = "register")
+    @PostMapping(path = "register", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> Register(@Valid @RequestBody registerRequestDTP data){
 
         return registerservice.RegisterService(data);
 
     }
 
-    @PostMapping(value = "user")
+    @PostMapping(path = "user", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> User(@Valid @RequestBody registerRequestDTP data){
 
         return registerservice.RegisterService(data);
 
     }
 
-    @PostMapping(value = "change_Password")
+    @PostMapping(path = "change_Password", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> ChangePassword(@Valid @RequestBody ChangePasswordDTP data){
 
         return changeuser.changePassword(data);
 
     }
 
-    @PostMapping(value = "change_Name")
+    @PostMapping(path = "change_Name", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> ChangeName (@Valid @RequestBody ChangeNameDTP data, JwtAuthenticationToken token){
 
         return changeuser.changeName(data, token);
 
     }
 
-    @DeleteMapping(value = "delete_User/{id}")
+    @DeleteMapping(path = "delete_User/{id}", params = "id")
     public ResponseEntity<?> DeleteUser (@Valid @PathVariable @RequestBody long id, DeleteUserDTP data, JwtAuthenticationToken token){
 
         return changeuser.deleteUser(id, data, token);

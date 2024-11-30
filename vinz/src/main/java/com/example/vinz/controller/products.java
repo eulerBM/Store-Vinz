@@ -21,56 +21,56 @@ public class products {
     @Autowired
     private productsService productsService;
 
-    @GetMapping(value = "all/{page}")
+    @GetMapping(path = "all/{page}")
     public ResponseEntity<?> ProductsAll (@PathVariable("page") int page) {
 
         return productsService.ProductsAll(page);
 
     }
 
-    @GetMapping(value = "get/{idPublic}")
+    @GetMapping(path = "get/{idPublic}", params = "idPublic")
     public ResponseEntity<?> ProductsGet (@PathVariable("idPublic") UUID idPublic) {
 
         return productsService.ProductsGet(idPublic);
 
     }
 
-    @PostMapping(value = "get/list")
+    @PostMapping(path = "get/list", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> ProductsListGet (@RequestBody List<String> data){
 
         return productsService.ProductsListGet(data);
 
     }
 
-    @PostMapping(value = "criar")
+    @PostMapping(path = "criar", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> ProductsCreate (@Valid @RequestBody productCreateDTP data, JwtAuthenticationToken token){
 
         return productsService.ProductsCreate(data, token);
 
     }
 
-    @PostMapping(value = "edite/{id}")
+    @PostMapping(path = "edite/{id}", consumes = "application/json", produces = "application/json", params = "id")
     public ResponseEntity<?> ProductsEdite (@Valid @PathVariable @RequestBody long id, productEditeDTP data){
 
         return productsService.ProductsEdite(id, data);
 
     }
 
-    @DeleteMapping(value = "delete/{id}")
+    @DeleteMapping(path = "delete/{id}", params = "id")
     public ResponseEntity<?> productsDelete (@PathVariable long id){
 
         return productsService.ProductsDelete(id);
 
     }
 
-    @GetMapping(value = "meus_publicados/{idPublic}/{page}")
+    @GetMapping(path = "meus_publicados/{idPublic}/{page}")
     public ResponseEntity<?> myPublished (@PathVariable("idPublic") UUID idPublic, @PathVariable("page") int page, JwtAuthenticationToken token){
 
         return productsService.MyPublished(idPublic, page);
 
     }
 
-    @GetMapping(value = "search")
+    @GetMapping(path = "search")
     public ResponseEntity<?> SearchProductName (@RequestParam("nameProducts") String nameProducts, @RequestParam("page") int page){
 
         return productsService.SearchProductName(nameProducts, page);

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import NavBar from "../Forms/NavBar";
 
 function Conta() {
-    // Estados para armazenar os valores dos inputs
+    
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

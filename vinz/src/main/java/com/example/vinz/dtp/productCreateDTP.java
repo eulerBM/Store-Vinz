@@ -15,7 +15,7 @@ public record productCreateDTP(
         String description,
 
         @NotBlank(message = "O preço deve ser informado")
-        Long price
+        String price
 
 ) {
 }

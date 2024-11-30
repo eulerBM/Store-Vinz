@@ -92,7 +92,7 @@ public class productsService {
 
             repositoryProduct.save(productModel);
 
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            return ResponseEntity.status(HttpStatus.CREATED).body("Produto criado com sucesso!");
 
         } catch (Exception e) {
 

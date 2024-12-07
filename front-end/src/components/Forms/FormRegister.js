@@ -7,7 +7,9 @@ function FormRegister() {
     const [formData, setFormData] = useState({
         nome: '',
         email: '',
-        password: ''
+        password: '',
+        password2:''
+
     });
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
@@ -24,14 +26,21 @@ function FormRegister() {
         event.preventDefault();
         
         try {
+
+            if (formData.password !== formData.password2) {
+                setErrorMessage("As senhas não são iguais!");
+                return;
+            }
+
             const response = await axios.post('http://localhost:8080/auth/register', {
                 nome: formData.nome,
                 email: formData.email,
-                password: formData.password
+                password: formData.password,
+                password2: formData.password2
             });
 
             if (response.status === 200) {
-                navigate('/');
+                navigate('/login');
             }
         } catch (error) {
             if (error.response && error.response.status === 400) {
@@ -79,6 +88,16 @@ function FormRegister() {
                                     id="password" 
                                     name="password" 
                                     value={formData.password} 
+                                    onChange={handleChange} 
+                                    placeholder="Digite sua senha"
+                                    required
+                                />
+                                <label for="password">Repetir senha</label>
+                                <input 
+                                    type="password" 
+                                    id="password" 
+                                    name="password2" 
+                                    value={formData.password2} 
                                     onChange={handleChange} 
                                     placeholder="Digite sua senha"
                                     required

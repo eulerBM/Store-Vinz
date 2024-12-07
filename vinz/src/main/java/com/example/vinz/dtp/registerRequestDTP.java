@@ -17,7 +17,11 @@ public record registerRequestDTP(
 
         @NotBlank(message = "O campo senha não pode ser branco ! ")
         @Size(min = 1, max = 300)
-        String password
+        String password,
+
+        @NotBlank(message = "O campo senha não pode ser branco ! ")
+        @Size(min = 1, max = 300)
+        String password2
 
 ) {
 }

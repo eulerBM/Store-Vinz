@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../css/FormLogin.css';
 import Carrinho from '../utils/Carrinho';
+import { Link } from "react-router-dom";
 import axios from 'axios';
 
 function FormLogin() {
@@ -75,8 +76,11 @@ function FormLogin() {
                 </div>
 
                 <a href="/">Esqueci minha senha</a>
+                <Link to="/register">Cadastrar-me</Link>
+
                 <input type="submit" value="Acessar" className="btn" />
                 {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+
             </form>
         </div>
     );

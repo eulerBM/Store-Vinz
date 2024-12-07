@@ -4,7 +4,9 @@ import com.example.vinz.dtp.registerRequestDTP;
 import com.example.vinz.entity.Users;
 import com.example.vinz.repository.UserRepository;
 import com.example.vinz.response.responseRegister;
+import com.example.vinz.utils.validade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ public class registerService {
     public ResponseEntity<?> RegisterService(registerRequestDTP data){
 
         try {
+
+            validade.passworldIsIquals(data.password(), data.password2());
 
             Users user = new Users(data);
 

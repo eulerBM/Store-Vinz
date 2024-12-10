@@ -15,7 +15,12 @@ function Product() {
         
             try {
 
-                const response = await axios.get(`http://localhost:8080/products/get/${idPublic}`);
+                const response = await axios.get(`http://localhost:8080/products/get/${idPublic}`, {
+                    params: { idPublic:idPublic 
+
+                    }
+                }
+                );
                 setResults(response.data);
 
             } catch (err) {

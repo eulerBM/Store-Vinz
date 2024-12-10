@@ -2,6 +2,7 @@ version: "3.1"
 
 services:
 
+  # Serviço do Postgress
   db:
     image: postgres:14.2-alpine
     restart: always
@@ -11,3 +12,14 @@ services:
       POSTGRES_DB: vinz
     ports:
       - "5432:5432"
+
+    # Serviço do MongoDB
+  mongo:
+    image: mongo:latest
+    restart: always
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: mongo
+        MONGO_INITDB_ROOT_PASSWORD: admin
+        MONGO_INITDB_DATABASE: chatdb
+    ports:
+      - "27017:27017"

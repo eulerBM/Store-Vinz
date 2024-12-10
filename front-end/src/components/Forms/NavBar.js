@@ -64,6 +64,9 @@ function NavBar() {
                                     <Link className="nav-link" to="/meus_publicados">Meus publicados</Link>
                                 </li>
                                 <li className="nav-item">
+                                    <Link className="nav-link" to="/chat">Suporte</Link>
+                                </li>
+                                <li className="nav-item">
                                     <a><Logout /></a>
                                 </li>
                             </>

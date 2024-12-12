@@ -1,7 +1,9 @@
 package com.example.vinz.controller;
 
-import com.example.vinz.entity.Chat;
-import com.example.vinz.repository.ChatRepository;
+import com.example.vinz.dtp.chat.getChatDTP;
+import com.example.vinz.dtp.chat.sendChatDTP;
+import com.example.vinz.service.chatService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
@@ -10,23 +12,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
-
 @RestController
 @RequestMapping("chat/")
 public class chat {
 
     @Autowired
-    private ChatRepository chatRepository;
+    chatService chatService;
 
-    @PostMapping(path = "create")
-    public ResponseEntity<?> CreateChat(@RequestBody UUID user_uuid){
+    @PostMapping(path = "get")
+    public ResponseEntity<?> getChat(@Valid @RequestBody getChatDTP data){
 
-        Chat chat = new Chat(user_uuid);
+        return chatService.getChat(data);
 
-        chatRepository.save(chat);
+    }
 
-        return ResponseEntity.ok().build();
+    @PostMapping(path = "send")
+    public ResponseEntity<?> send(@Valid @RequestBody sendChatDTP data){
+
+        return chatService.send(data);
 
     }
 }

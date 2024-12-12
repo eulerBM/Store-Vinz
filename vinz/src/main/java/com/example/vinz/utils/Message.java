@@ -4,10 +4,12 @@ import java.time.LocalDateTime;
 
 public class Message {
 
+    private String sender;
     private String msg;
     private LocalDateTime date;
 
-    public Message(String msg, LocalDateTime date) {
+    public Message(String sender, String msg, LocalDateTime date) {
+        this.sender = sender;
         this.msg = msg;
         this.date = date;
     }
@@ -15,19 +17,15 @@ public class Message {
     public Message() {
     }
 
+    public String getSender() {
+        return sender;
+    }
+
     public String getMsg() {
         return msg;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
     public LocalDateTime getDate() {
         return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
     }
 }

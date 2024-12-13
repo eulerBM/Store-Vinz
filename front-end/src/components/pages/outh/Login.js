@@ -7,7 +7,6 @@ function Login () {
         <FormLogin />
 
     )
-
 }
 
 export default Login;

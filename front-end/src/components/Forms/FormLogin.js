@@ -18,8 +18,8 @@ function FormLogin() {
     };
 
     const handleSubmit = async (event) => {
-        event.preventDefault(); 
-        
+        event.preventDefault();
+
         try {
             const response = await axios.post('http://localhost:8080/auth/login', {
                 email: email,
@@ -72,7 +72,7 @@ function FormLogin() {
                         value={senha}
                         onChange={(e) => setSenha(e.target.value)}
                     />
-                    <span class="lnr lnr-eye" id="olho" onClick={togglePasswordVisibility}></span>
+                    <span className="lnr lnr-eye" id="olho" onClick={togglePasswordVisibility}></span>
                 </div>
 
                 <a href="/">Esqueci minha senha</a>
@@ -80,9 +80,9 @@ function FormLogin() {
 
                 <input type="submit" value="Acessar" className="btn" />
                 {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-
             </form>
         </div>
+
     );
 }
 

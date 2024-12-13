@@ -13,15 +13,15 @@ function NavBar() {
 
     const getIdPublicUser = JSON.parse(localStorage.getItem("userInfo"));
     const idPublicUserOrFalse = getIdPublicUser && getIdPublicUser.idPublic ? getIdPublicUser.idPublic : false;
-    
+
 
     function CarrinhoButton() {
 
         navigate('/carrinho')
-    
+
     };
-    
-    
+
+
     // Função para tratar a busca
     const handleSearch = (e) => {
         e.preventDefault();
@@ -67,7 +67,7 @@ function NavBar() {
                                     <Link className="nav-link" to="/chat">Suporte</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <a><Logout /></a>
+                                    <button className="nav-link" onClick={Logout}>Sair</button> {/* Substituído <a> por <button> */}
                                 </li>
                             </>
                         ) : ( // Caso contrário, exibe os botões de Login e Registro
@@ -82,11 +82,11 @@ function NavBar() {
                         )}
                     </ul>
 
-                    <button type="button" class="btn btn-primary position-relative" onClick={CarrinhoButton}>
+                    <button type="button" className="btn btn-primary position-relative" onClick={CarrinhoButton}>
                         Carrinho
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             {length(idPublicUserOrFalse)}
-                            <span class="visually-hidden">unread messages</span>
+                            <span className="visually-hidden">unread messages</span>
                         </span>
                     </button>
 

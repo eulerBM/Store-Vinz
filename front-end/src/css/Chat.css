@@ -61,3 +61,13 @@
 .chat-button:hover {
     background-color: #0056b3;
 }
+
+.chat-date {
+
+    font-size: 10px;
+}
+
+.chat-sender {
+
+    font-size: 15px;
+}

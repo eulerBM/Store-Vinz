@@ -14,7 +14,7 @@ function Logout () {
 
     return (
 
-        <button class="nav-link" onClick={handleLogout}>
+        <button className="nav-link" onClick={handleLogout}>
             Sair
         </button>
 

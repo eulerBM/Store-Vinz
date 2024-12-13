@@ -8,7 +8,7 @@ function FormRegister() {
         nome: '',
         email: '',
         password: '',
-        password2:''
+        password2: ''
 
     });
     const [errorMessage, setErrorMessage] = useState('');
@@ -24,7 +24,7 @@ function FormRegister() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        
+
         try {
 
             if (formData.password !== formData.password2) {
@@ -52,66 +52,64 @@ function FormRegister() {
     };
 
     return (
-        <div class="page">
+        <div className="page">
 
             <div className="form-container">
 
-                        <form onSubmit={handleSubmit} class="formLogin">
-                            <h2>Cadastro</h2>
+                <form onSubmit={handleSubmit} className="formLogin">
+                    <h2>Cadastro</h2>
 
-                            
-                            <label for="email">Nome</label>
-                                <input 
-                                    type="text" 
-                                    id="nome" 
-                                    name="nome" 
-                                    value={formData.nome} 
-                                    onChange={handleChange} 
-                                    placeholder="Digite seu nome"
-                                    required
-                                />
-                            
-                                <label for="email">E-mail</label>
-                                <input 
-                                    type="email" 
-                                    id="email" 
-                                    name="email" 
-                                    value={formData.email} 
-                                    onChange={handleChange} 
-                                    placeholder="Digite seu email"
-                                    required
-                                />
+                    <label htmlFor="nome">Nome</label>
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        value={formData.nome}
+                        onChange={handleChange}
+                        placeholder="Digite seu nome"
+                        required
+                    />
 
-                                <label for="password">Senha</label>
-                                <input 
-                                    type="password" 
-                                    id="password" 
-                                    name="password" 
-                                    value={formData.password} 
-                                    onChange={handleChange} 
-                                    placeholder="Digite sua senha"
-                                    required
-                                />
-                                <label for="password">Repetir senha</label>
-                                <input 
-                                    type="password" 
-                                    id="password" 
-                                    name="password2" 
-                                    value={formData.password2} 
-                                    onChange={handleChange} 
-                                    placeholder="Digite sua senha"
-                                    required
-                                />
+                    <label htmlFor="email">E-mail</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="Digite seu email"
+                        required
+                    />
 
-                            <input type="submit" value="Cadastrar" class="btn" />
+                    <label htmlFor="password">Senha</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder="Digite sua senha"
+                        required
+                    />
 
-                            {errorMessage && <p className="error-message">{errorMessage}</p>}
+                    <label htmlFor="password2">Repetir senha</label>
+                    <input
+                        type="password"
+                        id="password2"
+                        name="password2"
+                        value={formData.password2}
+                        onChange={handleChange}
+                        placeholder="Digite sua senha"
+                        required
+                    />
 
-                        </form>
-                    </div>
+                    <input type="submit" value="Cadastrar" className="btn" />
 
+                    {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+                </form>
+            </div>
         </div>
-        
     );
 }
 

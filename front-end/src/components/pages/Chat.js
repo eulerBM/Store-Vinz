@@ -38,11 +38,40 @@ function Chat() {
         }
     };
 
+    function sendMessagesServer(){
+
+        try {
+
+            const response = axios.post("http://localhost:8080/chat/send",
+                {
+                    sender: "USER",
+                    message: input,
+                    uuidUser: getInfosUser.idPublic
+                }
+            )
+            if(response.status === 200){
+
+                setMessages((prevMessages) => [...prevMessages, { sender: 'USER', msg: input, date: new Date().toISOString() }]);
+
+            } else {
+
+                setMessages((prevMessages) => [...prevMessages, { sender: 'USER', msg: "Não foi possivel enviar essa mensagem !", date: new Date().toISOString() }]);
+
+            }
+
+        } catch (error) {
+
+            console.error("Erro ao enviar mensagens:", error);
+            setMessages([]); 
+        }
+
+        
+    }
+
     const handleSend = () => {
         if (input.trim() === '') return; // Não envia mensagens vazias
 
-        // Adiciona a mensagem ao histórico
-        setMessages((prevMessages) => [...prevMessages, { sender: 'USER', msg: input, date: new Date().toISOString() }]);
+        sendMessagesServer();
 
         // Simula a resposta automática
         setTimeout(() => {

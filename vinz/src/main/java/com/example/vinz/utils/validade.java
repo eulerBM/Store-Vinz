@@ -1,7 +1,5 @@
 package com.example.vinz.utils;
 
-import org.springframework.http.ResponseEntity;
-
 public class validade {
 
     public static void passworldIsIquals(String password, String password2){

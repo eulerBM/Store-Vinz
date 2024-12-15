@@ -3,7 +3,6 @@ package com.example.vinz.entity;
 import com.example.vinz.dtp.productCreateDTP;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;

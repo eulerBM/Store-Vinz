@@ -1,6 +1,5 @@
 package com.example.vinz.entity;
 
-
 import com.example.vinz.dtp.registerRequestDTP;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;

@@ -13,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class chatService {
@@ -54,30 +51,38 @@ public class chatService {
 
         } catch (Exception e) {
 
-            throw new RuntimeException(e);
+            return ResponseEntity.internalServerError().body(e);
 
         }
     }
 
     public ResponseEntity<?> send(sendChatDTP data){
 
-        Optional<Chat> userChat = chatRepository.findByUuidUser(data.uuidUser());
+        try {
 
-        if (userChat.isPresent()){
+            Optional<Chat> userChat = chatRepository.findByUuidUser(data.uuidUser());
 
-            Chat chat = userChat.get();
+            if (userChat.isPresent()) {
 
-            Message message = new Message(data.sender(), data.message(), LocalDateTime.now());
+                Chat chat = userChat.get();
 
-            chat.setContent(message);
+                Message message = new Message(data.sender(), data.message(), LocalDateTime.now());
 
-            chatRepository.save(chat);
+                chat.setContent(message);
 
-            return ResponseEntity.status(HttpStatus.OK).build();
+                chatRepository.save(chat);
+
+                return ResponseEntity.status(HttpStatus.OK).build();
+
+            }
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Esse usuario não possui um chat aberto");
+
+        } catch (Exception e) {
+
+            return ResponseEntity.internalServerError().body(e);
 
         }
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Esse usuario não possui um chat aberto");
 
     }
 }

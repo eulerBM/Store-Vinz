@@ -67,7 +67,7 @@ function NavBar() {
                                     <Link className="nav-link" to="/chat">Suporte</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <button className="nav-link" onClick={Logout}>Sair</button> {/* Substituído <a> por <button> */}
+                                    <Logout />
                                 </li>
                             </>
                         ) : ( // Caso contrário, exibe os botões de Login e Registro

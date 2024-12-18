@@ -19,14 +19,14 @@ public class chat {
     @Autowired
     chatService chatService;
 
-    @PostMapping(path = "get")
+    @PostMapping(path = "get", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> getChat(@Valid @RequestBody getChatDTP data){
 
         return chatService.getChat(data);
 
     }
 
-    @PostMapping(path = "send")
+    @PostMapping(path = "send", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> send(@Valid @RequestBody sendChatDTP data){
 
         return chatService.send(data);

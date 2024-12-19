@@ -73,8 +73,6 @@ public class loginService {
                         userGet.getCreateAccount()
                 );
 
-                redisRepository.createUser(userGet.getIdPublic());
-
                 return ResponseEntity.ok(new responseLogin(jwtValue, expiresIn, userResponseDTO));
 
             }

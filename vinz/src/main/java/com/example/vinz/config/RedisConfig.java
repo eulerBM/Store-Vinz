@@ -13,10 +13,10 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        // Tentando conectar diretamente ao nome do contêiner
-        return new LettuceConnectionFactory("redis-server", 6379);
+        LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory("localhost", 6379);
+        connectionFactory.setPassword("admin"); // Adicione a senha aqui
+        return connectionFactory;
     }
-
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {

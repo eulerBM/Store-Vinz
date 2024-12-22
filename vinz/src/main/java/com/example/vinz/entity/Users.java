@@ -30,7 +30,8 @@ public class Users {
     @Column(length = 300, nullable = false)
     private String password;
 
-    @Column(length = 6, nullable = false)
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ChoiceRole role;
 
     @Column(nullable = false)
@@ -52,6 +53,7 @@ public class Users {
     }
 
     public enum ChoiceRole {
+        SUPER,
         ADMIN,
         USER
     }

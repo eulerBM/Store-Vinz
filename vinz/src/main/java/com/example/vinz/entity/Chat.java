@@ -13,11 +13,13 @@ public class Chat {
 
     @Id
     private UUID id;
+    private String name;
     private UUID uuidUser;
     private List<Message> content;
 
-    public Chat(UUID user_uuid){
+    public Chat(UUID user_uuid, String name){
         this.id = UUID.randomUUID();
+        this.name = name;
         this.uuidUser = user_uuid;
         this.content = new ArrayList<>();
     }
@@ -31,6 +33,14 @@ public class Chat {
 
     public UUID getUuidUser() {
         return uuidUser;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<Message> getContent() {

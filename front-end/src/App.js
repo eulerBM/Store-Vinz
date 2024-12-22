@@ -6,12 +6,14 @@ import Register from './components/pages/outh/Register';
 import ChangePassword from './components/pages/outh/ChangePassword';
 import Conta from './components/pages/Conta';
 import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRouteAdmin from './components/ProtectedRouteAdmin';
 import Search from './components/pages/Search';
 import CreateProduct from './components/pages/CreateProduct';
 import Product from './components/pages/Product';
 import MyPubli from './components/pages/MyPubli';
 import CarrinhoPage from './components/pages/CarrinhoPage';
 import Chat from './components/pages/Chat';
+import ChatAdmin from './administradores/ChatAdmin';
 
 function App() {
 
@@ -29,6 +31,15 @@ function App() {
         <Route path="/chat" element={<Chat />} />
 
          {/* Rotas protegidas */}
+         <Route 
+          path="/admin/chat" 
+          element={
+            <ProtectedRouteAdmin>
+              <ChatAdmin />
+            </ProtectedRouteAdmin>
+          } 
+        />
+
          <Route 
           path="/conta" 
           element={

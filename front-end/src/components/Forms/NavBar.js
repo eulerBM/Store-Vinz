@@ -8,21 +8,28 @@ import '../../css/FormLogin.css';
 function NavBar() {
     const [searchTerm, setSearchTerm] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
     const { length } = Carrinho();
     const navigate = useNavigate();
 
     const getIdPublicUser = JSON.parse(localStorage.getItem("userInfo"));
     const idPublicUserOrFalse = getIdPublicUser && getIdPublicUser.idPublic ? getIdPublicUser.idPublic : false;
 
+    useEffect(() => {
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        if (userInfo && ["ADMIN", "SUPER"].includes(userInfo.role)) {
+            console.log("É ADMIN")
+            setIsAdmin(true);
+        } else {
+            console.log("não é admin")
+            setIsAdmin(false);
+        }
+    }, []);
 
     function CarrinhoButton() {
+        navigate('/carrinho');
+    }
 
-        navigate('/carrinho')
-
-    };
-
-
-    // Função para tratar a busca
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchTerm.trim()) {
@@ -52,7 +59,27 @@ function NavBar() {
                             <Link className="nav-link active" aria-current="page" to="/">Principal</Link>
                         </li>
 
-                        {isLoggedIn ? ( // Se estiver logado, exibe as opções de usuário logado
+                        {isAdmin ? (
+                            // Exibe rotas para administradores
+                            <>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/conta">Conta</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/criar_produto">Publicar</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/meus_publicados">Meus publicados</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/admin/chat">Suporte Admin</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Logout />
+                                </li>
+                            </>
+                        ) : isLoggedIn ? (
+                            // Exibe rotas para usuários que não são administradores
                             <>
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/conta">Conta</Link>
@@ -70,7 +97,8 @@ function NavBar() {
                                     <Logout />
                                 </li>
                             </>
-                        ) : ( // Caso contrário, exibe os botões de Login e Registro
+                        ) : (
+                            // Exibe rotas para usuários não logados
                             <>
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/login">Entrar</Link>

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,7 +40,9 @@ public class chatService {
 
             else if (user.isPresent()) {
 
-                Chat chat = new Chat(data.uuidUser());
+                Users getNameUser = user.get();
+
+                Chat chat = new Chat(data.uuidUser(), getNameUser.getName());
 
                 chatRepository.save(chat);
 
@@ -48,6 +51,27 @@ public class chatService {
             }
 
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não possui um cadastro!");
+
+        } catch (Exception e) {
+
+            return ResponseEntity.internalServerError().body(e);
+
+        }
+    }
+
+    public ResponseEntity<?> getChats(){
+
+        try {
+
+            List<Chat> getChats = chatRepository.findAll();
+
+            if (getChats.isEmpty()){
+
+                return ResponseEntity.notFound().build();
+
+            }
+
+            return ResponseEntity.ok(getChats);
 
         } catch (Exception e) {
 

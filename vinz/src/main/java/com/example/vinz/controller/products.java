@@ -20,14 +20,14 @@ public class products {
     private productsService productsService;
 
     @GetMapping(path = "all/{page}")
-    public ResponseEntity<?> ProductsAll (@PathVariable("page") int page) {
+    public ResponseEntity<?> ProductsAll (@PathVariable int page) {
 
         return productsService.ProductsAll(page);
 
     }
 
-    @GetMapping(path = "get/{idPublic}", params = "idPublic")
-    public ResponseEntity<?> ProductsGet (@PathVariable("idPublic") UUID idPublic) {
+    @GetMapping(path = "get/{idPublic}")
+    public ResponseEntity<?> ProductsGet (@PathVariable UUID idPublic) {
 
         return productsService.ProductsGet(idPublic);
 
@@ -49,14 +49,14 @@ public class products {
 
     }
 
-    @PostMapping(path = "edite/{id}", consumes = "application/json", produces = "application/json", params = "id")
+    @PostMapping(path = "edite/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> ProductsEdite (@Valid @PathVariable @RequestBody long id, productEditeDTP data){
 
         return productsService.ProductsEdite(id, data);
 
     }
 
-    @DeleteMapping(path = "delete/{id}", params = "id")
+    @DeleteMapping(path = "delete/{id}")
     public ResponseEntity<?> productsDelete (@PathVariable long id){
 
         return productsService.ProductsDelete(id);
@@ -64,7 +64,7 @@ public class products {
     }
 
     @GetMapping(path = "meus_publicados/{idPublic}/{page}")
-    public ResponseEntity<?> myPublished (@PathVariable("idPublic") UUID idPublic, @PathVariable("page") int page, JwtAuthenticationToken token){
+    public ResponseEntity<?> myPublished (@PathVariable UUID idPublic, @PathVariable int page, JwtAuthenticationToken token){
 
         return productsService.MyPublished(idPublic, page);
 

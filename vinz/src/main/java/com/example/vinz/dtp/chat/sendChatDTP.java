@@ -9,7 +9,7 @@ import java.util.UUID;
 public record sendChatDTP(
 
         @NotBlank(message = "O campo sender não pode ser branco ! ")
-        @Pattern(regexp = "ADMIN|USER", message = "A sender da conta deve ser 'ADMIN' ou 'USER'")
+        @Pattern(regexp = "ADMIN|USER", message = "O sender da conta deve ser 'ADMIN' ou 'USER'")
         String sender,
 
         @NotBlank(message = "O campo message não pode ser branco ! ")

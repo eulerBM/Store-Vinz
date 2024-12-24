@@ -1,7 +1,9 @@
 package com.example.vinz.entity;
 
 import com.example.vinz.utils.Message;
+import jakarta.persistence.PrePersist;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ public class Chat {
     @Id
     private UUID id;
     private String name;
+    @Indexed(unique = true)
     private UUID uuidUser;
     private List<Message> content;
 

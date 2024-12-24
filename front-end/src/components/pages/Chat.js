@@ -25,25 +25,37 @@ function Chat() {
 
     // Função para buscar histórico de mensagens
     useEffect(() => {
+        let isMounted = true; // Controle para prevenir múltiplas chamadas
+
         const fetchMessages = async () => {
+            console.log("Executando fetchMessages...");
             try {
                 const response = await axios.post("http://localhost:8080/chat/get", {
                     uuidUser: getInfosUser.idPublic // Enviado no request body
                 });
+                console.log(response.data);
 
-                if (response.data && Array.isArray(response.data.content)) {
-                    setMessages(response.data.content);
-                } else {
-                    console.error("Formato inesperado de resposta:", response.data);
-                    setMessages([]);
+                if (isMounted) {
+                    if (response.data && Array.isArray(response.data.content)) {
+                        setMessages(response.data.content);
+                    } else {
+                        console.error("Formato inesperado de resposta:", response.data);
+                        setMessages([]);
+                    }
                 }
             } catch (error) {
-                console.error("Erro ao buscar mensagens:", error);
-                setMessages([]);
+                if (isMounted) {
+                    console.error("Erro ao buscar mensagens:", error);
+                    setMessages([]);
+                }
             }
         };
 
         fetchMessages();
+
+        return () => {
+            isMounted = false; // Cleanup para evitar chamadas após desmontagem
+        };
     }, [getInfosUser.idPublic]);
 
     const handleKeyDown = (event) => {
@@ -52,19 +64,19 @@ function Chat() {
         }
     };
 
-    const sendMessagesServer = () => {
+    const sendMessagesServer = async () => {
         try {
-            axios.post("http://localhost:8080/chat/send", {
+            const response = await axios.post("http://localhost:8080/chat/send", {
                 sender: "USER",
                 message: input,
                 uuidUser: getInfosUser.idPublic
-            }).then((response) => {
-                if (response.status === 200) {
-                    setMessages((prevMessages) => [...prevMessages, { sender: 'USER', msg: input, date: new Date().toISOString() }]);
-                } else {
-                    setMessages((prevMessages) => [...prevMessages, { sender: 'Sistema', msg: "Não foi possível enviar essa mensagem!", date: new Date().toISOString() }]);
-                }
             });
+
+            if (response.status === 200) {
+                setMessages((prevMessages) => [...prevMessages, { sender: 'USER', msg: input, date: new Date().toISOString() }]);
+            } else {
+                setMessages((prevMessages) => [...prevMessages, { sender: 'Sistema', msg: "Não foi possível enviar essa mensagem!", date: new Date().toISOString() }]);
+            }
         } catch (error) {
             console.error("Erro ao enviar mensagens:", error);
             setMessages([]);

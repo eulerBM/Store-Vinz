@@ -40,9 +40,15 @@ public class chatService {
 
             else if (user.isPresent()) {
 
-                Users getNameUser = user.get();
+                Users getUser = user.get();
 
-                Chat chat = new Chat(data.uuidUser(), getNameUser.getName());
+                if (List.of(Users.ChoiceRole.ADMIN, Users.ChoiceRole.SUPER).contains(getUser.getRole())){
+
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body("ADMINS e SUPERS não podem ter chat");
+
+                }
+
+                Chat chat = new Chat(data.uuidUser(), getUser.getName());
 
                 chatRepository.save(chat);
 

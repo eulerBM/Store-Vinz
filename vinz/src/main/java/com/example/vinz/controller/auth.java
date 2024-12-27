@@ -45,9 +45,9 @@ public class auth {
     }
 
     @PostMapping(path = "change_Password", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> ChangePassword(@Valid @RequestBody ChangePasswordDTP data){
+    public ResponseEntity<?> ChangePassword(@Valid @RequestBody ChangePasswordDTP data, JwtAuthenticationToken token){
 
-        return changeuser.changePassword(data);
+        return changeuser.changePassword(data, token);
 
     }
 

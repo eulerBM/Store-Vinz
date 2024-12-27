@@ -37,7 +37,7 @@ public class Product {
     @JsonBackReference
     private Users users;
 
-    public Product(productCreateDTP data, Users user) throws IOException {
+    public Product(productCreateDTP data, Users user){
 
         this.idPublic = UUID.randomUUID();
         this.name = data.name();

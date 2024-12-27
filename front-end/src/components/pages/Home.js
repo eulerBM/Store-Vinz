@@ -12,6 +12,14 @@ function Home() {
     const userStatus = userInfo ? userInfo : false;
     const [totalPages, setTotalPages] = useState(1);
     const [PageAtual, setPageAtual] = useState(0)
+
+    const formatPrice = (price) => {
+        if (!price) return "0,00";
+        return parseFloat(price)
+            .toFixed(2)
+            .replace(".", ",") 
+            .replace(/\B(?=(\d{3})+(?!\d))/g, "."); 
+    };
    
     const fetchProducts = async () => {
         try {
@@ -55,6 +63,9 @@ function Home() {
                                                     ? `${product.description.substring(0, 40)}...`
                                                     : product.description
                                                 : 'Descrição não disponível'}
+                                        </p>
+                                        <p className="card-text">
+                                        R$: {formatPrice(product.price)}
                                         </p>
                                         <a href={`/products/get/${product.id_public}`} className="btn btn-primary">
                                             Ver mais

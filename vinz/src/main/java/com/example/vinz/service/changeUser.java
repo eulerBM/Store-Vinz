@@ -5,6 +5,7 @@ import com.example.vinz.dtp.ChangePasswordDTP;
 import com.example.vinz.dtp.DeleteUserDTP;
 import com.example.vinz.entity.Users;
 import com.example.vinz.repository.UserRepository;
+import com.example.vinz.utils.getIdToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,40 +24,30 @@ public class changeUser {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public ResponseEntity<?> changePassword (ChangePasswordDTP data){
+    public ResponseEntity<?> changePassword (ChangePasswordDTP data, JwtAuthenticationToken token){
 
         try {
 
-            Optional<Users> user = repository.findByEmail(data.Email());
+            Long userID = getIdToken.extrairTokenId(token);
+
+            Optional<Users> user = repository.findById(userID);
 
             if (user.isEmpty()){
 
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("E-mail não encontrado.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado.");
 
+            }
+
+            if (data.senhaNova().equals(data.senhaAntiga())){
+
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Senha antiga e a nova são parecidas!");
             }
 
             Users userGet = user.get();
-            String hashedPassword = userGet.getPassword();
-            boolean passwordMatches = passwordEncoder.matches(data.senhaNova(), hashedPassword);
+            userGet.setPassword(passwordEncoder.encode(data.senhaNova()));
+            repository.save(userGet);
 
-            if (passwordMatches){
-
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Senha igual a antiga.");
-
-            }
-
-            if (!userGet.getEmail().equals(data.Email())){
-
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
-            } else {
-
-                userGet.setPassword(passwordEncoder.encode(data.senhaNova()));
-                repository.save(userGet);
-
-                return ResponseEntity.ok().body("Senha trocada com sucesso !");
-
-            }
+            return ResponseEntity.ok().body("Senha trocada com sucesso !");
 
         } catch (Exception e) {
 

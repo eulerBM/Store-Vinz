@@ -9,28 +9,52 @@ function CreateProduct() {
         price: "",
     });
 
+    // Formatar preço automaticamente
+    const formatPrice = (value) => {
+        const numericValue = value.replace(/\D/g, ""); // Remove tudo que não for número
+        const formattedValue = (numericValue / 100).toLocaleString("pt-BR", {
+            style: "decimal",
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
+        return formattedValue;
+    };
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setProduct({ ...product, [name]: value });
+
+        if (name === "price") {
+            // Atualizar preço formatado
+            setProduct({
+                ...product,
+                [name]: formatPrice(value),
+            });
+        } else {
+            setProduct({
+                ...product,
+                [name]: value,
+            });
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-       
-        if (!product.name || !product.description || !product.price) {
+        // Remove o formato do preço para enviar ao backend
+        const numericPrice = product.price.replace(/\./g, "").replace(",", ".");
+
+        if (!product.name || !product.description || isNaN(numericPrice)) {
             alert("Por favor, preencha todos os campos.");
             return;
         }
 
         try {
             const token = localStorage.getItem("token");
-            await axios.post("http://localhost:8080/products/criar",
-                {
-                    name: product.name,
-                    description: product.description,
-                    price: product.price
-                },{
+            await axios.post("http://localhost:8080/products/criar", {
+                name: product.name,
+                description: product.description,
+                price: numericPrice,
+            }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
@@ -87,8 +111,6 @@ function CreateProduct() {
                             placeholder="Preço do produto"
                             value={product.price}
                             onChange={handleInputChange}
-                            min="0"
-                            step="0.01"
                             required
                         />
                     </div>

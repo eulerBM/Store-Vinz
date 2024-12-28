@@ -4,7 +4,6 @@ import com.example.vinz.dtp.productCreateDTP;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;

@@ -1,7 +1,6 @@
 package com.example.vinz.entity;
 
 import com.example.vinz.utils.Message;
-import jakarta.persistence.PrePersist;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;

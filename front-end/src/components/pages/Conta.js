@@ -137,12 +137,12 @@ function Conta() {
                         </div>
                         <div className="col-auto">
                             <span id="passwordHelpInline" className="form-text">
-                                Deve ter de 8 a 200 caracteres.
+                                Letra, Numero e Caracteres especiais 
                             </span>
                         </div>
                     </div>
 
-                    {/* Exibindo a barra de progresso */}
+                    
                     <div className="progress" role="progressbar" aria-label="Password strength" aria-valuenow={passwordProgress} aria-valuemin="0" aria-valuemax="100">
                         <div className={`progress-bar bg-${htmlProgessTextColor}`} style={{ width: `${passwordProgress}%` }}>{passwordProgress}</div>
                     </div>

@@ -28,7 +28,7 @@ public class productsService {
     @Autowired
     private ProductRepository repositoryProduct;
 
-    public ResponseEntity<?> ProductsAll (int page){
+    public ResponseEntity<?> ProductsAll(int page){
 
         try {
 
@@ -54,7 +54,7 @@ public class productsService {
         }
     }
 
-    public ResponseEntity<?> ProductsGet (UUID idPublic) {
+    public ResponseEntity<?> ProductsGet(UUID idPublic) {
 
         try {
 
@@ -79,7 +79,7 @@ public class productsService {
         }
     }
 
-    public ResponseEntity<?> ProductsCreate (productCreateDTP data, JwtAuthenticationToken token){
+    public ResponseEntity<?> ProductsCreate(productCreateDTP data, JwtAuthenticationToken token){
 
         try {
 
@@ -100,7 +100,7 @@ public class productsService {
         }
     }
 
-    public ResponseEntity<?> ProductsEdite (long id, productEditeDTP data){
+    public ResponseEntity<?> ProductsEdite(long id, productEditeDTP data){
 
         try {
 
@@ -139,7 +139,7 @@ public class productsService {
         }
     }
 
-    public ResponseEntity<?> ProductsDelete (long id){
+    public ResponseEntity<?> ProductsDelete(long id){
 
         try {
 

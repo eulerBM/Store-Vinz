@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface ChatRepository extends MongoRepository<Chat, String> {
 
     Optional<Chat> findByUuidUser(UUID uuidUser);
+
 }

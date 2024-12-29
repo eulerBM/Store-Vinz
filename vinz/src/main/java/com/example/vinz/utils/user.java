@@ -2,7 +2,6 @@ package com.example.vinz.utils;
 
 import com.example.vinz.repository.RedisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 
 import java.util.UUID;
 

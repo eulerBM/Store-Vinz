@@ -43,8 +43,6 @@ public class products {
     @PostMapping(path = "criar", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> ProductsCreate (@Valid @RequestBody productCreateDTP data, JwtAuthenticationToken token){
 
-        System.out.println(data);
-
         return productsService.ProductsCreate(data, token);
 
     }

@@ -1,160 +1,79 @@
-import { useState, useEffect, useRef } from 'react';
-import EmojiPicker from 'emoji-picker-react';
+import React, { useState, useEffect } from 'react';
 import NavBar from '../Forms/NavBar';
-import axios from 'axios';
+import { createWebSocketClient, subscribeToTopic, sendMessage } from '../utils/WebSocket';
 import '../../css/Chat.css';
 
 function Chat() {
-    const [messages, setMessages] = useState([]); // Armazena as mensagens
-    const [input, setInput] = useState(''); // Controla o que o usuário digita
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false); // Controla o estado do emoji picker
-    const getInfosUser = JSON.parse(localStorage.getItem("userInfo"));
-    const messagesEndRef = useRef(null);
+    const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState('');
+    const [stompClient, setStompClient] = useState(null);
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-    // Função para rolar até o final do chat
-    const scrollToBottom = () => {
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
+    // Função chamada quando o WebSocket é conectado
+    const handleConnect = (client) => {
+        console.log('Connected to WebSocket');
+        subscribeToTopic(client, '/chat/get-chat-response', (message) => {
+            setMessages((prevMessages) => [...prevMessages, message]);
+        });
     };
 
-    // Rola automaticamente para o final quando mensagens são atualizadas
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
-
-    // Função para buscar histórico de mensagens
-    useEffect(() => {
-        let isMounted = true; // Controle para prevenir múltiplas chamadas
-
-        const fetchMessages = async () => {
-            console.log("Executando fetchMessages...");
-            try {
-                const response = await axios.post("http://localhost:8080/chat/get", {
-                    uuidUser: getInfosUser.idPublic // Enviado no request body
-                });
-                console.log(response.data);
-
-                if (isMounted) {
-                    if (response.data && Array.isArray(response.data.content)) {
-                        setMessages(response.data.content);
-                    } else {
-                        console.error("Formato inesperado de resposta:", response.data);
-                        setMessages([]);
-                    }
-                }
-            } catch (error) {
-                if (isMounted) {
-                    console.error("Erro ao buscar mensagens:", error);
-                    setMessages([]);
-                }
-            }
-        };
-
-        fetchMessages();
-
-        return () => {
-            isMounted = false; // Cleanup para evitar chamadas após desmontagem
-        };
-    }, [getInfosUser.idPublic]);
-
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
-            handleSend();
-        }
+    // Função chamada quando o WebSocket é desconectado
+    const handleDisconnect = () => {
+        console.log('Disconnected from WebSocket');
     };
 
-    const sendMessagesServer = async () => {
+    // Função para buscar as mensagens iniciais
+    const fetchInitialMessages = async () => {
         try {
-            const response = await axios.post("http://localhost:8080/chat/send", {
-                sender: "USER",
-                message: input,
-                uuidUser: getInfosUser.idPublic
-            });
-
-            if (response.status === 200) {
-                setMessages((prevMessages) => [...prevMessages, { sender: 'USER', msg: input, date: new Date().toISOString() }]);
-            } else {
-                setMessages((prevMessages) => [...prevMessages, { sender: 'Sistema', msg: "Não foi possível enviar essa mensagem!", date: new Date().toISOString() }]);
-            }
+            const response = await fetch(`http://localhost:8080/chat/get/${userInfo.idPublic}`);
+            const data = await response.json();
+            setMessages(data); // Supondo que a resposta seja um array de mensagens
         } catch (error) {
-            console.error("Erro ao enviar mensagens:", error);
-            setMessages([]);
+            console.error("Erro ao buscar mensagens iniciais", error);
         }
     };
 
-    const handleSend = () => {
-        if (input.trim() === '') return;
+    // Inicializa o WebSocket e busca as mensagens iniciais ao carregar o componente
+    useEffect(() => {
+        fetchInitialMessages(); // Buscar as mensagens iniciais
 
-        sendMessagesServer();
+        const client = createWebSocketClient('http://localhost:8080/ws', handleConnect, handleDisconnect);
+        setStompClient(client);
 
-        setTimeout(() => {
-            setMessages((prevMessages) => [
-                ...prevMessages,
-                { sender: 'BOT', msg: 'Obrigado pela sua mensagem! Estamos analisando.', date: new Date().toISOString() },
-            ]);
-        }, 1000);
+        return () => client.deactivate(); // Desativa o WebSocket ao desmontar o componente
+    }, []);
 
-        setInput('');
-    };
-
-    const onEmojiClick = (event, emojiObject) => {
-        setInput((prevInput) => prevInput + emojiObject.emoji); // Adiciona o emoji ao texto atual
+    // Envia uma mensagem ao servidor
+    const handleSendMessage = () => {
+        if (newMessage.trim()) {
+            sendMessage(stompClient, '/app/chat/get-chat', {
+                sender: userInfo.name,
+                message: newMessage,
+                uuidUser: userInfo.idPublic,
+            });
+            setNewMessage('');
+        }
     };
 
     return (
         <div>
             <NavBar />
             <div className="chat-container">
-                <h2 className="chat-header">Chat de Suporte</h2>
-
-                {/* Área de mensagens com scroll */}
                 <div className="chat-messages">
-                    {messages.length > 0 ? (
-                        messages.map((message, index) => (
-                            <div key={index} className={`chat-message ${message.sender.toLowerCase()}`}>
-                                <p className="chat-sender">
-                                    {message.sender === "USER" ? "Você" : message.sender}
-                                </p>
-                                <p className="chat-text">{message.msg}</p>
-                                <p className="chat-date">{new Date(message.date).toLocaleString()}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <p>Sem mensagens no histórico.</p>
-                    )}
-
-                    {/* Elemento usado para rolar até o final */}
-                    <div ref={messagesEndRef}></div>
-                </div>
-
-                {/* Campo de entrada e botão */}
-                <div className="chat-input-container">
-                    <button
-                        onClick={() => setShowEmojiPicker((prev) => !prev)}
-                        className="emoji-button"
-                    >
-                        😊
-                    </button>
-                    {showEmojiPicker && (
-                        <div className="emoji-picker-container">
-                            <EmojiPicker onEmojiClick={onEmojiClick} />
+                    {messages.map((msg, index) => (
+                        <div key={index} className="chat-message">
+                            <strong>{msg.sender}:</strong> {msg.message}
                         </div>
-                    )}
+                    ))}
+                </div>
+                <div className="chat-input">
                     <input
                         type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={handleKeyDown}
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
                         placeholder="Digite sua mensagem..."
-                        className="chat-input"
                     />
-                    <button
-                        onClick={handleSend}
-                        className="chat-button"
-                    >
-                        Enviar
-                    </button>
+                    <button onClick={handleSendMessage}>Enviar</button>
                 </div>
             </div>
         </div>

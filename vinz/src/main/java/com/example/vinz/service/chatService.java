@@ -6,6 +6,7 @@ import com.example.vinz.entity.Chat;
 import com.example.vinz.entity.Users;
 import com.example.vinz.repository.ChatRepository;
 import com.example.vinz.repository.UserRepository;
+import com.example.vinz.response.ws.chatResponse;
 import com.example.vinz.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class chatService {
@@ -25,16 +27,18 @@ public class chatService {
     @Autowired
     private UserRepository userRepository;
 
-    public ResponseEntity<?> getChat(getChatDTP data){
+    public ResponseEntity getChat(UUID uuidUser){
 
         try {
 
-            Optional<Chat> userChat = chatRepository.findByUuidUser(data.uuidUser());
-            Optional<Users> user = userRepository.findByIdPublic(data.uuidUser());
+            Optional<Chat> userChat = chatRepository.findByUuidUser(uuidUser);
+            Optional<Users> user = userRepository.findByIdPublic(uuidUser);
 
             if (userChat.isPresent()) {
 
-                return ResponseEntity.ok().body(userChat);
+                Chat chat = userChat.get();
+
+                return ResponseEntity.status(HttpStatus.OK).body(chat);
 
             }
 
@@ -44,23 +48,23 @@ public class chatService {
 
                 if (List.of(Users.ChoiceRole.ADMIN, Users.ChoiceRole.SUPER).contains(getUser.getRole())){
 
-                    return ResponseEntity.status(HttpStatus.CONFLICT).body("ADMINS e SUPERS não podem ter chat");
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body("ADMIN e SUPER não podem ter chat");
 
                 }
 
-                Chat chat = new Chat(data.uuidUser(), getUser.getName());
+                Chat chat = new Chat(uuidUser, getUser.getName());
 
                 chatRepository.save(chat);
 
-                return ResponseEntity.ok(chat);
+                return ResponseEntity.status(HttpStatus.OK).body(chat);
 
             }
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não possui um cadastro!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não possui uma conta!");
 
         } catch (Exception e) {
 
-            return ResponseEntity.internalServerError().body(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
 
         }
     }

@@ -1,7 +1,7 @@
 import NavBar from "../Forms/NavBar";
 import { useState, useEffect } from 'react';
 import Carrinho from "../utils/Carrinho";
-import Pagination from "../utils/Pagination"
+import Pagination from "../utils/Pagination";
 import axios from 'axios';
 
 function Home() {
@@ -11,7 +11,7 @@ function Home() {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const userStatus = userInfo ? userInfo : false;
     const [totalPages, setTotalPages] = useState(1);
-    const [PageAtual, setPageAtual] = useState(0)
+    const [PageAtual, setPageAtual] = useState(0);
 
     const formatPrice = (price) => {
         if (!price) return "0,00";
@@ -20,17 +20,14 @@ function Home() {
             .replace(".", ",") 
             .replace(/\B(?=(\d{3})+(?!\d))/g, "."); 
     };
-   
+
     const fetchProducts = async () => {
         try {
-            
             const response = await axios.get(`http://localhost:8080/products/all/${PageAtual}`);
             if (response.status === 200) {
-                
                 setProducts(response.data.products || []);
                 setTotalPages(response.data.totalPages || 1);
-                setPageAtual(response.data.currentPage)
-                
+                setPageAtual(response.data.currentPage);
             }
         } catch (error) {
             if (error.response && error.response.status === 500) {
@@ -44,7 +41,7 @@ function Home() {
     useEffect(() => {
         fetchProducts();
     }, [PageAtual]);
-    
+
     return (
         <div>
             <NavBar />
@@ -65,7 +62,7 @@ function Home() {
                                                 : 'Descrição não disponível'}
                                         </p>
                                         <p className="card-text">
-                                        R$: {formatPrice(product.price)}
+                                            R$: {formatPrice(product.price)}
                                         </p>
                                         <a href={`/products/get/${product.id_public}`} className="btn btn-primary">
                                             Ver mais
@@ -84,13 +81,18 @@ function Home() {
                         <p>Nenhum produto encontrado.</p>
                     )}
                 </div>
+
+                {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+
+                
+                <div className="d-flex justify-content-center mt-4">
+                    <Pagination 
+                        totalPages_={totalPages} 
+                        pageAtual_={PageAtual} 
+                        onPageChange={setPageAtual} 
+                    />
+                </div>
             </div>
-
-            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-
-
-            <Pagination totalPages_={totalPages} pageAtual_={PageAtual} onPageChange={setPageAtual} />
-
         </div>
     );
 }

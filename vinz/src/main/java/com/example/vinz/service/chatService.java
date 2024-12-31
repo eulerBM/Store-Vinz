@@ -2,6 +2,7 @@ package com.example.vinz.service;
 
 import com.example.vinz.dtp.chat.getChatDTP;
 import com.example.vinz.dtp.chat.sendChatDTP;
+import com.example.vinz.dtp.chat.sendMenssage;
 import com.example.vinz.entity.Chat;
 import com.example.vinz.entity.Users;
 import com.example.vinz.repository.ChatRepository;
@@ -27,7 +28,7 @@ public class chatService {
     @Autowired
     private UserRepository userRepository;
 
-    public ResponseEntity getChat(UUID uuidUser){
+    public ResponseEntity<?> getChat(UUID uuidUser){
 
         try {
 
@@ -90,7 +91,7 @@ public class chatService {
         }
     }
 
-    public ResponseEntity<?> send(sendChatDTP data){
+    public chatResponse send(sendMenssage data){
 
         try {
 
@@ -106,15 +107,15 @@ public class chatService {
 
                 chatRepository.save(chat);
 
-                return ResponseEntity.status(HttpStatus.OK).build();
+                return new chatResponse(chat);
 
             }
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Esse usuario não possui um chat aberto");
+            return new chatResponse(HttpStatus.NOT_FOUND, "Esse usuario não possui um chat aberto");
 
         } catch (Exception e) {
 
-            return ResponseEntity.internalServerError().body(e);
+            return new chatResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.toString());
 
         }
 

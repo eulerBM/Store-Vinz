@@ -1,6 +1,7 @@
 package com.example.vinz.controller;
 
-import com.example.vinz.dtp.chat.getChatDTP;
+import com.example.vinz.dtp.chat.sendMenssage;
+import com.example.vinz.response.ws.chatResponse;
 import com.example.vinz.service.chatService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,14 +13,19 @@ import org.springframework.web.bind.annotation.*;
 public class chatWs {
 
     @Autowired
-    chatService chatService;
+    chatService ChatService;
 
-    @MessageMapping("chat/get-chat")
-    @SendTo("/chat/get-chat-response")
-    public void getChat(getChatDTP data){
+    @MessageMapping("chat/message")
+    @SendTo("chat/message")
+    public chatResponse sendMessage(sendMenssage data){
 
+        System.out.println(data);
 
+        chatResponse chat = ChatService.send(data);
 
+        System.out.println(chat);
+
+        return chat;
 
     }
 }

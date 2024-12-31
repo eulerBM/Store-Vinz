@@ -1,11 +1,14 @@
 .chat-container {
+    width: 180vh;
+    max-width: 190vh;
     display: flex;
     flex-direction: column;
-    height: 80vh;
-    max-width: 600px;
+    height: 90vh;
+    
     margin: auto;
+    margin-top: 5px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
 }
 

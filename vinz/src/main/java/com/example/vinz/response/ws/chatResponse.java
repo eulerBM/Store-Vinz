@@ -1,6 +1,7 @@
 package com.example.vinz.response.ws;
 
 import com.example.vinz.entity.Chat;
+import com.example.vinz.utils.Message;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.http.HttpStatus;
 
@@ -10,6 +11,8 @@ public class chatResponse {
     Chat chat;
     HttpStatus codeErro;
     String messageErro;
+
+    Message message;
 
     public chatResponse(Chat chat) {
         this.chat = chat;
@@ -21,6 +24,10 @@ public class chatResponse {
     }
 
     public chatResponse() {
+    }
+
+    public chatResponse(Message msg) {
+        this.message = msg;
     }
 
     public Chat getChat() {

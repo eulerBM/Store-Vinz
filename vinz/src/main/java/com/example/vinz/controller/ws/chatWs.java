@@ -19,11 +19,7 @@ public class chatWs {
     @SendTo("chat/message")
     public chatResponse sendMessage(sendMenssage data){
 
-        System.out.println(data);
-
         chatResponse chat = ChatService.send(data);
-
-        System.out.println(chat);
 
         return chat;
 

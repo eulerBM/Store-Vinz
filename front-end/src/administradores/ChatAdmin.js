@@ -10,7 +10,7 @@ function ChatAdmin() {
     useEffect(() => {
         const fetchMessages = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/chat/get/chats");
+                const response = await axios.get("http://192.168.3.103:8080/chat/get/chats");
                 if (response.data) {
                     setChats(response.data);
                     console.log(response);

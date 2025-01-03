@@ -17,7 +17,7 @@ function CarrinhoPage() {
         const fetchProducts = async () => {
             try {
                 const response = await axios.post(
-                    'http://localhost:8080/products/get/list',
+                    'http://192.168.3.103:8080/products/get/list',
                     idPublicList,
                     { headers: { 'Content-Type': 'application/json' } }
                 );

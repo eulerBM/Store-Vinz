@@ -1,5 +1,6 @@
 package com.example.vinz.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -11,6 +12,9 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Value("${backend.urls}")
+    private String backendUrls;
 
 
     @Override
@@ -29,7 +33,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
         // Endpoint do Chat
         registry.addEndpoint("ws/chat")
-                .setAllowedOrigins("http://localhost:3000")
+                .setAllowedOrigins(backendUrls.split(","))
                 .withSockJS();
 
     }

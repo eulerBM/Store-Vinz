@@ -15,7 +15,7 @@ function Product() {
         
             try {
 
-                const response = await axios.get(`http://localhost:8080/products/get/${idPublic}`, {
+                const response = await axios.get(`http://192.168.3.103:8080/products/get/${idPublic}`, {
                     params: { idPublic:idPublic 
 
                     }

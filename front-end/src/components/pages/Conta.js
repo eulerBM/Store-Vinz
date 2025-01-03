@@ -38,7 +38,7 @@ function Conta() {
         try {
             const token = localStorage.getItem('token'); // Obtem o token do localStorage
             const response = await axios.post(
-                'http://localhost:8080/auth/change_Password',
+                'http://192.168.3.103:8080/auth/change_Password',
                 payload,
                 {
                     headers: {

@@ -2,6 +2,7 @@ import NavBar from "../Forms/NavBar";
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Pagination from "../utils/Pagination"
+import '../../css/MyPubli.css';
 
 function MyPubli() {
     const [products, setProducts] = useState([]);
@@ -12,7 +13,7 @@ function MyPubli() {
 
     useEffect(() => {
         if (idPublic) {
-            axios.get(`http://localhost:8080/products/meus_publicados/${idPublic}/${page}`)
+            axios.get(`http://192.168.3.103:8080/products/meus_publicados/${idPublic}/${page}`)
                 .then(response => {
                     console.log(page, totalPages)
                     setProducts(response.data.products);
@@ -29,38 +30,36 @@ function MyPubli() {
         <div>
             <NavBar />
             <div className="container">
-            <div className="row">
-                {products.map((product) => (
-                    <div key={product.id} className="col-md-4 mb-4">
-                        <div className="card" style={{ width: '18rem' }}>
-                            <img src={product.imageUrl} className="card-img-top" alt={product.name} />
-                            <div className="card-body">
-                                <h5 className="card-title">{product.name}</h5>
-                                <p className="card-text">
-
-                                {product.description
-                                    ? product.description.length > 40 
-                                        ? `${product.description.substring(0, 40)}...` 
-                                        : product.description
-                                    : 'Descrição não disponível'}
-                                    
-                                </p>
-                                <a href={`/products/get/${product.id_public}`} className="btn btn-primary">
-                                    Ver mais
-                                </a>
+                <div className="row">
+                    {products.map((product) => (
+                        <div key={product.id} className="col-md-4 mb-4">
+                            <div className="card" style={{ width: '18rem' }}>
+                                <img src={product.imageUrl} className="card-img-top" alt={product.name} />
+                                <div className="card-body">
+                                    <h5 className="card-title">{product.name}</h5>
+                                    <p className="card-text">
+                                        {product.description
+                                            ? product.description.length > 40 
+                                                ? `${product.description.substring(0, 40)}...` 
+                                                : product.description
+                                            : 'Descrição não disponível'}
+                                    </p>
+                                    <a href={`/products/get/${product.id_public}`} className="btn btn-primary">
+                                        Ver mais
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
+            </div>
+
+            {/* Centralizando o botão de paginação */}
+            <div className="pagination-container">
+                <Pagination totalPages_={totalPages} pageAtual_={page} onPageChange={setPage} />
             </div>
         </div>
-
-        <Pagination totalPages_={totalPages} pageAtual_={page} onPageChange={setPage} />
-        
-    </div>
     );
-
-
 }
 
 export default MyPubli;

@@ -50,7 +50,7 @@ function CreateProduct() {
 
         try {
             const token = localStorage.getItem("token");
-            await axios.post("http://localhost:8080/products/criar", {
+            await axios.post("http://192.168.3.103:8080/products/criar", {
                 name: product.name,
                 description: product.description,
                 price: numericPrice,

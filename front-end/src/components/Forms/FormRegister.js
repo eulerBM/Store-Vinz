@@ -32,7 +32,7 @@ function FormRegister() {
                 return;
             }
 
-            const response = await axios.post('http://localhost:8080/auth/register', {
+            const response = await axios.post('http://192.168.3.103:8080/auth/register', {
                 nome: formData.nome,
                 email: formData.email,
                 password: formData.password,

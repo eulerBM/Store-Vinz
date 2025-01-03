@@ -17,7 +17,7 @@ function Chat() {
     const messagesEndRef = useRef(null);
 
     const WS_CONFIG = {
-        WS_URL: 'http://localhost:8080/ws/chat',
+        WS_URL: 'http://192.168.3.103:8080/ws/chat',
         RECEIVE_TOPIC: 'chat/message',
         SEND_DESTINATION: 'receive/chat/message',
     };
@@ -25,7 +25,7 @@ function Chat() {
     // Função para buscar mensagens iniciais
     async function fetchInitialMessages() {
         try {
-            const response = await axios.get(`http://localhost:8080/chat/get/${userInfo.idPublic}`);
+            const response = await axios.get(`http://192.168.3.103:8080/chat/get/${userInfo.idPublic}`);
             const formattedMessages = response.data.content.map((msg) => ({
                 sender: msg.sender,
                 msg: msg.msg,

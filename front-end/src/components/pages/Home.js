@@ -23,7 +23,7 @@ function Home() {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/products/all/${PageAtual}`);
+            const response = await axios.get(`http://192.168.3.103:8080/products/all/${PageAtual}`);
             if (response.status === 200) {
                 setProducts(response.data.products || []);
                 setTotalPages(response.data.totalPages || 1);

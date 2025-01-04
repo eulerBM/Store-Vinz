@@ -1,4 +1,4 @@
-package com.example.vinz.controller;
+package com.example.vinz.controller.ws;
 
 import com.example.vinz.dtp.chat.sendMenssage;
 import com.example.vinz.response.ws.chatResponse;

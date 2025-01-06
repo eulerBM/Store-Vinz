@@ -1,9 +1,10 @@
-import '../../css/HomeCss.css';
 import Logout from '../pages/outh/Logout';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Carrinho from '../utils/Carrinho';
 import '../../css/FormLogin.css';
+import '../../css/Navbar.css';
+import NavBarE from '../../effect/NavBarEffect';
 
 function NavBar() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -110,7 +111,7 @@ function NavBar() {
                         )}
                     </ul>
 
-                    <button type="button" className="btn btn-primary position-relative" onClick={CarrinhoButton}>
+                    <button type="button" id='btnCard' className="btn btn-primary position-relative" onClick={CarrinhoButton}>
                         Carrinho
                         <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             {length(idPublicUserOrFalse)}
@@ -118,7 +119,7 @@ function NavBar() {
                         </span>
                     </button>
 
-                    <form className="d-flex" role="search" onSubmit={handleSearch}>
+                    <form className="d-flex" role="search" id='inputSearch' onClick={NavBarE.inputIncreaseSize()} onBlur={NavBarE.inputReturnNormal()} onSubmit={handleSearch}>
                         <input
                             className="form-control me-2"
                             type="search"

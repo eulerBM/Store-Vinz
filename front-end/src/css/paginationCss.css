@@ -1,0 +1,12 @@
+.page-link {
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+}
+
+.page-link:active {
+    transform: scale(0.95); 
+    background-color: #ff0676;;
+  }

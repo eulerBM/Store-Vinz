@@ -2,6 +2,7 @@ import NavBar from "../Forms/NavBar";
 import { useState, useEffect } from 'react';
 import Carrinho from "../utils/Carrinho";
 import Pagination from "../utils/Pagination";
+import '../../css/home.css'
 import axios from 'axios';
 
 function Home() {
@@ -61,18 +62,18 @@ function Home() {
                                                     : product.description
                                                 : 'Descrição não disponível'}
                                         </p>
-                                        <p className="card-text">
-                                            R$: {formatPrice(product.price)}
-                                        </p>
-                                        <a href={`/products/get/${product.id_public}`} className="btn btn-primary">
-                                            Ver mais
-                                        </a>
-                                        <a
-                                            className="btn btn-primary"
-                                            onClick={() => add(product.id_public, userStatus)}
-                                        >
-                                            + Carrinho
-                                        </a>
+                                            <p className="card-text" >
+                                                R$: {formatPrice(product.price)}
+                                            </p>
+                                            <a href={`/products/get/${product.id_public}`} className="btn btn-primary mr-3" id="price_card">
+                                                Ver mais
+                                            </a>
+                                            <a
+                                                className="btn btn-primary"
+                                                onClick={() => add(product.id_public, userStatus)}
+                                            >
+                                                + Carrinho
+                                            </a>
                                     </div>
                                 </div>
                             </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import '../../css/paginationCss.css'
 
 function Pagination({totalPages_, pageAtual_, onPageChange}) {
     const [totalPages, setTotalPages] = useState(totalPages_);

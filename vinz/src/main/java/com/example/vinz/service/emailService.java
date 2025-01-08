@@ -15,6 +15,12 @@ public class emailService {
     @Autowired
     private JavaMailSender mailSender;
 
+    public void changePasswordService(String to){
+
+
+
+    }
+
     public void welcome(String to){
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -23,7 +29,6 @@ public class emailService {
         message.setSubject("Seja bem vindo");
         message.setText("Olá usuario você acabou de se cadastrar no Store Vinz, estamos passando pra te desejar otimas compras!");
         message.setFrom(myEmail);
-
 
     }
 

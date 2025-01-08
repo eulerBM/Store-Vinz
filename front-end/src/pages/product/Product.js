@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import NavBar from '../Forms/NavBar';
+import NavBar from '../../components/navbar/NavBar';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 

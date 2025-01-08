@@ -1,4 +1,4 @@
-import FormLogin from "../../Forms/FormLogin";
+import FormLogin from '../../components/formLogin/FormLogin'
 
 
 function Login () {

@@ -1,8 +1,8 @@
-import NavBar from "../Forms/NavBar";
+import NavBar from "../../components/navbar/NavBar";
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import Pagination from "../utils/Pagination"
-import '../../css/MyPubli.css';
+import Pagination from "../../utils/pagination/Pagination";
+import './MyPubli.css'
 
 function MyPubli() {
     const [products, setProducts] = useState([]);

@@ -1,8 +1,9 @@
-import NavBar from "../Forms/NavBar";
+import NavBar from '../../components/navbar/NavBar'
 import { useState, useEffect } from 'react';
-import Carrinho from "../utils/Carrinho";
-import Pagination from "../utils/Pagination";
-import '../../css/home.css'
+import Carrinho from "../../utils/Carrinho";
+import Pagination from "../../utils/pagination/Pagination";
+import './home.css'
+import homeService from '../../services/homeService'
 import axios from 'axios';
 
 function Home() {
@@ -21,6 +22,8 @@ function Home() {
             .replace(".", ",") 
             .replace(/\B(?=(\d{3})+(?!\d))/g, "."); 
     };
+
+    homeService.getAllProducts(PageAtual)
 
     const fetchProducts = async () => {
         try {

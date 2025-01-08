@@ -1,10 +1,10 @@
-import Logout from '../pages/outh/Logout';
+import Logout from '../../pages/outh/Logout'
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import Carrinho from '../utils/Carrinho';
-import '../../css/FormLogin.css';
-import '../../css/Navbar.css';
-import NavBarEffect from '../../effect/NavBarEffect';
+import Carrinho from '../../utils/Carrinho';
+import '../../components/formLogin/FormLogin.css';
+import '../navbar/Navbar.css';
+import NavBarEffect from '../../effect/NavBarEffect'
 
 function NavBar() {
     const [searchTerm, setSearchTerm] = useState('');

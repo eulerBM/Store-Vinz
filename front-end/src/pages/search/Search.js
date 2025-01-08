@@ -1,9 +1,9 @@
-import NavBar from "../Forms/NavBar";
+import NavBar from "../../components/navbar/NavBar";
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import Carrinho from "../utils/Carrinho";
+import Carrinho from "../../utils/Carrinho";
 import axios from 'axios';
-import Pagination from "../utils/Pagination"
+import Pagination from "../../utils/pagination/Pagination";
 
 function Search() {
     const [searchParams] = useSearchParams();

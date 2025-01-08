@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../css/FormLogin.css';
+import '../formLogin/FormLogin.css'
 import axios from 'axios';
 
 function FormRegister() {

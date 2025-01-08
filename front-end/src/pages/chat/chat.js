@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import NavBar from '../Forms/NavBar';
+import NavBar from '../../components/navbar/NavBar';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import axios from 'axios';
-import '../../css/Chat.css';
+import './chat.css';
 
 function Chat() {
     const [messages, setMessages] = useState([

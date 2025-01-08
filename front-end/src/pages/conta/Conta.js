@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import NavBar from "../Forms/NavBar";
+import NavBar from "../../components/navbar/NavBar";
 
 function Conta() {
     const [nome, setNome] = useState('');

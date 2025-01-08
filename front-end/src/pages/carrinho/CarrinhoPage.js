@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import NavBar from "../Forms/NavBar";
+import NavBar from "../../components/navbar/NavBar";
 
 function CarrinhoPage() {
     const [products, setProducts] = useState([]);

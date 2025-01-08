@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import NavBar from "../components/Forms/NavBar";
+import NavBar from "../components/navbar/NavBar";
 import axios from "axios";
 
 function ChatAdmin() {
     const [chats, setChats] = useState([]);
-    const [responses, setResponses] = useState([]); // Armazenar respostas de cada chat
+    const [responses, setResponses] = useState([]);
     const getInfosUser = JSON.parse(localStorage.getItem("userInfo"));
 
     useEffect(() => {

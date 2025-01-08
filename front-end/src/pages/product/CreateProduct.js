@@ -1,5 +1,5 @@
 import { useState } from "react";
-import NavBar from "../Forms/NavBar";
+import NavBar from "../../components/navbar/NavBar";
 import axios from "axios";
 
 function CreateProduct() {

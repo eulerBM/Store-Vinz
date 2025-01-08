@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../css/FormLogin.css';
-import Carrinho from '../utils/Carrinho';
+import '../formLogin/FormLogin.css'
+import Carrinho from '../../utils/Carrinho';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 

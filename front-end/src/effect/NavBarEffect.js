@@ -1,16 +1,19 @@
-class NavBarE {
-
+class NavBarEffect {
+    
     static inputIncreaseSize(){
-        var getInput = document.getElementById("inputSearch")
 
+        const getInput = document.getElementById("inputSearch")
+        
         getInput.style.width = "30%"
     }
 
     static inputReturnNormal(){
-        var getInput = document.getElementById("inputSearch")
+        
+        const getInput = document.getElementById("inputSearch")
 
         getInput.style.width = null
     }
+
 }
 
-export default navbar
+export default NavBarEffect;

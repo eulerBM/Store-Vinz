@@ -47,7 +47,7 @@ function Home() {
         <div>
             <NavBar />
 
-            <div className="container">
+            <div className="container mt-3" >
                 <div className="row">
                     {products.length > 0 ? (
                         products.map((product) => (

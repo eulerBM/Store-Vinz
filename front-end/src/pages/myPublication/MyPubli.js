@@ -1,7 +1,7 @@
 import NavBar from "../../components/navbar/NavBar";
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Pagination from "../../utils/pagination/Pagination";
+import myPubliService from "../../services/myPubliService";
 import './MyPubli.css'
 
 function MyPubli() {
@@ -12,18 +12,25 @@ function MyPubli() {
     const [page, setPage] = useState(0);
 
     useEffect(() => {
-        if (idPublic) {
-            axios.get(`http://192.168.3.103:8080/products/meus_publicados/${idPublic}/${page}`)
-                .then(response => {
-                    console.log(page, totalPages)
-                    setProducts(response.data.products);
-                    setTotalPages(response.data.totalPages || 1)
-                    setPage(response.data.currentPage)
-                })
-                .catch(error => {
-                    console.error("Erro ao buscar produtos:", error);
-                });
-        }
+
+        const fetchMyPublics = async () => {
+
+            if (idPublic) {
+                try {
+                    const response = await myPubliService.getMyPublics(idPublic, page); 
+    
+                    if (response) {
+                        setProducts(response.products);
+                        setTotalPages(response.totalPages || 1);
+                        setPage(response.page);
+                    }
+                } catch (error) {
+                    console.error("Erro ao buscar publicações:", error);
+                }
+            }
+        };
+    
+        fetchMyPublics();
     }, [idPublic, page]);
 
     return (

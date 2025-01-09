@@ -1,27 +1,38 @@
 import axios from 'axios';
 
-class homeService {
+class myPubliService{ 
 
-    static async getAllProducts(pageAtual) {
+    static async getMyPublics (idPublic, page){
+
         try {
-            const response = await axios.get(`http://192.168.3.103:8080/products/all/${pageAtual}`);
 
-            if (response.status === 200) {
-                
+            const response = await axios.get(`http://192.168.3.103:8080/products/meus_publicados/${idPublic}/${page}`)
+
+            if (response.status === 200){
+
                 return {
+
                     products: response.data.products,
                     totalPages: response.data.totalPages,
-                    currentPage: response.data.currentPage
-                };
+                    page: response.data.currentPage
+                }
             }
-        } catch (error) {
+
+        } catch (error){
+            
             if (error.response && error.response.status === 500) {
+
                 return { error: 'Tente mais tarde!' };
+
             } else {
+
                 return { error: 'Erro interno, tente mais tarde.' };
+
             }
         }
     }
+
+
 }
 
-export default homeService;
+export default myPubliService;

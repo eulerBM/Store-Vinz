@@ -4,7 +4,7 @@ import Carrinho from "../../utils/Carrinho";
 import Pagination from "../../utils/pagination/Pagination";
 import './home.css'
 import homeService from '../../services/homeService'
-import axios from 'axios';
+import homeUtils from '../../utils/homeUtils'
 
 function Home() {
     const [errorMessage, setErrorMessage] = useState('');
@@ -15,30 +15,20 @@ function Home() {
     const [totalPages, setTotalPages] = useState(1);
     const [PageAtual, setPageAtual] = useState(0);
 
-    const formatPrice = (price) => {
-        if (!price) return "0,00";
-        return parseFloat(price)
-            .toFixed(2)
-            .replace(".", ",") 
-            .replace(/\B(?=(\d{3})+(?!\d))/g, "."); 
-    };
-
-    homeService.getAllProducts(PageAtual)
-
     const fetchProducts = async () => {
-        try {
-            const response = await axios.get(`http://192.168.3.103:8080/products/all/${PageAtual}`);
-            if (response.status === 200) {
-                setProducts(response.data.products || []);
-                setTotalPages(response.data.totalPages || 1);
-                setPageAtual(response.data.currentPage);
-            }
-        } catch (error) {
-            if (error.response && error.response.status === 500) {
-                setErrorMessage('Tente mais tarde');
-            } else {
-                setErrorMessage('Erro interno, tente mais tarde.');
-            }
+
+        const result = await homeService.getAllProducts(PageAtual);
+    
+        if (result.error) {
+
+            setErrorMessage(result.error);
+
+        } else {
+
+            setProducts(result.products || []);
+            setTotalPages(result.totalPages || 1);
+            setPageAtual(result.currentPage);
+            
         }
     };
 
@@ -66,7 +56,7 @@ function Home() {
                                                 : 'Descrição não disponível'}
                                         </p>
                                             <p className="card-text" >
-                                                R$: {formatPrice(product.price)}
+                                                R$: {homeUtils.formatPrice(product.price)}
                                             </p>
                                             <a href={`/products/get/${product.id_public}`} className="btn btn-primary mr-3" id="price_card">
                                                 Ver mais

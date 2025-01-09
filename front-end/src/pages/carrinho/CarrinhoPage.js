@@ -25,12 +25,15 @@ function CarrinhoPage() {
                 if (response.status === 200) {
                     setProducts(response.data);
                 }
+
             } catch (error) {
+
                 if (error.response && error.response.status === 500) {
                     setErrorMessage('Tente mais tarde');
                 } else {
                     setErrorMessage('Erro interno, tente mais tarde.');
                 }
+                
             }
         };
 

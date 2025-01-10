@@ -2,7 +2,7 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './pages/outh/Login';
 import Register from './pages/outh/Register';
-import ChangePassword from './pages/outh/ChangePassword'
+import ChangePassword from './pages/changes/changePassword';
 import Conta from './pages/conta/Conta';
 import ProtectedRoute from './protectRoutes/ProtectedRoute'
 import ProtectedRouteAdmin from './protectRoutes/ProtectedRouteAdmin'
@@ -36,7 +36,7 @@ function App() {
         <Route path="/meus_publicados" element={<ProtectedRoute> <MyPubli/> </ProtectedRoute>}/>
         <Route path="/carrinho" element={<ProtectedRoute> <CarrinhoPage/></ProtectedRoute>}/>
         <Route path="/criar_produto" element={<ProtectedRoute> <CreateProduct/> </ProtectedRoute>}/>
-        <Route path="/user/change_password" element={<ProtectedRoute> <ChangePassword/> </ProtectedRoute>}/>
+        <Route path="/user/change/password" element={<ProtectedRoute> <ChangePassword/> </ProtectedRoute>}/>
 
       </Routes>
     </Router>

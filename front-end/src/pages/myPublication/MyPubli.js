@@ -10,6 +10,7 @@ function MyPubli() {
     const idPublic = userInfo ? userInfo.idPublic : null;
     const [totalPages, setTotalPages] = useState(0);
     const [page, setPage] = useState(0);
+    const [erro, setErro] = useState("")
 
     useEffect(() => {
 
@@ -20,10 +21,14 @@ function MyPubli() {
                     const response = await myPubliService.getMyPublics(idPublic, page); 
     
                     if (response) {
+                        
                         setProducts(response.products);
                         setTotalPages(response.totalPages || 1);
                         setPage(response.page);
+                        setErro(response.error)
                     }
+
+
                 } catch (error) {
                     console.error("Erro ao buscar publicações:", error);
                 }

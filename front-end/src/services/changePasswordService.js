@@ -4,14 +4,20 @@ class changePasswordService {
 
     static async changePassword(newPass, oldPass) {
 
+        const token = localStorage.getItem('token')
+
         try {
 
-            const response = await axios.post(`http://192.168.3.103:8080/auth/change_Password`,{
+            const response = await axios.post(`http://192.168.3.103:8080/auth/change_Password`, {
 
-                senhaNova: newPass,
-                senhaAntiga: oldPass
+                senhaAntiga: oldPass,
+                senhaNova: newPass, 
+                
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
                
-
             });
 
             if (response.status === 200) {

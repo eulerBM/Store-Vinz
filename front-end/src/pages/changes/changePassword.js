@@ -2,6 +2,7 @@ import NavBar from "../../components/navbar/NavBar";
 import { useState } from 'react';
 import '../changes/changePassword.css';
 import changePassword from "../../utils/changePassword";
+import changePasswordService from "../../services/changePasswordService";
 
 function ChangePassword() {
     const [newPassword, setNewPassword] = useState("");
@@ -9,10 +10,13 @@ function ChangePassword() {
     const [msgError, setMsgError] = useState(null);
     const validPass = changePassword.validPassword(newPassword, oldPassword);
 
-    if (validPass === true) {
+    const clickButton = () => {
 
-    } else {
-        
+        if (validPass === true){
+
+            changePasswordService.changePassword(newPassword, oldPassword)
+
+        }
     }
 
     return (
@@ -45,6 +49,9 @@ function ChangePassword() {
                         onChange={(e) => setOldPassword(e.target.value)}
                     />
                 </div>
+
+                <button type="button" onClick={clickButton} class="btn btn-primary">Salvar</button>
+
             </div>
         </div>
     );

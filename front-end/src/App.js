@@ -12,7 +12,7 @@ import Product from './pages/product/Product';
 import MyPubli from './pages/myPublication/MyPubli';
 import CarrinhoPage from './pages/carrinho/CarrinhoPage';
 import Chat from './pages/chat/chat';
-import ChatAdmin from './administradores/ChatAdmin'
+import ChatAdmin from './pages/chat/admin/chatAdmin';
 import Home from './pages/home/home';
 
 function App() {
@@ -31,12 +31,14 @@ function App() {
         <Route path="/chat" element={<Chat />} />
 
          {/* Rotas protegidas */}
-        <Route path="/admin/chat" element={<ProtectedRouteAdmin> <ChatAdmin/> </ProtectedRouteAdmin>}/>
         <Route path="/conta" element={<ProtectedRoute> <Conta/> </ProtectedRoute>}/>
         <Route path="/meus_publicados" element={<ProtectedRoute> <MyPubli/> </ProtectedRoute>}/>
         <Route path="/carrinho" element={<ProtectedRoute> <CarrinhoPage/></ProtectedRoute>}/>
         <Route path="/criar_produto" element={<ProtectedRoute> <CreateProduct/> </ProtectedRoute>}/>
         <Route path="/user/change/password" element={<ProtectedRoute> <ChangePassword/> </ProtectedRoute>}/>
+
+        {/* Rotas de ADMINS e SUPERS*/}
+        <Route path="/admin/chat" element={<ProtectedRouteAdmin> <ChatAdmin/> </ProtectedRouteAdmin>}/>
 
       </Routes>
     </Router>

@@ -22,11 +22,7 @@ class changePasswordService {
 
             if (response.status === 200) {
                 
-                return {
-                    products: response.data.products,
-                    totalPages: response.data.totalPages,
-                    currentPage: response.data.currentPage
-                };
+                return true
             }
 
         } catch (error) {

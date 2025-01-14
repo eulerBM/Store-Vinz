@@ -1,0 +1,40 @@
+#chat-container {
+    display: flex;
+    width: 100%;
+    max-width: 90%;
+    height: 750px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 20px;
+    background: #fff;
+    padding-left: 0;
+    padding-right: 0;
+
+}
+
+#user-list {
+    width: 25%;
+    background-color: #ff0000;
+   
+
+}
+
+#chat-box {
+    background-color: #00ff6a;
+}
+
+#msg-list {
+    background-color: #fff;
+    width: 98%;
+    height: 90%;
+    margin: 10px;
+    border-radius: 2%;
+}
+
+#input {
+    width: 60%;
+    
+    margin-left: 19%;
+}
+

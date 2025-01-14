@@ -70,7 +70,7 @@ public class chatService {
         }
     }
 
-    public ResponseEntity<?> getChats(){
+    public ResponseEntity<?> getAllChats(){
 
         try {
 

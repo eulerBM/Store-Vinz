@@ -21,4 +21,11 @@ public class chat {
         return chatService.getChat(uuidUser);
 
     }
+
+    @GetMapping(path = "get/chats", produces = "application/json")
+    public ResponseEntity getAllChats(){
+
+        return chatService.getAllChats();
+
+    }
 }

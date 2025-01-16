@@ -1,177 +1,188 @@
-import React, { useState } from "react";
-import NavBar from "../../../components/navbar/NavBar";
-import "./chatAdmin.css";
+import React, { useState, useEffect, useRef } from 'react';
+import NavBar from "../../../components/navbar/NavBar"
+import './chatAdmin.css';
+import chatAdminService from '../../../services/chatAdminService';
+
+const getUsers = await chatAdminService.getChats();
+const getChat = await chatAdminService.getChat();
+
+const mockUsers = [
+  { id: 1, name: 'João Silva', status: 'online', lastMessage: 'Preciso de ajuda com meu pedido' },
+  { id: 2, name: 'Maria Santos', status: 'offline', lastMessage: 'Obrigada pelo suporte!' },
+  { id: 3, name: 'Pedro Oliveira', status: 'online', lastMessage: 'Como faço para...' },
+];
+
+const UserList = ({ onUserSelect, selectedUser }) => (
+  <div className="user-list">
+    <div className="user-list-header">
+      <h5 className="mb-0">Usuários</h5>
+      <span className="badge bg-primary">
+        online 
+      </span>
+    </div>
+    <div className="user-list-content">
+
+    {getUsers.chats.map(user => (
+
+        <div
+          key={user.id}
+          className={`user-item ${selectedUser?.id === user.id ? 'active' : ''}`}
+          onClick={() => { onUserSelect(user); getUuidUser(user.uuidUser);}}
+        >
+          <div className="user-status">
+            <span className={`status-indicator ${user.status}`}></span>
+          </div>
+          <div className="user-info">
+            <h6 className="mb-1">{user.name}</h6>
+            <p className="mb-0 text-truncate">{user.lastMessage}</p>
+          </div>
+        </div>
+
+    ))}
+      
+      {mockUsers.map(user => (
+        <div
+          key={user.id}
+          className={`user-item ${selectedUser?.id === user.id ? 'active' : ''}`}
+          onClick={() => onUserSelect(user)}
+        >
+          <div className="user-status">
+            <span className={`status-indicator ${user.status}`}></span>
+          </div>
+          <div className="user-info">
+            <h6 className="mb-1">{user.name}</h6>
+            <p className="mb-0 text-truncate">{user.lastMessage}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const ChatWindow = ({ selectedUser, messages, onSendMessage }) => {
+  const [newMessage, setNewMessage] = useState('');
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (newMessage.trim() && selectedUser) {
+      onSendMessage(newMessage.trim());
+      setNewMessage('');
+    }
+  };
+
+  if (!selectedUser) {
+    return (
+      <div className="chat-window chat-empty">
+        <div className="empty-state">
+          <i className="bi bi-chat-dots"></i>
+          <h4>Selecione um usuário para iniciar o chat</h4>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="chat-window">
+      <div className="chat-header">
+        <div className="user-info">
+          <h5 className="mb-0">{selectedUser.name}</h5>
+          <span className={`status ${selectedUser.status}`}>
+            {selectedUser.status === 'online' ? 'Online' : 'Offline'}
+          </span>
+        </div>
+      </div>
+
+      <div className="messages-container">
+        {messages.map((message, index) => (
+          <div
+            key={index}
+            className={`message ${message.sender === 'admin' ? 'sent' : 'received'}`}
+          >
+            <div className="message-content">
+              <p>{message.text}</p>
+              <small className="message-time">
+                {new Date(message.timestamp).toLocaleTimeString()}
+              </small>
+            </div>
+          </div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
+
+      <form onSubmit={handleSubmit} className="message-input">
+        <div className="input-group">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Digite sua mensagem..."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+          />
+          <button 
+            type="submit" 
+            className="btn btn-primary"
+            disabled={!newMessage.trim()}
+          >
+            <i className="bi bi-send"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+const getUuidUser = (uuidUser) => {
+
+  const response = chatAdminService.getChat(uuidUser)
+
+  
+
+
+
+}
 
 const ChatAdmin = () => {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      user: "Support Agent",
-      text: "Olá! Como posso ajudar você hoje?",
-      time: "10:00 AM",
-    },
-    {
-      id: 2,
-      user: "User",
-      text: "Oi, tenho uma dúvida sobre minha conta",
-      time: "10:02 AM",
-    },
-    {
-      id: 3,
-      user: "Support Agent",
-      text: "Claro! Ficarei feliz em ajudar. O que você gostaria de saber sobre sua conta?",
-      time: "10:05 AM",
-    },
-  ]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [messages, setMessages] = useState({});
 
-  const [newMessage, setNewMessage] = useState("");
+  const handleUserSelect = (user) => {
+    
+    setSelectedUser(user);
+  };
 
-  const users = [
-    { id: 1, name: "Atendente", status: "online", role: "agent", avatar: "👩‍💼" },
-    { id: 2, name: "João Silva", status: "online", role: "user", avatar: "👤" },
-    {
-      id: 3,
-      name: "Maria Santos",
-      status: "online",
-      role: "user",
-      avatar: "👤",
-    },
-    {
-      id: 4,
-      name: "Pedro Oliveira",
-      status: "waiting",
-      role: "user",
-      avatar: "👤",
-    },
-    { id: 5, name: "Ana Costa", status: "waiting", role: "user", avatar: "👤" },
-  ];
+  const handleSendMessage = (message) => {
+    if (!selectedUser) return;
 
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    if (newMessage.trim()) {
-      const message = {
-        id: messages.length + 1,
-        user: "User",
-        text: newMessage,
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
-      setMessages([...messages, message]);
-      setNewMessage("");
-
-      setTimeout(() => {
-        const agentResponse = {
-          id: messages.length + 2,
-          user: "Support Agent",
-          text: "Obrigado pela sua mensagem. Nossa equipe de suporte irá ajudá-lo em breve.",
-          time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        };
-        setMessages((prev) => [...prev, agentResponse]);
-      }, 1000);
-    }
+    setMessages(prevMessages => ({
+      ...prevMessages,
+      [selectedUser.id]: [
+        ...(prevMessages[selectedUser.id] || []),
+        {
+          id: Date.now(),
+          text: message,
+          sender: 'admin',
+          timestamp: new Date().toISOString()
+        }
+      ]
+    }));
   };
 
   return (
     <div>
-      <NavBar />
-
-      <div className="container-fluid vh-100 p-0">
-        <div className="row h-100 g-0">
-          <div className="col-md-3 bg-dark text-white users-sidebar">
-            <div className="p-4">
-              <h2 className="mb-4 fs-4 fw-bold">
-                <i className="bi bi-people-fill me-2"></i>
-                Fila de Atendimento
-              </h2>
-              <div className="user-list">
-                {users.map((user) => (
-                  <div
-                    key={user.id}
-                    className="user-card mb-3 p-3 rounded bg-dark-subtle"
-                  >
-                    <div className="d-flex align-items-center">
-                      <div className={`status-dot ${user.status} me-2`}></div>
-                      <div className="user-avatar me-2">{user.avatar}</div>
-                      <div>
-                        <div className="fw-bold text-white">{user.name}</div>
-                        <small className="text-light-emphasis">
-                          {user.role === "agent" ? "Atendente" : "Cliente"}
-                        </small>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="col-md-9 d-flex flex-column h-100">
-            <div className="chat-header bg-primary text-white p-4">
-              <h2 className="mb-0 fs-4">Central de Atendimento</h2>
-              <p className="mb-0 text-light-emphasis">
-                Estamos aqui para ajudar! Como podemos te auxiliar hoje?
-              </p>
-            </div>
-
-            <div className="flex-grow-1 p-4 overflow-auto messages-container bg-light">
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`d-flex ${
-                    message.user === "User"
-                      ? "justify-content-end"
-                      : "justify-content-start"
-                  } mb-3`}
-                >
-                  <div
-                    className={`message ${
-                      message.user === "User" ? "sent" : "received"
-                    } 
-                               p-3 rounded-3 ${
-                                 message.user === "User"
-                                   ? "bg-primary text-white"
-                                   : "bg-white border"
-                               }`}
-                  >
-                    <div className="message-info mb-1">
-                      <small
-                        className={
-                          message.user === "User" ? "text-light" : "text-muted"
-                        }
-                      >
-                        {message.user} - {message.time}
-                      </small>
-                    </div>
-                    <div>{message.text}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <form
-              onSubmit={handleSendMessage}
-              className="p-4 border-top bg-white"
-            >
-              <div className="input-group">
-                <input
-                  type="text"
-                  className="form-control form-control-lg"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Digite sua mensagem aqui..."
-                />
-                <button type="submit" className="btn btn-primary btn-lg">
-                  <i className="bi bi-send"></i> Enviar
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+      <NavBar/>
+    
+      <div className="admin-chat-container">
+        <UserList onUserSelect={handleUserSelect} selectedUser={selectedUser} />
+        <ChatWindow 
+          selectedUser={selectedUser}
+          messages={messages[selectedUser?.id] || []}
+          onSendMessage={handleSendMessage}
+        />
       </div>
     </div>
   );

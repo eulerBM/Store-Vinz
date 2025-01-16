@@ -17,8 +17,6 @@ public class emailService {
 
     public void changePasswordService(String to){
 
-
-
     }
 
     public void welcome(String to){

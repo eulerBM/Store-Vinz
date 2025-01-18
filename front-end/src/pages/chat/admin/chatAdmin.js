@@ -1,56 +1,110 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import NavBar from "../../../components/navbar/NavBar";
 import './chatAdmin.css';
 import chatAdminService from '../../../services/chatAdminService';
-import { Users } from 'lucide-react';
+import WebSocketService from './wsAdmin';
 
 const ChatAdmin = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [lastMsg, setLastMsg] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+  // ------------------- WS -------------------
+
+  const webSocketService = new WebSocketService();
+
+  const sendMessage = () => {
+   
+    webSocketService.sendMessage(userInfo.role, newMessage, userInfo.idPublic);
+  };
 
   useEffect(() => {
-    chatAdminService.getChats().then(response => {
+    const handleMessageReceived = (message) => {
+      console.log('Mensagem recebida:', message);
+    };
 
-      console.log(response.chats.data)
+    webSocketService.initialize(handleMessageReceived);
 
-        if (response.chats && Array.isArray(response.chats.data)) {
-
-          setUsers(response.chats.data);
-
-        } else {
-
-          console.error("Formato de dados inesperado:", response);
-
-        }
-      })
-      .catch(error => console.error("Erro ao buscar usuários:", error));
+    return () => {
+      webSocketService.disconnect();
+    };
   }, []);
 
-  const handleUserSelect = (user) => {
-    chatAdminService.getChat(user.uuidUser)
-      .then(response => {
-        console.log(response.chat.data.content);
-        setMessages(response.chat.data.content);
-        setSelectedUser(user);
-      })
-      .catch(error => console.error("Erro ao buscar chat:", error));
+  //--------------------------------------------
+
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const response = await chatAdminService.getChats();
+        const { chats } = response;
+
+        if (chats && Array.isArray(chats.data)) {
+          setUsers(chats.data);
+        } else {
+          console.error("Formato de dados inesperado:", response);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar usuários:", error);
+      }
+    };
+
+    fetchChats();
+  }, []);
+
+  const handleUserSelect = async (user) => {
+    try {
+      const response = await chatAdminService.getChat(user.uuidUser);
+      setMessages(response.chat.data.content);
+      setSelectedUser(user);
+    } catch (error) {
+      console.error("Erro ao buscar chat:", error);
+    }
   };
 
   const handleSendMessage = (message) => {
     if (!selectedUser) return;
 
-    setMessages(prevMessages => [
-      ...prevMessages,
-      {
-        id: Date.now(),
-        text: message,
-        sender: 'admin',
-        timestamp: new Date().toISOString()
-      }
-    ]);
+    const newMessage = {
+      id: Date.now(),
+      text: message,
+      sender: 'admin',
+      timestamp: new Date().toISOString(),
+    };
+
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
   };
+
+  const renderUserItem = (user) => (
+    <div
+      key={user.id}
+      className={`user-item ${selectedUser?.id === user.id ? 'active' : ''}`}
+      onClick={() => handleUserSelect(user)}
+    >
+      <h6 className="mb-1">{user.name}</h6>
+      <p className="mb-0">
+        {user.lastMsg
+          ? user.lastMsg.length > 20
+            ? `${user.lastMsg.substring(0, 20)}...`
+            : user.lastMsg
+          : 'erro...'}
+      </p>
+    </div>
+  );
+
+  const renderMessages = () =>
+    messages.map((message, index) => (
+      <div
+        key={index}
+        className={`message ${message.sender === 'admin' ? 'sent' : 'received'}`}
+      >
+        <div className="message-content">
+          <p>{message.msg}</p>
+          <small>{new Date(message.date).toLocaleTimeString()}</small>
+        </div>
+      </div>
+    ));
 
   return (
     <div>
@@ -58,19 +112,7 @@ const ChatAdmin = () => {
       <div className="admin-chat-container">
         <div className="user-list">
           <h5 className="mb-0">Usuários</h5>
-          <div className="user-list-content">
-            {users.map(user => (
-              <div
-                key={user.id}
-                className={`user-item ${selectedUser?.id === user.id ? 'active' : ''}`}
-                onClick={() => handleUserSelect(user)}
-              >
-                <h6 className="mb-1">{user.name}</h6>
-                <p className="mb-0">{user.lastMsg ? user.lastMsg.length > 20 ? `${user.lastMsg.substring(0, 20)}...` : user.lastMsg : 'erro...'}</p>
-               
-              </div>
-            ))}
-          </div>
+          <div className="user-list-content">{users.map(renderUserItem)}</div>
         </div>
 
         <div className="chat-window">
@@ -79,19 +121,22 @@ const ChatAdmin = () => {
               <div className="chat-header">
                 <h5 className="mb-0">{selectedUser.name}</h5>
               </div>
-              <div className="messages-container">
-                {messages.map((message, index) => (
-                  <div key={index} className={`message ${message.sender === 'admin' ? 'sent' : 'received'}`}>
-                    <div className="message-content">
-                      <p>{message.msg}</p>
-                      <small>{new Date(message.date).toLocaleTimeString()}</small>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(e.target.message.value); e.target.reset(); }}>
-                <input type="text" name="message" placeholder="Digite sua mensagem..." required />
-                <button type="submit">Enviar</button>
+              <div className="messages-container">{renderMessages()}</div>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSendMessage(e.target.message.value);
+                  e.target.reset();
+                }}
+              >
+                <input
+                  type="text"
+                  name="message"
+                  placeholder="Digite sua mensagem..."
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  required
+                />
+                <button onClick={sendMessage} type="submit">Enviar</button>
               </form>
             </>
           ) : (

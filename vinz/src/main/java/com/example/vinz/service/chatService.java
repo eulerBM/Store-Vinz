@@ -101,6 +101,8 @@ public class chatService {
 
                 Chat chat = userChat.get();
 
+                chat.setLastMsg(data.message());
+
                 Message message = new Message(data.sender(), data.message(), LocalDateTime.now());
 
                 chat.setContent(message);

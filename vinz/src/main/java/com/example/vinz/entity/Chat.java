@@ -17,6 +17,7 @@ public class Chat {
     private String name;
     @Indexed(unique = true)
     private UUID uuidUser;
+    private String lastMsg;
     private List<Message> content;
 
     public Chat(UUID user_uuid, String name){
@@ -27,6 +28,14 @@ public class Chat {
     }
 
     public Chat() {
+    }
+
+    public String getLastMsg() {
+        return lastMsg;
+    }
+
+    public void setLastMsg(String lastMsg) {
+        this.lastMsg = lastMsg;
     }
 
     public UUID getId() {

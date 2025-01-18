@@ -8,7 +8,9 @@ class chatAdminService {
 
             if (response.status === 200) {
 
-                return { chats: response.data };
+                
+
+                return { chats: response};
                 
             }
         } catch (error) {
@@ -26,7 +28,7 @@ class chatAdminService {
 
             if (response.status === 200) {
 
-                return { chat: response.data };
+                return { chat: response };
                 
             }
         } catch (error) {

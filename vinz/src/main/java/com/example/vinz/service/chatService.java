@@ -1,6 +1,7 @@
 package com.example.vinz.service;
 
 import com.example.vinz.dtp.chat.getChatDTP;
+import com.example.vinz.dtp.chat.receiveMessage;
 import com.example.vinz.dtp.chat.sendChatDTP;
 import com.example.vinz.dtp.chat.sendMenssage;
 import com.example.vinz.entity.Chat;
@@ -12,6 +13,7 @@ import com.example.vinz.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,6 +29,9 @@ public class chatService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     public ResponseEntity<?> getChat(UUID uuidUser){
 
@@ -122,4 +127,41 @@ public class chatService {
         }
 
     }
+
+    public chatResponse sendMsg(receiveMessage data){
+
+        try {
+
+            Optional<Chat> userChat = chatRepository.findByUuidUser(data.senderIdPublic());
+
+            if (userChat.isPresent()) {
+
+                Chat chat = userChat.get();
+
+                chat.setLastMsg(data.message());
+
+                Message message = new Message(data.nome(), data.message(), LocalDateTime.now());
+
+                chat.setContent(message);
+
+                chatRepository.save(chat);
+
+                String destination = "chat/user/" + data.nome();
+
+                messagingTemplate.convertAndSendToUser(data.nome(), destination, data.message());
+
+                return new chatResponse(chat);
+
+            }
+
+            return new chatResponse(HttpStatus.NOT_FOUND, "Esse usuario não possui um chat aberto");
+
+        } catch (Exception e) {
+
+            return new chatResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.toString());
+
+        }
+
+    }
+
 }

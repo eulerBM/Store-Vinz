@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import NavBar from "../../../components/navbar/NavBar";
 import './chatAdmin.css';
 import chatAdminService from '../../../services/chatAdminService';
@@ -12,26 +12,34 @@ const ChatAdmin = () => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
   // ------------------- WS -------------------
-
-  const webSocketService = new WebSocketService();
+  const webSocketService = useRef(new WebSocketService());
 
   const sendMessage = () => {
-   
-    webSocketService.sendMessage(userInfo.role, newMessage, userInfo.idPublic);
+    if (!newMessage.trim()) {
+      console.warn("Mensagem vazia não será enviada.");
+      return;
+    }
+
+    if (webSocketService.current) {
+      webSocketService.current.sendMessage(userInfo.role, newMessage, selectedUser.uuidUser);
+      setNewMessage(''); // Limpa o campo de mensagem após o envio
+    } else {
+      console.error("WebSocketService não inicializado.");
+    }
   };
 
   useEffect(() => {
     const handleMessageReceived = (message) => {
       console.log('Mensagem recebida:', message);
+      setMessages((prevMessages) => [...prevMessages, message]);
     };
 
-    webSocketService.initialize(handleMessageReceived);
+    webSocketService.current.initialize(handleMessageReceived);
 
     return () => {
-      webSocketService.disconnect();
+      webSocketService.current.disconnect();
     };
   }, []);
-
   //--------------------------------------------
 
   useEffect(() => {
@@ -58,6 +66,7 @@ const ChatAdmin = () => {
       const response = await chatAdminService.getChat(user.uuidUser);
       setMessages(response.chat.data.content);
       setSelectedUser(user);
+      console.log(user)
     } catch (error) {
       console.error("Erro ao buscar chat:", error);
     }
@@ -69,7 +78,7 @@ const ChatAdmin = () => {
     const newMessage = {
       id: Date.now(),
       text: message,
-      sender: 'admin',
+      sender: userInfo.role,
       timestamp: new Date().toISOString(),
     };
 
@@ -97,7 +106,8 @@ const ChatAdmin = () => {
     messages.map((message, index) => (
       <div
         key={index}
-        className={`message ${message.sender === 'admin' ? 'sent' : 'received'}`}
+        className={`message ${['ADMIN', 'SUPER'].includes(message.sender) ? 'sent' : 'received'}`}
+
       >
         <div className="message-content">
           <p>{message.msg}</p>
@@ -133,6 +143,7 @@ const ChatAdmin = () => {
                   type="text"
                   name="message"
                   placeholder="Digite sua mensagem..."
+                  value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   required
                 />

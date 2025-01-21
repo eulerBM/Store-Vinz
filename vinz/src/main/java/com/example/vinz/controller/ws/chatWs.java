@@ -1,5 +1,6 @@
 package com.example.vinz.controller.ws;
 
+import com.example.vinz.dtp.chat.receiveMessage;
 import com.example.vinz.dtp.chat.sendMenssage;
 import com.example.vinz.response.ws.chatResponse;
 import com.example.vinz.service.chatService;
@@ -22,6 +23,15 @@ public class chatWs {
         chatResponse chat = ChatService.send(data);
 
         return chat;
+
+    }
+
+    @MessageMapping("message/chat")
+    public chatResponse sendMsg(receiveMessage data){
+
+        String destination = "/user/" + data.recipientIdPublic() ;
+
+        return ChatService.sendMsg();
 
     }
 }

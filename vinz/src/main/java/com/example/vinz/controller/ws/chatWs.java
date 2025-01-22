@@ -5,6 +5,7 @@ import com.example.vinz.dtp.chat.sendMenssage;
 import com.example.vinz.response.ws.chatResponse;
 import com.example.vinz.service.chatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -27,11 +28,9 @@ public class chatWs {
     }
 
     @MessageMapping("message/chat")
-    public chatResponse sendMsg(receiveMessage data){
+    public void sendMsg(receiveMessage data){
 
-        String destination = "/user/" + data.recipientIdPublic() ;
-
-        return ChatService.sendMsg();
+        ChatService.sendMsg(data);
 
     }
 }

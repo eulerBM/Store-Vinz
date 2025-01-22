@@ -1,10 +1,13 @@
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
+const getInfosUser = JSON.parse(localStorage.getItem('userInfo'));
+
 const WS_CONFIG = {
   WS_URL: 'http://192.168.3.103:8080/ws/chat',
   RECEIVE_TOPIC: 'chat/message',
   SEND_DESTINATION: 'receive/chat/message',
+  USER_CHANNEL: `chat/user/${getInfosUser.idPublic}`
 };
 
 class WebSocketService {
@@ -14,39 +17,32 @@ class WebSocketService {
   }
 
   // Inicializa o WebSocket
-  initialize(handleMessageReceived) {
+  initialize(handleMessageReceived, userId) {
     if (this.stompClient) {
       console.warn('WebSocket já está conectado.');
       return;
     }
-
+  
     const socket = new SockJS(this.config.WS_URL);
     const client = new Client({
       webSocketFactory: () => socket,
       debug: (message) => console.log('STOMP Debug:', message),
       onConnect: () => {
         console.log('Conectado ao WebSocket');
-        client.subscribe(this.config.RECEIVE_TOPIC, (message) => {
-          try {
-            const parsedMessage = JSON.parse(message.body);
-            handleMessageReceived?.(parsedMessage);
-          } catch (error) {
-            console.error('Erro ao processar mensagem recebida:', error);
-          }
+  
+        // Inscrevendo-se no canal do usuário
+        client.subscribe(this.config.USER_CHANNEL, (message) => {
+          const parsedMessage = JSON.parse(message.body);
+          console.log("------ RECEBI ---------")
+          console.log(parsedMessage)
+          handleMessageReceived?.(parsedMessage);
         });
       },
-      onDisconnect: () => {
-        console.log('Desconectado do WebSocket');
-        this.stompClient = null;
-      },
-      onStompError: (frame) => {
-        console.error('Erro STOMP:', frame);
-      },
+      onDisconnect: () => console.log('Desconectado do WebSocket'),
+      onStompError: (frame) => console.error('Erro STOMP:', frame),
     });
-
-    // Atribuindo o stompClient antes de ativá-lo
+  
     this.stompClient = client;
-
     client.activate();
   }
 

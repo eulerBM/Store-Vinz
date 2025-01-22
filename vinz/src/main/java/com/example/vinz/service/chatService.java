@@ -128,39 +128,25 @@ public class chatService {
 
     }
 
-    public chatResponse sendMsg(receiveMessage data){
+    public void sendMsg(receiveMessage data) {
 
-        try {
+        Optional<Chat> userChat = chatRepository.findByUuidUser(data.senderIdPublic());
 
-            Optional<Chat> userChat = chatRepository.findByUuidUser(data.senderIdPublic());
+        Chat chat = userChat.get();
 
-            if (userChat.isPresent()) {
+        chat.setLastMsg(data.message());
 
-                Chat chat = userChat.get();
+        Message message = new Message(data.nome(), data.message(), LocalDateTime.now());
 
-                chat.setLastMsg(data.message());
+        chat.setContent(message);
 
-                Message message = new Message(data.nome(), data.message(), LocalDateTime.now());
+        chatRepository.save(chat);
 
-                chat.setContent(message);
+        String destination = "chat/user/" + data.senderIdPublic();
 
-                chatRepository.save(chat);
+        messagingTemplate.convertAndSendToUser(data.nome(), destination, data.message());
 
-                String destination = "chat/user/" + data.nome();
-
-                messagingTemplate.convertAndSendToUser(data.nome(), destination, data.message());
-
-                return new chatResponse(chat);
-
-            }
-
-            return new chatResponse(HttpStatus.NOT_FOUND, "Esse usuario não possui um chat aberto");
-
-        } catch (Exception e) {
-
-            return new chatResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.toString());
-
-        }
+        System.out.println("Estou enviando a msg");
 
     }
 

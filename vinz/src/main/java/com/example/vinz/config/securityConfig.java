@@ -28,7 +28,7 @@ import java.security.interfaces.RSAPublicKey;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class security {
+public class securityConfig {
 
     @Value("${jwt.public.key}")
     private RSAPublicKey publicKey;

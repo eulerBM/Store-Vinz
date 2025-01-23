@@ -1,3 +1,7 @@
+.chat-window {
+    height: 90vh;
+}
+
 .chat-container {
     width: 180vh;
     max-width: 190vh;

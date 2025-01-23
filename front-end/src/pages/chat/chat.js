@@ -1,29 +1,34 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { io } from 'socket.io-client'; // Importação do Socket.IO
 import NavBar from '../../components/navbar/NavBar';
-import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
 import axios from 'axios';
 import './chat.css';
 
 function Chat() {
-    const [messages, setMessages] = useState([
-        { sender: '', msg: '', time: '' }
-    ]);
-
+    const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const [nameUser, setNameUser] = useState('');
-    const stompClientRef = useRef(null);
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const messagesEndRef = useRef(null);
+    const socket = useRef(null);
 
-    const WS_CONFIG = {
-        WS_URL: 'http://192.168.3.103:8080/ws/chat',
-        RECEIVE_TOPIC: 'chat/message',
-        SEND_DESTINATION: 'receive/chat/message',
+    // Função para enviar mensagem via Socket.IO
+    const sendMessage = (e) => {
+        e.preventDefault();
+        if (newMessage.trim()) {
+            socket.current.emit('sendMessage', {
+                sender: userInfo.name,
+                msg: newMessage,
+                userId: userInfo.idPublic,
+            });
+            setNewMessage('');
+        } else {
+            console.warn('Mensagem vazia não será enviada.');
+        }
     };
 
-    // Função para buscar mensagens iniciais
-    async function fetchInitialMessages() {
+    // Carrega mensagens iniciais do backend
+    const fetchInitialMessages = async () => {
         try {
             const response = await axios.get(`http://192.168.3.103:8080/chat/get/${userInfo.idPublic}`);
             const formattedMessages = response.data.content.map((msg) => ({
@@ -34,72 +39,9 @@ function Chat() {
             setMessages(formattedMessages);
             setNameUser(response.data.name);
         } catch (error) {
-            console.error('Erro ao buscar mensagens iniciais', error);
+            console.error('Erro ao buscar mensagens iniciais:', error);
         }
-    }
-
-    const handleMessageReceived = useCallback((message) => {
-        try {
-            const parsedMessage = JSON.parse(message.body);
-            if (parsedMessage && parsedMessage.chat && parsedMessage.chat.content) {
-                const newMessages = parsedMessage.chat.content.map((msg) => ({
-                    sender: msg.sender,
-                    msg: msg.msg,
-                    time: msg.date,
-                }));
-    
-                // Substitui as mensagens anteriores com as novas
-                setMessages(newMessages);
-            } else {
-                console.warn('Mensagem no formato incorreto:', parsedMessage);
-            }
-        } catch (error) {
-            console.error('Erro ao processar a mensagem:', error);
-        }
-    }, []);
-
-    // Inicializa o WebSocket
-    function initializeWebSocket() {
-        if (stompClientRef.current) {
-            console.warn('WebSocket já está conectado.');
-            return;
-        }
-
-        const socket = new SockJS(WS_CONFIG.WS_URL);
-        const client = new Client({
-            webSocketFactory: () => socket,
-            debug: (message) => console.log('STOMP Debug:', message),
-            onConnect: () => {
-                console.log('Conectado ao WebSocket');
-                client.subscribe(WS_CONFIG.RECEIVE_TOPIC, handleMessageReceived);
-            },
-            onDisconnect: () => {
-                console.log('Desconectado do WebSocket');
-                stompClientRef.current = null;
-            },
-        });
-
-        client.activate();
-        stompClientRef.current = client;
-    }
-
-    // Função para enviar mensagem pelo WebSocket
-    function handleSendMessage() {
-        const client = stompClientRef.current;
-        if (client && client.connected && newMessage.trim()) {
-            client.publish({
-                destination: WS_CONFIG.SEND_DESTINATION,
-                body: JSON.stringify({
-                    sender: userInfo.name,
-                    message: newMessage,
-                    uuidUser: userInfo.idPublic,
-                }),
-            });
-            setNewMessage('');
-        } else {
-            console.warn('WebSocket não está conectado ou mensagem vazia.');
-        }
-    }
+    };
 
     // Rola para o final do chat
     const scrollToBottom = () => {
@@ -108,46 +50,79 @@ function Chat() {
         }
     };
 
-    // Efeito para rolar o chat sempre que as mensagens forem atualizadas
+    useEffect(() => {
+        // Inicializa o Socket.IO
+        socket.current = io('http://192.168.3.103:8080'); // Altere para o endereço correto do backend
+
+        // Conecta e escuta eventos
+        socket.current.on('connect', () => {
+            console.log('Conectado ao servidor Socket.IO');
+            socket.current.emit('joinRoom', { userId: userInfo.idPublic });
+        });
+
+        // Recebe mensagens do servidor
+        socket.current.on('receiveMessage', (message) => {
+            setMessages((prevMessages) => [...prevMessages, message]);
+        });
+
+        socket.current.on('disconnect', () => {
+            console.log('Desconectado do servidor Socket.IO');
+        });
+
+        // Cleanup na desmontagem do componente
+        return () => {
+            socket.current.disconnect();
+        };
+    }, [userInfo.idPublic]);
+
+    // Carrega mensagens iniciais e rola o chat para o final
+    useEffect(() => {
+        fetchInitialMessages();
+    }, []);
+
+    // Rola o chat sempre que as mensagens mudam
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
 
-    // Lógica de inicialização
-    useEffect(() => {
-        fetchInitialMessages();
-        initializeWebSocket();
-
-        return () => {
-            if (stompClientRef.current) {
-                stompClientRef.current.deactivate();
-                console.log('WebSocket desconectado.');
-                stompClientRef.current = null;
-            }
-        };
-    }, [userInfo.idPublic]);
+    const renderMessages = () =>
+        messages.map((message, index) => (
+            <div
+                key={index}
+                className={`message ${['ADMIN', 'SUPER'].includes(message.sender) ? 'sent' : 'received'}`}
+            >
+                <div className="message-content">
+                    <p>{message.msg}</p>
+                    <small>{new Date(message.time).toLocaleTimeString()}</small>
+                </div>
+            </div>
+        ));
 
     return (
         <div>
             <NavBar />
-            <div className="chat-container">
-                <div className="chat-messages">
-                    {messages.map((msg, index) => (
-                        <div key={index} className="chat-message">
-                            <strong>{msg.sender}: </strong> {msg.msg} <span>{new Date(msg.time).toLocaleTimeString()}</span>
-                        </div>
-                    ))}
+            <div className="chat-window">
+                <div className="chat-header">
+                    <h5 className="mb-0">Chat - {nameUser}</h5>
+                </div>
+                <div className="messages-container">
+                    {renderMessages()}
                     <div ref={messagesEndRef}></div>
                 </div>
-                <div className="chat-input">
-                    <input
-                        type="text"
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        placeholder="Digite sua mensagem..."
-                    />
-                    <button onClick={handleSendMessage}>Enviar</button>
-                </div>
+                <form onSubmit={sendMessage} className="p-4 border-t">
+                    <div className="input-group">
+                        <input
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            type="text"
+                            className="form-control"
+                            placeholder="Digite sua mensagem..."
+                        />
+                        <button className="btn btn-primary" type="submit">
+                            Enviar
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { io } from 'socket.io-client'; // Importação do Socket.IO
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
 import NavBar from '../../components/navbar/NavBar';
 import axios from 'axios';
 import './chat.css';
@@ -10,18 +11,40 @@ function Chat() {
     const [nameUser, setNameUser] = useState('');
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const messagesEndRef = useRef(null);
-    const socket = useRef(null);
+    const stompClient = useRef(null);
 
-    // Função para enviar mensagem via Socket.IO
-    const sendMessage = (e) => {
-        e.preventDefault();
+    const SEND_MESSAGE_WS = "/chat/message/user";
+
+    // Função para enviar mensagem via STOMP
+    const sendMessageWs = (dateNow) => {
+
         if (newMessage.trim()) {
-            socket.current.emit('sendMessage', {
-                sender: userInfo.name,
-                msg: newMessage,
-                userId: userInfo.idPublic,
-            });
-            setNewMessage('');
+            // Verifique se o stompClient está inicializado e conectado
+            if (stompClient.current && stompClient.current.connected) {
+                stompClient.current.publish({
+                    destination: SEND_MESSAGE_WS,
+                    body: JSON.stringify({
+                        nome: userInfo.name,
+                        senderIdPublic: userInfo.idPublic,
+                        role: userInfo.role,
+                        message: newMessage,
+                        timestamp: dateNow,
+                    }),
+                });
+                
+                const newMsgSendUser = ({
+                    sender: userInfo.role,
+                    msg: newMessage,
+                    time: dateNow,
+
+                })
+
+                setMessages(prevMessages => prevMessages.concat(newMsgSendUser));
+                setNewMessage('');
+                console.log("Mensagem enviada com sucesso");
+            } else {
+                console.warn('STOMP não está conectado.');
+            }
         } else {
             console.warn('Mensagem vazia não será enviada.');
         }
@@ -51,27 +74,31 @@ function Chat() {
     };
 
     useEffect(() => {
-        // Inicializa o Socket.IO
-        socket.current = io('http://192.168.3.103:8080'); // Altere para o endereço correto do backend
+        const socket = new SockJS('http://192.168.3.103:8080/ws'); // Endereço do WebSocket no backend
 
-        // Conecta e escuta eventos
-        socket.current.on('connect', () => {
-            console.log('Conectado ao servidor Socket.IO');
-            socket.current.emit('joinRoom', { userId: userInfo.idPublic });
+        stompClient.current = new Client({
+            webSocketFactory: () => socket,
+            onConnect: (frame) => {
+                console.log('Conectado ao servidor WebSocket via STOMP:', frame);
+
+                // Inscreve-se no tópico para receber mensagens
+                stompClient.current.subscribe(`/chat/user/${userInfo.idPublic}`, (messageOutput) => {
+                    const message = JSON.parse(messageOutput.body);
+                    setMessages((prevMessages) => [...prevMessages, message]);
+                });
+            },
+            onStompError: (error) => {
+                console.error('Erro STOMP: ', error);
+            },
         });
 
-        // Recebe mensagens do servidor
-        socket.current.on('receiveMessage', (message) => {
-            setMessages((prevMessages) => [...prevMessages, message]);
-        });
-
-        socket.current.on('disconnect', () => {
-            console.log('Desconectado do servidor Socket.IO');
-        });
+        stompClient.current.activate();
 
         // Cleanup na desmontagem do componente
         return () => {
-            socket.current.disconnect();
+            if (stompClient.current) {
+                stompClient.current.deactivate();
+            }
         };
     }, [userInfo.idPublic]);
 
@@ -89,7 +116,7 @@ function Chat() {
         messages.map((message, index) => (
             <div
                 key={index}
-                className={`message ${['ADMIN', 'SUPER'].includes(message.sender) ? 'sent' : 'received'}`}
+                className={`message ${!['ADMIN', 'SUPER'].includes(message.sender) ? 'sent' : 'received'}`}
             >
                 <div className="message-content">
                     <p>{message.msg}</p>
@@ -109,7 +136,7 @@ function Chat() {
                     {renderMessages()}
                     <div ref={messagesEndRef}></div>
                 </div>
-                <form onSubmit={sendMessage} className="p-4 border-t">
+                <form className="p-4 border-t">
                     <div className="input-group">
                         <input
                             value={newMessage}
@@ -118,7 +145,7 @@ function Chat() {
                             className="form-control"
                             placeholder="Digite sua mensagem..."
                         />
-                        <button className="btn btn-primary" type="submit">
+                        <button onClick={(e) => {e.preventDefault(); const dateNowE = new Date(); sendMessageWs(dateNowE)}} className="btn btn-primary" type="submit">
                             Enviar
                         </button>
                     </div>

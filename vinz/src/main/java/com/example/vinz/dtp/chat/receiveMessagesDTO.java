@@ -4,9 +4,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record receiveMessage(
+public record receiveMessagesDTO(
 
         @NotBlank(message = "O campo Nome não pode ser branco ! ")
         @Size(min = 1, max = 100)
@@ -15,10 +16,6 @@ public record receiveMessage(
         @NotBlank(message = "O campo senderIdPublic não pode ser branco ! ")
         @Size(min = 10, max = 50)
         UUID senderIdPublic,
-
-        @NotBlank(message = "O campo recipientIdPublic não pode ser branco ! ")
-        @Size(min = 10, max = 50)
-        UUID recipientIdPublic,
 
         @NotBlank(message = "O campo Role não pode ser branco ! ")
         @Pattern(regexp = "USER|ADMIN|SUPER", message = "O role da conta deve ser 'SUPER', 'ADMIN' e 'USER'")
@@ -29,7 +26,7 @@ public record receiveMessage(
         String message,
 
         @NotBlank(message = "O campo Timestamp não pode ser branco ! ")
-        String timestamp
+        LocalDateTime timestamp
 
 ) {
 }

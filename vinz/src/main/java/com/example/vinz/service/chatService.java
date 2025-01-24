@@ -1,8 +1,6 @@
 package com.example.vinz.service;
 
-import com.example.vinz.dtp.chat.getChatDTP;
-import com.example.vinz.dtp.chat.receiveMessage;
-import com.example.vinz.dtp.chat.sendChatDTP;
+import com.example.vinz.dtp.chat.receiveMessagesDTO;
 import com.example.vinz.dtp.chat.sendMenssage;
 import com.example.vinz.entity.Chat;
 import com.example.vinz.entity.Users;
@@ -16,7 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -128,7 +128,9 @@ public class chatService {
 
     }
 
-    public void sendMsg(receiveMessage data) {
+    public void sendMsg(receiveMessagesDTO data) {
+
+        System.out.println(data.timestamp());
 
         Optional<Chat> userChat = chatRepository.findByUuidUser(data.senderIdPublic());
 

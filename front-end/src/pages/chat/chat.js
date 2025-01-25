@@ -58,6 +58,7 @@ function Chat() {
                 sender: msg.sender,
                 msg: msg.msg,
                 time: msg.date,
+                role: msg.role
             }));
             setMessages(formattedMessages);
             setNameUser(response.data.name);
@@ -116,7 +117,7 @@ function Chat() {
         messages.map((message, index) => (
             <div
                 key={index}
-                className={`message ${!['ADMIN', 'SUPER'].includes(message.sender) ? 'sent' : 'received'}`}
+                className={`message ${!['ADMIN', 'SUPER'].includes(message.role) ? 'sent' : 'received'}`}
             >
                 <div className="message-content">
                     <p>{message.msg}</p>

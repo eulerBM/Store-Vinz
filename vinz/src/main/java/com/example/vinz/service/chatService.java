@@ -108,7 +108,7 @@ public class chatService {
 
                 chat.setLastMsg(data.message());
 
-                Message message = new Message(data.sender(), data.message(), LocalDateTime.now());
+                Message message = new Message(data.sender(), data.message(), LocalDateTime.now(), data.role());
 
                 chat.setContent(message);
 
@@ -138,7 +138,7 @@ public class chatService {
 
         chat.setLastMsg(data.message());
 
-        Message message = new Message(data.nome(), data.message(), LocalDateTime.now());
+        Message message = new Message(data.nome(), data.message(), LocalDateTime.now(), data.role());
 
         chat.setContent(message);
 

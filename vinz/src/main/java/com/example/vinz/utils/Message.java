@@ -7,12 +7,14 @@ public class Message {
     private String sender;
     private String msg;
     private LocalDateTime date;
+    private String role;
     private Boolean look;
 
-    public Message(String sender, String msg, LocalDateTime date) {
+    public Message(String sender, String msg, LocalDateTime date, String role) {
         this.sender = sender;
         this.msg = msg;
         this.date = date;
+        this.role = role;
         this.look = false;
     }
 

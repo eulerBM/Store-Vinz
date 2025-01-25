@@ -54,6 +54,7 @@ class WebSocketService {
           this.stompClient.publish({
             destination: this.config.SEND_DESTINATION,
             body: JSON.stringify({
+                 
                 sender: sender,
                 message: message,
                 uuidUser: uuidUser

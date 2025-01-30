@@ -1,7 +1,9 @@
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
+
 const getInfosUser = JSON.parse(localStorage.getItem('userInfo'));
+
 
 const WS_CONFIG = {
   WS_URL: 'http://192.168.3.103:8080/ws/chat',

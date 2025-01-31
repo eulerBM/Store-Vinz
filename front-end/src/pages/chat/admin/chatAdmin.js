@@ -11,17 +11,26 @@ const ChatAdmin = () => {
   const [newMessage, setNewMessage] = useState('');
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
+  if (!userInfo || !userInfo.role) {
+    throw new Error('Informações do usuário não encontradas ou inválidas.');
+  }
+
   // ------------------- WS -------------------
-  const webSocketService = useRef(new WebSocketService());
+  const webSocketService = useRef(null);
 
   const sendMessage = () => {
+    if (!selectedUser) {
+      console.warn("Nenhum usuário selecionado.");
+      return;
+    }
+
     if (!newMessage.trim()) {
       console.warn("Mensagem vazia não será enviada.");
       return;
     }
 
     if (webSocketService.current) {
-      webSocketService.current.sendMessage(userInfo.role, newMessage, selectedUser.uuidUser);
+      webSocketService.current.sendMessage(selectedUser.uuidUser, newMessage);
       setNewMessage(''); // Limpa o campo de mensagem após o envio
     } else {
       console.error("WebSocketService não inicializado.");
@@ -34,12 +43,19 @@ const ChatAdmin = () => {
       setMessages((prevMessages) => [...prevMessages, message]);
     };
 
+    if (!webSocketService.current) {
+      webSocketService.current = new WebSocketService();
+    }
+
     webSocketService.current.initialize(handleMessageReceived);
 
     return () => {
-      webSocketService.current.disconnect();
+      if (webSocketService.current) {
+        webSocketService.current.disconnect();
+      }
     };
   }, []);
+
   //--------------------------------------------
 
   useEffect(() => {
@@ -66,23 +82,10 @@ const ChatAdmin = () => {
       const response = await chatAdminService.getChat(user.uuidUser);
       setMessages(response.chat.data.content);
       setSelectedUser(user);
-      console.log(user)
+      console.log(user);
     } catch (error) {
       console.error("Erro ao buscar chat:", error);
     }
-  };
-
-  const handleSendMessage = (message) => {
-    if (!selectedUser) return;
-
-    const newMessage = {
-      id: Date.now(),
-      text: message,
-      sender: userInfo.role,
-      timestamp: new Date().toISOString(),
-    };
-
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
   };
 
   const renderUserItem = (user) => (
@@ -103,11 +106,10 @@ const ChatAdmin = () => {
   );
 
   const renderMessages = () =>
-    messages.map((message, index) => (
+    messages?.map((message, index) => (
       <div
         key={index}
         className={`message ${['ADMIN', 'SUPER'].includes(message.sender) ? 'sent' : 'received'}`}
-
       >
         <div className="message-content">
           <p>{message.msg}</p>
@@ -135,8 +137,7 @@ const ChatAdmin = () => {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  handleSendMessage(e.target.message.value);
-                  e.target.reset();
+                  sendMessage();
                 }}
               >
                 <input
@@ -147,7 +148,7 @@ const ChatAdmin = () => {
                   onChange={(e) => setNewMessage(e.target.value)}
                   required
                 />
-                <button onClick={sendMessage} type="submit">Enviar</button>
+                <button type="submit">Enviar</button>
               </form>
             </>
           ) : (

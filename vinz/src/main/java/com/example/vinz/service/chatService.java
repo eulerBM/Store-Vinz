@@ -1,5 +1,6 @@
 package com.example.vinz.service;
 
+import com.example.vinz.dtp.chat.receiveMessagesBossDTO;
 import com.example.vinz.dtp.chat.receiveMessagesDTO;
 import com.example.vinz.dtp.chat.sendMenssage;
 import com.example.vinz.entity.Chat;
@@ -128,9 +129,7 @@ public class chatService {
 
     }
 
-    public void sendMsg(receiveMessagesDTO data) {
-
-        System.out.println(data.timestamp());
+    public void sendMsgUser(receiveMessagesDTO data) {
 
         Optional<Chat> userChat = chatRepository.findByUuidUser(data.senderIdPublic());
 
@@ -145,6 +144,28 @@ public class chatService {
         chatRepository.save(chat);
 
         String destination = "chat/user/" + data.senderIdPublic();
+
+        messagingTemplate.convertAndSendToUser(data.nome(), destination, data.message());
+
+    }
+
+    public void sendMsgBoss(receiveMessagesBossDTO data) {
+
+        System.out.println("to entrando :D");
+
+        Optional<Chat> userChat = chatRepository.findByUuidUser(data.senderIdPublicUser());
+
+        Chat chat = userChat.get();
+
+        chat.setLastMsg(data.message());
+
+        Message message = new Message(data.nome(), data.message(), LocalDateTime.now(), data.role());
+
+        chat.setContent(message);
+
+        chatRepository.save(chat);
+
+        String destination = "chat/user/" + data.senderIdPublicUser();
 
         messagingTemplate.convertAndSendToUser(data.nome(), destination, data.message());
 

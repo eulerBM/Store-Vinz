@@ -1,5 +1,6 @@
 package com.example.vinz.controller.ws;
 
+import com.example.vinz.dtp.chat.receiveMessagesBossDTO;
 import com.example.vinz.dtp.chat.receiveMessagesDTO;
 import com.example.vinz.service.chatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,16 @@ public class chatWs {
     chatService ChatService;
 
     @MessageMapping("chat/message/user")
-    public void sendMessage(receiveMessagesDTO data){
+    public void sendMessageUser(receiveMessagesDTO data){
 
-        ChatService.sendMsg(data);
+        ChatService.sendMsgUser(data);
+
+    }
+
+    @MessageMapping("chat/message/boss")
+    public void sendMessageBoss(receiveMessagesBossDTO data){
+
+        ChatService.sendMsgBoss(data);
 
     }
 }

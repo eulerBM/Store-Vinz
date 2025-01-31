@@ -1,99 +1,66 @@
-import { Client } from '@stomp/stompjs';
+import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
 
-const getInfosUser = JSON.parse(localStorage.getItem('userInfo'));
-if (!getInfosUser || !getInfosUser.idPublic) {
-  throw new Error('Informações do usuário não encontradas ou inválidas.');
-}
+const wsAdmin = () => {
+    const [message, setMessage] = useState('');
+    const [name, setName] = useState('');
+    const stompClientRef = useRef(null);
 
-const WS_CONFIG = {
-  WS_URL: 'http://192.168.3.103:8080/ws/chat',
-  RECEIVE_TOPIC: 'chat/message',
-  SEND_DESTINATION: '/chat/message/boss',
-  USER_CHANNEL: `chat/user/${getInfosUser.idPublic}`
+    useEffect(() => {
+        const socket = new SockJS('http://localhost:8080/ws');
+        const stompClient = new Client({
+            webSocketFactory: () => socket,
+            reconnectDelay: 5000,
+            debug: (str) => {
+                console.log(str);
+            },
+            onConnect: () => {
+                console.log('Connected to WebSocket');
+                stompClient.subscribe('/topic/greetings', (response) => {
+                    console.log('Received message:', response.body);
+                    setMessage(JSON.parse(response.body).content);
+                });
+            },
+            onStompError: (frame) => {
+                console.error('Broker reported error: ' + frame.headers['message']);
+                console.error('Additional details: ' + frame.body);
+            },
+        });
+
+        stompClient.activate();
+        stompClientRef.current = stompClient;
+
+        return () => {
+            stompClient.deactivate();
+        };
+    }, []);
+
+    const sendMessage = () => {
+        const stompClient = stompClientRef.current;
+        if (stompClient && stompClient.connected) {
+            console.log('Sending message:', name);
+            stompClient.publish({
+                destination: '/app/hello',
+                body: name,
+            });
+        } else {
+            console.error('Stomp client is not connected');
+        }
+    };
+
+    return (
+        <div>
+            <input 
+                type="text" 
+                placeholder="Enter your name" 
+                value={name} 
+                onChange={(e) => setName(e.target.value)} 
+            />
+            <button onClick={sendMessage}>Send</button>
+            <p>{message}</p>
+        </div>
+    );
 };
 
-class WebSocketService {
-  constructor(config = WS_CONFIG) {
-    this.config = config;
-    this.stompClient = null;
-  }
-
-  // Inicializa o WebSocket
-  initialize(handleMessageReceived, userId) {
-    if (this.stompClient) {
-      console.warn('WebSocket já está conectado.');
-      return;
-    }
-
-    const socket = new SockJS(this.config.WS_URL);
-    const client = new Client({
-      webSocketFactory: () => socket,
-      debug: (message) => console.log('STOMP Debug:', message),
-      onConnect: () => {
-        console.log('Conectado ao WebSocket');
-
-        // Inscrevendo-se no canal do usuário
-        client.subscribe(this.config.USER_CHANNEL, (message) => {
-          const parsedMessage = JSON.parse(message.body);
-          console.log("------ RECEBI ---------");
-          console.log(parsedMessage);
-          handleMessageReceived?.(parsedMessage);
-        });
-      },
-      onDisconnect: () => {
-        console.log('Desconectado do WebSocket. Tentando reconectar...');
-        setTimeout(() => this.initialize(handleMessageReceived, userId), 5000); // Reconecta após 5 segundos
-      },
-      onStompError: (frame) => console.error('Erro STOMP:', frame),
-    });
-
-    this.stompClient = client;
-    try {
-      client.activate();
-    } catch (error) {
-      console.error('Erro ao ativar o cliente STOMP:', error);
-    }
-  }
-
-  // Envia uma mensagem para o WebSocket
-  sendMessage(senderIdPublicUser, message) {
-    if (this.stompClient) {
-      if (this.stompClient.connected) {
-        try {
-          this.stompClient.publish({
-            destination: this.config.SEND_DESTINATION,
-            body: JSON.stringify({
-              nome: getInfosUser.name,
-              senderIdPublicUser:senderIdPublicUser,
-              senderIdPublicBoss:getInfosUser.idPublic,
-              role: getInfosUser.role,
-              message: message,
-              timestamp: new Date()
-              
-            }),
-          });
-          console.log('Mensagem enviada:', message);
-        } catch (error) {
-          console.error('Erro ao enviar mensagem:', error);
-        }
-      } else {
-        console.warn('WebSocket está desconectado, tentando reconectar...');
-        this.initialize(); // Reconecta
-      }
-    } else {
-      console.warn('stompClient não está inicializado.');
-    }
-  }
-
-  // Desconecta o WebSocket
-  disconnect() {
-    if (this.stompClient && this.stompClient.connected) {
-      this.stompClient.deactivate();
-      console.log('WebSocket desconectado.');
-      this.stompClient = null;
-    }
-  }
-}
-
-export default WebSocketService;
+export default wsAdmin;

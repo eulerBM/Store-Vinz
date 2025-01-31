@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
 import NavBar from "../../../components/navbar/NavBar";
 import './chatAdmin.css';
 import chatAdminService from '../../../services/chatAdminService';
-import WebSocketService from './wsAdmin';
 
 const ChatAdmin = () => {
   const [users, setUsers] = useState([]);
@@ -10,14 +11,41 @@ const ChatAdmin = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  const stompClientRef = useRef(null);
 
   if (!userInfo || !userInfo.role) {
     throw new Error('Informações do usuário não encontradas ou inválidas.');
   }
 
-  // ------------------- WS -------------------
-  const webSocketService = useRef(null);
+  // Função para inicializar o WebSocket e configurar o STOMP
+  const initializeWebSocket = () => {
+    const socket = new SockJS('http://192.168.3.103:8080/ws');
+    const stompClient = new Client({
+      webSocketFactory: () => socket,
+      reconnectDelay: 5000,
+      debug: (str) => {
+        console.log(str);
+      },
+      onConnect: () => {
+        console.log('Conectado ao WebSocket');
+        stompClient.subscribe('/topic/greetings', (response) => {
+          console.log('Mensagem recebida:', response.body);
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            JSON.parse(response.body),
+          ]);
+        });
+      },
+      onStompError: (frame) => {
+        console.error('Erro no STOMP:', frame);
+      },
+    });
 
+    stompClient.activate();
+    stompClientRef.current = stompClient;
+  };
+
+  // Função para enviar a mensagem
   const sendMessage = () => {
     if (!selectedUser) {
       console.warn("Nenhum usuário selecionado.");
@@ -29,35 +57,34 @@ const ChatAdmin = () => {
       return;
     }
 
-    if (webSocketService.current) {
-      webSocketService.current.sendMessage(selectedUser.uuidUser, newMessage);
+    const stompClient = stompClientRef.current;
+    if (stompClient && stompClient.connected) {
+      const payload = {
+        userId: selectedUser.uuidUser,
+        message: newMessage,
+      };
+      stompClient.publish({
+        destination: 'chat/message/boss',
+        body: JSON.stringify(payload),
+      });
       setNewMessage(''); // Limpa o campo de mensagem após o envio
     } else {
-      console.error("WebSocketService não inicializado.");
+      console.error("STOMP client não está conectado");
     }
   };
 
+  // Inicializa o WebSocket
   useEffect(() => {
-    const handleMessageReceived = (message) => {
-      console.log('Mensagem recebida:', message);
-      setMessages((prevMessages) => [...prevMessages, message]);
-    };
-
-    if (!webSocketService.current) {
-      webSocketService.current = new WebSocketService();
-    }
-
-    webSocketService.current.initialize(handleMessageReceived);
+    initializeWebSocket();
 
     return () => {
-      if (webSocketService.current) {
-        webSocketService.current.disconnect();
+      if (stompClientRef.current) {
+        stompClientRef.current.deactivate();
       }
     };
   }, []);
 
-  //--------------------------------------------
-
+  // Busca os usuários disponíveis para chat
   useEffect(() => {
     const fetchChats = async () => {
       try {
@@ -77,6 +104,7 @@ const ChatAdmin = () => {
     fetchChats();
   }, []);
 
+  // Seleciona um usuário e carrega as mensagens
   const handleUserSelect = async (user) => {
     try {
       const response = await chatAdminService.getChat(user.uuidUser);
@@ -88,6 +116,7 @@ const ChatAdmin = () => {
     }
   };
 
+  // Renderiza a lista de usuários
   const renderUserItem = (user) => (
     <div
       key={user.id}
@@ -105,6 +134,7 @@ const ChatAdmin = () => {
     </div>
   );
 
+  // Renderiza as mensagens
   const renderMessages = () =>
     messages?.map((message, index) => (
       <div

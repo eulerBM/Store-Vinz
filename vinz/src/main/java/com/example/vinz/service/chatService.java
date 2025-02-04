@@ -151,7 +151,7 @@ public class chatService {
 
     public void sendMsgBoss(receiveMessagesBossDTO data) {
 
-        System.out.println("to entrando :D");
+        System.out.println(data);
 
         Optional<Chat> userChat = chatRepository.findByUuidUser(data.senderIdPublicUser());
 

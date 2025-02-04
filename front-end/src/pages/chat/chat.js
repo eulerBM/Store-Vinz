@@ -2,24 +2,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import NavBar from '../../components/navbar/NavBar';
-import axios from 'axios';
+import chatService from '../../services/chatService';
 import './chat.css';
 
 function Chat() {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
-    const [nameUser, setNameUser] = useState('');
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const messagesEndRef = useRef(null);
     const stompClient = useRef(null);
-
-    const SEND_MESSAGE_WS = "/chat/message/user";
 
     const sendMessageWs = (dateNow) => {
         if (!newMessage.trim() || !stompClient.current?.connected) return;
 
         stompClient.current.publish({
-            destination: SEND_MESSAGE_WS,
+            destination: "/chat/message/user",
             body: JSON.stringify({
                 nome: userInfo.name,
                 senderIdPublic: userInfo.idPublic,
@@ -31,27 +28,35 @@ function Chat() {
 
         setMessages(prev => [...prev, { sender: userInfo.role, msg: newMessage, time: dateNow }]);
         setNewMessage('');
+    
     };
 
+
     const fetchInitialMessages = async () => {
+
         try {
-            const { data } = await axios.get(`http://192.168.3.103:8080/chat/get/${userInfo.idPublic}`);
-            setMessages(data.content.map(msg => ({
+
+            const response = await chatService.getChat(userInfo.idPublic);
+
+            setMessages(response.chat.map(msg => ({
                 sender: msg.sender,
                 msg: msg.msg,
                 time: msg.date,
                 role: msg.role,
             })));
-            setNameUser(data.name);
+
         } catch (error) {
-            console.error('Erro ao buscar mensagens iniciais:', error);
+
+            console.error('Erro ao obter mensagens iniciais:', error);
+
         }
     };
 
     const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 
     useEffect(() => {
-        fetchInitialMessages();
+        fetchInitialMessages()
+        
 
         const socket = new SockJS('http://192.168.3.103:8080/ws');
         stompClient.current = new Client({
@@ -75,7 +80,7 @@ function Chat() {
             <NavBar />
             <div className="chat-window">
                 <div className="chat-header">
-                    <h5>Chat - {nameUser}</h5>
+                    <h5>Chat - {userInfo.name}</h5>
                 </div>
                 <div className="messages-container">
                     {messages.map((message, index) => (

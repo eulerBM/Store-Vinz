@@ -11,80 +11,29 @@ const ChatAdmin = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-  const stompClientRef = useRef(null);
+  const stompClient = useRef(null);
 
   if (!userInfo || !userInfo.role) {
     throw new Error('Informações do usuário não encontradas ou inválidas.');
   }
 
-  // Função para inicializar o WebSocket e configurar o STOMP
-  const initializeWebSocket = () => {
+  useEffect(() => {
+
     const socket = new SockJS('http://192.168.3.103:8080/ws');
-    const stompClient = new Client({
+    stompClient.current = new Client({
       webSocketFactory: () => socket,
-      reconnectDelay: 5000,
-      debug: (str) => {
-        console.log(str);
-      },
       onConnect: () => {
-        console.log('Conectado ao WebSocket');
-        stompClient.subscribe('/topic/greetings', (response) => {
-          console.log('Mensagem recebida:', response.body);
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            JSON.parse(response.body),
-          ]);
+        stompClient.current.subscribe(`/chat/user/${selectedUser.idPublic}`, ({ body }) => {
+          setMessages(prev => [...prev, JSON.parse(body)]);
         });
       },
-      onStompError: (frame) => {
-        console.error('Erro no STOMP:', frame);
-      },
+      onStompError: error => console.error('Erro STOMP:', error),
     });
 
-    stompClient.activate();
-    stompClientRef.current = stompClient;
-  };
+    stompClient.current.activate();
+    return () => stompClient.current?.deactivate();
+  }, [userInfo.idPublic]);
 
-  // Função para enviar a mensagem
-  const sendMessage = () => {
-    if (!selectedUser) {
-      console.warn("Nenhum usuário selecionado.");
-      return;
-    }
-
-    if (!newMessage.trim()) {
-      console.warn("Mensagem vazia não será enviada.");
-      return;
-    }
-
-    const stompClient = stompClientRef.current;
-    if (stompClient && stompClient.connected) {
-      const payload = {
-        userId: selectedUser.uuidUser,
-        message: newMessage,
-      };
-      stompClient.publish({
-        destination: 'chat/message/boss',
-        body: JSON.stringify(payload),
-      });
-      setNewMessage(''); // Limpa o campo de mensagem após o envio
-    } else {
-      console.error("STOMP client não está conectado");
-    }
-  };
-
-  // Inicializa o WebSocket
-  useEffect(() => {
-    initializeWebSocket();
-
-    return () => {
-      if (stompClientRef.current) {
-        stompClientRef.current.deactivate();
-      }
-    };
-  }, []);
-
-  // Busca os usuários disponíveis para chat
   useEffect(() => {
     const fetchChats = async () => {
       try {
@@ -104,19 +53,50 @@ const ChatAdmin = () => {
     fetchChats();
   }, []);
 
-  // Seleciona um usuário e carrega as mensagens
   const handleUserSelect = async (user) => {
     try {
       const response = await chatAdminService.getChat(user.uuidUser);
-      setMessages(response.chat.data.content);
-      setSelectedUser(user);
-      console.log(user);
+      if (response.chat && response.chat.data && Array.isArray(response.chat.data.content)) {
+        setMessages(response.chat.data.content);
+        setSelectedUser(user);
+        console.log(selectedUser)
+      } else {
+        console.error("Formato de dados inesperado:", response);
+      }
     } catch (error) {
       console.error("Erro ao buscar chat:", error);
     }
   };
 
-  // Renderiza a lista de usuários
+  const sendMessage = (dateNow) => {
+    if (!selectedUser) {
+      console.warn("Nenhum usuário selecionado.");
+      return;
+    }
+
+    if (!newMessage.trim()) {
+      console.warn("Mensagem vazia não será enviada.");
+      return;
+    }
+
+    console.log("o botão ta funcionando :D")
+
+    stompClient.current.publish({
+      destination: "/chat/message/boss",
+      body: JSON.stringify({
+        nome: userInfo.name,
+        senderIdPublicUser: selectedUser.uuidUser,
+        senderIdPublicBoss: userInfo.idPublic,
+        role: userInfo.role,
+        message: newMessage,
+        timestamp: dateNow,
+      }),
+    });
+
+    setNewMessage("")
+
+  };
+
   const renderUserItem = (user) => (
     <div
       key={user.id}
@@ -134,9 +114,27 @@ const ChatAdmin = () => {
     </div>
   );
 
-  // Renderiza as mensagens
-  const renderMessages = () =>
-    messages?.map((message, index) => (
+  const renderUserList = () => {
+    if (!Array.isArray(users)) {
+      return null;
+    }
+
+    return users.map(renderUserItem);
+  };
+
+  useEffect(() => {
+    const container = document.querySelector('.messages-container');
+    if (container) {
+      container.scrollTop = container.scrollHeight; // Rola até o final
+    }
+  }, [messages]);
+
+  const renderMessages = () => {
+    if (!Array.isArray(messages)) {
+      return null;
+    }
+
+    return messages.map((message, index) => (
       <div
         key={index}
         className={`message ${['ADMIN', 'SUPER'].includes(message.sender) ? 'sent' : 'received'}`}
@@ -147,6 +145,7 @@ const ChatAdmin = () => {
         </div>
       </div>
     ));
+  };
 
   return (
     <div>
@@ -154,7 +153,7 @@ const ChatAdmin = () => {
       <div className="admin-chat-container">
         <div className="user-list">
           <h5 className="mb-0">Usuários</h5>
-          <div className="user-list-content">{users.map(renderUserItem)}</div>
+          <div className="user-list-content">{renderUserList()}</div>
         </div>
 
         <div className="chat-window">
@@ -167,7 +166,7 @@ const ChatAdmin = () => {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  sendMessage();
+                  sendMessage(new Date());
                 }}
               >
                 <input

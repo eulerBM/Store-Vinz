@@ -26,7 +26,7 @@ function Chat() {
             }),
         });
 
-        setMessages(prev => [...prev, { sender: userInfo.role, msg: newMessage, time: dateNow }]);
+        setMessages(prev => [...prev, { sender: userInfo.name, msg: newMessage, time: dateNow }]);
         setNewMessage('');
     
     };
@@ -38,11 +38,12 @@ function Chat() {
 
             const response = await chatService.getChat(userInfo.idPublic);
 
+            console.log(response)
+
             setMessages(response.chat.map(msg => ({
                 sender: msg.sender,
                 msg: msg.msg,
-                time: msg.date,
-                role: msg.role,
+                time: msg.date
             })));
 
         } catch (error) {
@@ -86,7 +87,7 @@ function Chat() {
                     {messages.map((message, index) => (
                         <div
                             key={index}
-                            className={`message ${['ADMIN', 'SUPER'].includes(message.role) ? 'received' : 'sent'}`}
+                            className={`message ${[userInfo.name].includes(message.sender) ? 'sent' : 'received'}`}
                         >
                             <div className="message-content">
                                 <p>{message.msg}</p>

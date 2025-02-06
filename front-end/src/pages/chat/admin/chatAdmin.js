@@ -137,7 +137,7 @@ const ChatAdmin = () => {
     return messages.map((message, index) => (
       <div
         key={index}
-        className={`message ${['ADMIN', 'SUPER'].includes(message.sender) ? 'sent' : 'received'}`}
+        className={`message ${[userInfo.name].includes(message.sender) ? 'sent' : 'received'}`}
       >
         <div className="message-content">
           <p>{message.msg}</p>

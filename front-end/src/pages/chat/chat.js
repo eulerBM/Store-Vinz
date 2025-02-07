@@ -63,7 +63,9 @@ function Chat() {
         stompClient.current = new Client({
             webSocketFactory: () => socket,
             onConnect: () => {
-                stompClient.current.subscribe(`/chat/user/${userInfo.idPublic}`, ({ body }) => {
+                console.log(userInfo.idPublic)
+                stompClient.current.subscribe(`/user/chat/${userInfo.idPublic}`, ({ body }) => {
+                    console.log("to recendo o body do userChat: ", body)
                     setMessages(prev => [...prev, JSON.parse(body)]);
                 });
             },

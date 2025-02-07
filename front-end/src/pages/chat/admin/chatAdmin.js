@@ -10,6 +10,7 @@ const ChatAdmin = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [uuidUser, setUuidUser] = useState('');
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   const stompClient = useRef(null);
 
@@ -23,7 +24,10 @@ const ChatAdmin = () => {
     stompClient.current = new Client({
       webSocketFactory: () => socket,
       onConnect: () => {
-        stompClient.current.subscribe(`/chat/user/${selectedUser.idPublic}`, ({ body }) => {
+        console.log(selectedUser.idPublic)
+        stompClient.current.subscribe(`/chat/user/${uuidUser}`, ({ body }) => {
+          console.log("to recebendo o body do adminChat: ", body)
+          
           setMessages(prev => [...prev, JSON.parse(body)]);
         });
       },
@@ -56,10 +60,12 @@ const ChatAdmin = () => {
   const handleUserSelect = async (user) => {
     try {
       const response = await chatAdminService.getChat(user.uuidUser);
-      if (response.chat && response.chat.data && Array.isArray(response.chat.data.content)) {
+      if (response.chat) {
         setMessages(response.chat.data.content);
         setSelectedUser(user);
-        console.log(selectedUser)
+        setUuidUser(user.uuidUser)
+        console.lof(selectedUser)
+        
       } else {
         console.error("Formato de dados inesperado:", response);
       }

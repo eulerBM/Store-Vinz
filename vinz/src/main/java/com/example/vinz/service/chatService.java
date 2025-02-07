@@ -143,9 +143,11 @@ public class chatService {
 
         chatRepository.save(chat);
 
-        String destination = "chat/user/" + data.senderIdPublic();
+        System.out.println(data.senderIdPublic());
 
-        messagingTemplate.convertAndSendToUser(data.nome(), destination, data.message());
+        String destination = "chat/" + data.senderIdPublic();
+
+        messagingTemplate.convertAndSend(destination, data.message());
 
     }
 

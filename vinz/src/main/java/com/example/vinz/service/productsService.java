@@ -6,6 +6,7 @@ import com.example.vinz.entity.Product;
 import com.example.vinz.entity.Users;
 import com.example.vinz.repository.UserRepository;
 import com.example.vinz.utils.getIdToken;
+import com.example.vinz.service.emailService;
 import com.example.vinz.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,9 @@ public class productsService {
 
     @Autowired
     private ProductRepository repositoryProduct;
+
+    @Autowired
+    private emailService emailService;
 
     public ResponseEntity<?> ProductsAll(int page){
 

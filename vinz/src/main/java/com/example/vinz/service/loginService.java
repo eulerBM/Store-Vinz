@@ -2,7 +2,6 @@ package com.example.vinz.service;
 
 import com.example.vinz.dtp.loginRequestDTP;
 import com.example.vinz.entity.Users;
-import com.example.vinz.repository.RedisRepository;
 import com.example.vinz.repository.UserRepository;
 import com.example.vinz.response.dto.UserDTO;
 import com.example.vinz.response.responseLogin;
@@ -20,9 +19,6 @@ import java.util.Optional;
 
 @Service
 public class loginService {
-
-    @Autowired
-    private RedisRepository redisRepository;
 
     @Autowired
     private UserRepository repository;

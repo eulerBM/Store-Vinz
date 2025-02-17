@@ -1,12 +1,14 @@
 import { useState } from "react";
 import NavBar from "../../components/navbar/NavBar";
 import axios from "axios";
+import { convertImageToBytes } from "../../utils/convertToByte";
 
 function CreateProduct() {
     const [product, setProduct] = useState({
         name: "",
         description: "",
         price: "",
+        image: undefined
     });
 
     // Formatar preço automaticamente
@@ -21,9 +23,15 @@ function CreateProduct() {
     };
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, files } = e.target;
 
-        if (name === "price") {
+        if (name === "image") {
+            // Garantir que a imagem seja um arquivo válido
+            setProduct({
+                ...product,
+                [name]: files ? files[0] : undefined,
+            });
+        } else if (name === "price") {
             // Atualizar preço formatado
             setProduct({
                 ...product,
@@ -48,21 +56,24 @@ function CreateProduct() {
             return;
         }
 
+        // Criar FormData
+        const formData = new FormData();
+        formData.append("name", product.name);
+        formData.append("description", product.description);
+        formData.append("price", numericPrice);
+        formData.append("image", product.image); // Adicionando a imagem
+
         try {
             const token = localStorage.getItem("token");
-            await axios.post("http://192.168.3.103:8080/products/criar", {
-                name: product.name,
-                description: product.description,
-                price: numericPrice,
-            }, {
+            await axios.post("http://192.168.3.103:8080/products/criar", formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
+                    "Content-Type": "multipart/form-data",
                 },
             });
 
             alert("Produto criado com sucesso!");
-            setProduct({ name: "", description: "", price: "" }); // Resetar formulário
+            setProduct({ name: "", description: "", price: "", image: undefined }); // Resetar formulário
         } catch (err) {
             console.error(err.response || err);
             alert("Erro ao criar o produto. Por favor, tente novamente.");
@@ -110,6 +121,18 @@ function CreateProduct() {
                             className="form-control"
                             placeholder="Preço do produto"
                             value={product.price}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group mt-3">
+                        <label htmlFor="price">Imagem</label>
+                        <input
+                            type="file"
+                            id="image"
+                            name="image"
+                            className="form-control"
+                            placeholder="Imagem de capa"
                             onChange={handleInputChange}
                             required
                         />

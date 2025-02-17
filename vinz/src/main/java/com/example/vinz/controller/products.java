@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -40,10 +41,14 @@ public class products {
 
     }
 
-    @PostMapping(path = "criar", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> ProductsCreate (@Valid @RequestBody productCreateDTP data, JwtAuthenticationToken token){
+    @PostMapping(path = "criar", produces = "application/json")
+    public ResponseEntity<?> ProductsCreate (@RequestParam("name") String name,
+                                             @RequestParam("description") String description,
+                                             @RequestParam("price") String price,
+                                             @RequestParam("image") MultipartFile image,
+                                             JwtAuthenticationToken token){
 
-        return productsService.ProductsCreate(data, token);
+        return productsService.ProductsCreate(name, description, price, image, token);
 
     }
 

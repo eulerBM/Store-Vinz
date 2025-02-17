@@ -6,7 +6,6 @@ import com.example.vinz.entity.Product;
 import com.example.vinz.entity.Users;
 import com.example.vinz.repository.UserRepository;
 import com.example.vinz.utils.getIdToken;
-import com.example.vinz.service.emailService;
 import com.example.vinz.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -83,15 +83,20 @@ public class productsService {
         }
     }
 
-    public ResponseEntity<?> ProductsCreate(productCreateDTP data, JwtAuthenticationToken token){
+    public ResponseEntity<?> ProductsCreate(String name, String description, String price, MultipartFile image, JwtAuthenticationToken token){
 
         try {
+
+            if (image.isEmpty()){
+
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Imagem não enviada");
+            }
 
             Long userId = getIdToken.extrairTokenId(token);
 
             Optional<Users> userGet = repositoryUser.findById(userId);
 
-            Product productModel = new Product(data, userGet.get());
+            Product productModel = new Product(name, description, price, image.getBytes(), userGet.get());
 
             repositoryProduct.save(productModel);
 

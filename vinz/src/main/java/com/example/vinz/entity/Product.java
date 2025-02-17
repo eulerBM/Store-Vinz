@@ -3,7 +3,9 @@ package com.example.vinz.entity;
 import com.example.vinz.dtp.productCreateDTP;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -31,18 +33,22 @@ public class Product {
     @Column(length = 50, nullable = false)
     private LocalDateTime published_data;
 
+    @Lob
+    private byte[] image;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private Users users;
 
-    public Product(productCreateDTP data, Users user){
+    public Product(String name, String description, String price, byte[] image, Users user) throws IOException {
 
         this.idPublic = UUID.randomUUID();
-        this.name = data.name();
-        this.description = data.description();
-        this.price = new BigDecimal(data.price());
+        this.name = name;
+        this.description = description;
+        this.price = new BigDecimal(price);
         this.published_data = LocalDateTime.now();
+        this.image = image;
         this.users = user;
 
     }

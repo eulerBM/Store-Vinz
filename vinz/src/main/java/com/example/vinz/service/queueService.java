@@ -28,7 +28,7 @@ public class queueService {
 
     // Remove e retorna a próxima mensagem da fila
     public String dequeue() {
-        String message = redisTemplate.opsForList().rightPop(QUEUE_NAME);
+        String message = redisTemplate.opsForList().leftPop(QUEUE_NAME);
         return message;
     }
 

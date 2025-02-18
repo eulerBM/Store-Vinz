@@ -33,7 +33,7 @@ public class Product {
     @Column(length = 50, nullable = false)
     private LocalDateTime published_data;
 
-    @Lob
+    @Column(name = "image", columnDefinition = "bytea", nullable = false)
     private byte[] image;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,6 +54,14 @@ public class Product {
     }
 
     public Product() {
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public Users getUsers() {

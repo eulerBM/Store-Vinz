@@ -10,6 +10,7 @@ class homeService {
                 
                 return {
                     products: response.data.products,
+                    image: response.data.image,
                     totalPages: response.data.totalPages,
                     currentPage: response.data.currentPage
                 };

@@ -42,9 +42,11 @@ public class productsService {
 
             Page<Product> product = repositoryProduct.findAll(pageable);
 
-            Map<String, Object> response = new HashMap<>();
+            byte[] image = product.getContent().getFirst().getImage();
 
+            Map<String, Object> response = new HashMap<>();
             response.put("products", product.getContent());
+            response.put("image", Base64.getEncoder().encodeToString(image));
             response.put("totalPages", product.getTotalPages());
             response.put("currentPage", product.getNumber());
             response.put("totalElements", product.getTotalElements());
@@ -178,9 +180,11 @@ public class productsService {
         Pageable pageable = PageRequest.of(page, 1);
 
         Page<Product> product = repositoryProduct.findByUsers_IdPublic(idPublic, pageable);
+        byte[] image = product.getContent().getFirst().getImage();
 
         Map<String, Object> response = new HashMap<>();
         response.put("products", product.getContent());
+        response.put("image", Base64.getEncoder().encodeToString(image));
         response.put("totalPages", product.getTotalPages());
         response.put("currentPage", product.getNumber());
         response.put("totalElements", product.getTotalElements());

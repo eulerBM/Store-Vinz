@@ -11,6 +11,7 @@ function MyPubli() {
     const [totalPages, setTotalPages] = useState(0);
     const [page, setPage] = useState(0);
     const [erro, setErro] = useState("")
+    const [image, setImage] = useState()
 
     useEffect(() => {
 
@@ -22,6 +23,7 @@ function MyPubli() {
     
                     if (response) {
                         
+                        setImage(response.image)
                         setProducts(response.products);
                         setTotalPages(response.totalPages || 1);
                         setPage(response.page);
@@ -46,7 +48,7 @@ function MyPubli() {
                     {products.map((product) => (
                         <div key={product.id} className="col-md-4 mb-4">
                             <div className="card" style={{ width: '18rem' }}>
-                                <img src={product.imageUrl} className="card-img-top" alt={product.name} />
+                            <img className="image" src={`data:image/jpeg;base64,${image}`} alt="Produto" />
                                 <div className="card-body">
                                     <h5 className="card-title">{product.name}</h5>
                                     <p className="card-text">

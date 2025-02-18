@@ -13,6 +13,7 @@ class myPubliService{
                 return {
 
                     products: response.data.products,
+                    image: response.data.image,
                     totalPages: response.data.totalPages,
                     page: response.data.currentPage
                 }

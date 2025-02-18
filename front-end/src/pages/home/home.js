@@ -14,6 +14,7 @@ function Home() {
     const userStatus = userInfo ? userInfo : false;
     const [totalPages, setTotalPages] = useState(1);
     const [PageAtual, setPageAtual] = useState(0);
+    const [image, setImgae] = useState();
 
     const fetchProducts = async () => {
 
@@ -28,6 +29,7 @@ function Home() {
             setProducts(result.products || []);
             setTotalPages(result.totalPages || 1);
             setPageAtual(result.currentPage);
+            setImgae(result.image)
             
         }
     };
@@ -47,6 +49,7 @@ function Home() {
                             <div key={product.id} className="col-md-4 mb-4">
                                 <div className="card" style={{ width: '18rem' }}>
                                     <div className="card-body">
+                                    <img className="image" src={`data:image/jpeg;base64,${image}`} alt="Produto" />
                                         <h5 className="card-title">{product.name}</h5>
                                         <p className="card-text">
                                             {product.description

@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,7 +47,10 @@ public class products {
                                              @RequestParam("description") String description,
                                              @RequestParam("price") String price,
                                              @RequestParam("image") MultipartFile image,
-                                             JwtAuthenticationToken token){
+                                             JwtAuthenticationToken token) throws IOException {
+
+        System.out.println(image.getOriginalFilename());
+        System.out.println(image.getBytes().length);
 
         return productsService.ProductsCreate(name, description, price, image, token);
 

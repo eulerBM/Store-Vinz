@@ -49,9 +49,6 @@ public class products {
                                              @RequestParam("image") MultipartFile image,
                                              JwtAuthenticationToken token) throws IOException {
 
-        System.out.println(image.getOriginalFilename());
-        System.out.println(image.getBytes().length);
-
         return productsService.ProductsCreate(name, description, price, image, token);
 
     }

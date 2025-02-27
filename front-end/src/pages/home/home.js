@@ -19,7 +19,7 @@ function Home() {
     const fetchProducts = async () => {
 
         const result = await homeService.getAllProducts(PageAtual);
-    
+
         if (result.error) {
 
             setErrorMessage(result.error);
@@ -30,7 +30,7 @@ function Home() {
             setTotalPages(result.totalPages || 1);
             setPageAtual(result.currentPage);
             setImgae(result.image)
-            
+
         }
     };
 
@@ -49,7 +49,7 @@ function Home() {
                             <div key={product.id} className="col-md-4 mb-4">
                                 <div className="card" style={{ width: '18rem' }}>
                                     <div className="card-body">
-                                    <img className="image" src={`data:image/jpeg;base64,${image}`} alt="Produto" />
+                                        <img className="image" src={`data:image/jpeg;base64,${image}`} alt="Produto" />
                                         <h5 className="card-title">{product.name}</h5>
                                         <p className="card-text">
                                             {product.description
@@ -58,18 +58,22 @@ function Home() {
                                                     : product.description
                                                 : 'Descrição não disponível'}
                                         </p>
-                                            <p className="card-text" >
-                                                R$: {homeUtils.formatPrice(product.price)}
-                                            </p>
-                                            <a href={`/products/get/${product.id_public}`} className="btn btn-primary mr-3" id="price_card">
-                                                Ver mais
+                                        <div className="d-flex justify-content-between mt-2 gap-1">
+                                            <a href={`/products/get/${product.id_public}`} className="btn btn-primary">
+                                                Comprar
                                             </a>
+
                                             <a
-                                                className="btn btn-primary"
+                                                className="btn btn-primary mx-3"
                                                 onClick={() => add(product.id_public, userStatus)}
                                             >
-                                                + Carrinho
+                                                Carrinho
                                             </a>
+                                            <a href={`/products/get/${product.id_public}`} className="btn btn-primary">
+                                                Ver mais
+                                            </a>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -81,12 +85,12 @@ function Home() {
 
                 {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
-                
+
                 <div className="d-flex justify-content-center mt-4">
-                    <Pagination 
-                        totalPages_={totalPages} 
-                        pageAtual_={PageAtual} 
-                        onPageChange={setPageAtual} 
+                    <Pagination
+                        totalPages_={totalPages}
+                        pageAtual_={PageAtual}
+                        onPageChange={setPageAtual}
                     />
                 </div>
             </div>

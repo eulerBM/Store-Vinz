@@ -23,7 +23,6 @@ public class emailService {
     public void welcome(String to){
 
         SimpleMailMessage message = new SimpleMailMessage();
-
         message.setTo(to);
         message.setSubject("Seja bem vindo");
         message.setText("Olá usuario você acabou de se cadastrar no Store Vinz, estamos passando pra te desejar otimas compras!");
@@ -34,7 +33,6 @@ public class emailService {
     public void productCreate(Users user, String nameProduct){
 
         SimpleMailMessage message = new SimpleMailMessage();
-
         message.setTo(user.getEmail());
         message.setSubject("Você publicou um produto!");
         message.setText("Óla " + user.getName() + "você acabou de publicar " + nameProduct + "na loja virtual Store Vinz");
@@ -47,12 +45,11 @@ public class emailService {
     public void changePasswordService(String to, String subJect, String text){
 
         SimpleMailMessage message = new SimpleMailMessage();
-
         message.setTo(to);
         message.setSubject(subJect);
         message.setText(text);
         message.setFrom(myEmail);
-
         mailSender.send(message);
+
     }
 }

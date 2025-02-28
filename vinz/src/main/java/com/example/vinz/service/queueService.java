@@ -21,24 +21,30 @@ public class queueService {
 
     // Adiciona uma mensagem à fila
     public void enqueue(mailPublicProductDto mailPublicProductDto) throws JsonProcessingException {
+
         String message = objectMapper.writeValueAsString(mailPublicProductDto);
         redisTemplate.opsForList().leftPush(QUEUE_NAME, message);
         System.out.println("Mensagem adicionada à fila: " + message);
+
     }
 
     // Remove e retorna a próxima mensagem da fila
     public String dequeue() {
+
         String message = redisTemplate.opsForList().leftPop(QUEUE_NAME);
         return message;
+
     }
 
     // Processar a fila
     @Scheduled(fixedDelay = 2000) //Espera 2 segundos antes de iniciar outra
     public void processQueue() {
+
         String message;
         while ((message = dequeue()) != null) {
             // Aqui você processa a mensagem
             System.out.println("Processando mensagem: " + message);
+
         }
     }
 

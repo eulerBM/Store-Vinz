@@ -1,6 +1,5 @@
 package com.example.vinz.service;
 
-import com.example.vinz.dtp.productCreateDTP;
 import com.example.vinz.dtp.productEditeDTP;
 import com.example.vinz.entity.Product;
 import com.example.vinz.entity.Users;

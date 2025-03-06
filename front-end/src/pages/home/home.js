@@ -58,6 +58,9 @@ function Home() {
                                                     : product.description
                                                 : 'Descrição não disponível'}
                                         </p>
+                                        <p className="card-text">
+                                            R$: {homeUtils.formatPrice(product.price)}
+                                        </p>
                                         <div className="d-flex justify-content-between mt-2 gap-1">
                                             <a href={`/products/get/${product.id_public}`} className="btn btn-primary">
                                                 Comprar

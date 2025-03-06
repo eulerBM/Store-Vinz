@@ -37,7 +37,7 @@ public class productsService {
 
             if (page < 0) page = 0;
 
-            Pageable pageable = PageRequest.of(page,2);
+            Pageable pageable = PageRequest.of(page,3);
 
             Page<Product> product = repositoryProduct.findAll(pageable);
 

@@ -12,3 +12,5 @@ Tela de cadastro de produto
 Tela do chat
 ![Descrição da Imagem](front-end/photos_projects/photo_chat.png)
 
+e muito mais...
+

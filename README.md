@@ -4,4 +4,4 @@ Uma loja virtual com usuarios podendo publicar seus produtos e tambem podendo ef
 
 
 Tela inicial
-![Descrição da Imagem](photos_projects/photo_home.png)
+![Descrição da Imagem](front-end/photos_projects/photo_home.png)

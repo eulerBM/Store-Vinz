@@ -9,6 +9,9 @@ Tela inicial
 Tela de cadastro de produto
 ![Descrição da Imagem](front-end/photos_projects/photo_create.png)
 
+Metodo de pagamento (Stripe)
+![Descrição da Imagem](front-end/photos_projects/photo_stripe.png)
+
 Tela do chat
 ![Descrição da Imagem](front-end/photos_projects/photo_chat.png)
 

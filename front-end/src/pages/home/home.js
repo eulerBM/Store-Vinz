@@ -2,6 +2,7 @@ import NavBar from '../../components/navbar/NavBar'
 import { useState, useEffect } from 'react';
 import Carrinho from "../../utils/Carrinho";
 import Pagination from "../../utils/pagination/Pagination";
+import CheckoutButton from '../stripe/CheckoutButton';
 import './home.css'
 import homeService from '../../services/homeService'
 import homeUtils from '../../utils/homeUtils'
@@ -41,7 +42,7 @@ function Home() {
     return (
         <div>
             <NavBar />
-
+            
             <div className="container mt-3" >
                 <div className="row">
                     {products.length > 0 ? (
@@ -62,10 +63,8 @@ function Home() {
                                             R$: {homeUtils.formatPrice(product.price)}
                                         </p>
                                         <div className="d-flex justify-content-between mt-2 gap-1">
-                                            <a href={`/products/get/${product.id_public}`} className="btn btn-primary">
-                                                Comprar
-                                            </a>
 
+                                            <CheckoutButton amount={product.price} nameProduct={product.name} nameDescription={product.description}/>
                                             <a
                                                 className="btn btn-primary mx-3"
                                                 onClick={() => add(product.id_public, userStatus)}

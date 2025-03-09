@@ -14,6 +14,8 @@ import CarrinhoPage from './pages/carrinho/CarrinhoPage';
 import Chat from './pages/chat/chat';
 import ChatAdmin from './pages/chat/admin/chatAdmin';
 import Home from './pages/home/home';
+import CancelStripe from './pages/stripe/cancelStripe';
+import SuccessStripe from './pages/stripe/successStripe';
 
 function App() {
 
@@ -36,6 +38,8 @@ function App() {
         <Route path="/carrinho" element={<ProtectedRoute> <CarrinhoPage/></ProtectedRoute>}/>
         <Route path="/criar_produto" element={<ProtectedRoute> <CreateProduct/> </ProtectedRoute>}/>
         <Route path="/user/change/password" element={<ProtectedRoute> <ChangePassword/> </ProtectedRoute>}/>
+        <Route path="/cancel" element={<ProtectedRoute> <CancelStripe/> </ProtectedRoute>}/>
+        <Route path="/success" element={<ProtectedRoute> <SuccessStripe/> </ProtectedRoute>}/>
 
         {/* Rotas de ADMINS e SUPERS*/}
         <Route path="/admin/chat" element={<ProtectedRouteAdmin> <ChatAdmin/> </ProtectedRouteAdmin>}/>

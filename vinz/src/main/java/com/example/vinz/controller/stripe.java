@@ -26,7 +26,7 @@ public class stripe {
             String nameProduct = request.get("nameProduct").toString();
             String nameDescription = request.get("nameDescription").toString();
 
-            String checkoutUrl = stripeService.createCheckoutSession(amount, nameDescription, nameDescription);
+            String checkoutUrl = stripeService.createCheckoutSession(amount, nameProduct, nameDescription);
             return ResponseEntity.ok(Map.of("url", checkoutUrl));
 
         } catch (Exception e) {

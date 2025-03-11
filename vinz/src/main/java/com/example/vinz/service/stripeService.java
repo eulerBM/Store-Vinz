@@ -45,5 +45,6 @@ public class stripeService {
 
         Session session = Session.create(params);
         return session.getUrl(); // Retorna o link do Stripe Checkout
+
     }
 }

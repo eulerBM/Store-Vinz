@@ -1,5 +1,6 @@
 package com.example.vinz.controller;
 
+import com.example.vinz.dtp.stripeDTP.stripeMultiProducts;
 import com.example.vinz.service.stripeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,7 +19,7 @@ public class stripe {
     @Autowired
     private stripeService stripeService;
 
-    @PostMapping("create-session")
+    @PostMapping(path = "create-session")
     public ResponseEntity<?> createCheckoutSession(@RequestBody Map<String, Object> request){
 
         try {
@@ -27,6 +29,22 @@ public class stripe {
             String nameDescription = request.get("nameDescription").toString();
 
             String checkoutUrl = stripeService.createCheckoutSession(amount, nameProduct, nameDescription);
+            return ResponseEntity.ok(Map.of("url", checkoutUrl));
+
+        } catch (Exception e) {
+
+            return ResponseEntity.badRequest().body(e.getMessage());
+
+        }
+
+    }
+
+    @PostMapping(path = "create-session-multi-products")
+    public ResponseEntity<?> createCheckoutSessionForMultiProducts(@RequestBody List<stripeMultiProducts> products){
+
+        try {
+
+            String checkoutUrl = stripeService.createCheckoutSessionForMultiProducts(products);
             return ResponseEntity.ok(Map.of("url", checkoutUrl));
 
         } catch (Exception e) {

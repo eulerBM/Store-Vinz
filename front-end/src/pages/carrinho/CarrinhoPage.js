@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import NavBar from "../../components/navbar/NavBar";
+import CheckoutButtonForMultiProducts from "../stripe/CheckoutButtonForMultiProducts"
 
 function CarrinhoPage() {
     const [products, setProducts] = useState([]);
@@ -55,6 +56,8 @@ function CarrinhoPage() {
             ) : (
                 <p>{idPublicList.length > 0 ? "Carregando produtos..." : "Nenhum produto encontrado."}</p>
             )}
+
+            <CheckoutButtonForMultiProducts products={products}/>
         </div>
     );
 }

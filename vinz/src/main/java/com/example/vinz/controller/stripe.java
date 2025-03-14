@@ -19,7 +19,7 @@ public class stripe {
     @Autowired
     private stripeService stripeService;
 
-    @PostMapping(path = "create-session")
+    @PostMapping(path = "create-session", consumes = "application/json")
     public ResponseEntity<?> createCheckoutSession(@RequestBody Map<String, Object> request){
 
         try {
@@ -39,7 +39,7 @@ public class stripe {
 
     }
 
-    @PostMapping(path = "create-session-multi-products")
+    @PostMapping(path = "create-session-multi-products", consumes = "application/json")
     public ResponseEntity<?> createCheckoutSessionForMultiProducts(@RequestBody List<stripeMultiProducts> products){
 
         try {

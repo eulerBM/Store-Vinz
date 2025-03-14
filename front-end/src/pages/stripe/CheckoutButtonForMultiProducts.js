@@ -10,14 +10,14 @@ function CheckoutButtonForMultiProducts({ products }) {
         const formattedProducts = products.map(product => ({
             name: product.name,
             description: product.description,
-            amount: Math.round(product.amount)
+            amount: Math.round(product.price)
            
         }));
 
         const response = await fetch("http://localhost:8080/stripe/create-session-multi-products", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ items: formattedProducts }) // Enviar a lista de itens
+            body: JSON.stringify(formattedProducts) // Enviar a lista de itens
         });
 
         const data = await response.json();

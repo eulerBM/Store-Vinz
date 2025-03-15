@@ -32,11 +32,21 @@ function Carrinho() {
     }
 
     function remove(idPublic, idUser) {
+
         const userCartKey = `cart_${idUser}`;
-        const updatedCart = cartItems.filter(item => item.idPublic !== idPublic);
+    
+        const storedCart = JSON.parse(localStorage.getItem(userCartKey)) || [];
+    
+       
+        const updatedCart = storedCart.filter(item => item !== idPublic);
+        
         setCartItems(updatedCart);
+
         localStorage.setItem(userCartKey, JSON.stringify(updatedCart));
+
+        
     }
+    
 
     function length(idUser) {
 

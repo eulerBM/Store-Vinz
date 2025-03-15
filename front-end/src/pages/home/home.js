@@ -1,6 +1,6 @@
 import NavBar from '../../components/navbar/NavBar'
 import { useState, useEffect } from 'react';
-import Carrinho from "../../utils/Carrinho";
+import Carrinho from '../../utils/Carrinho';
 import Pagination from "../../utils/pagination/Pagination";
 import CheckoutButton from '../stripe/CheckoutButton';
 import './home.css'

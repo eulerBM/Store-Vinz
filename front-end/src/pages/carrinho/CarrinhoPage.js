@@ -3,12 +3,15 @@ import axios from "axios";
 import NavBar from "../../components/navbar/NavBar";
 import CheckoutButtonForMultiProducts from "../stripe/CheckoutButtonForMultiProducts"
 import homeUtils from "../../utils/homeUtils";
+import Carrinho from "../../utils/Carrinho";
 
 function CarrinhoPage() {
     const [products, setProducts] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
     const [idPublicList, setIdPublicList] = useState([]);
-
+    const getInfoUser = JSON.parse(localStorage.getItem("userInfo"));
+    const { remove } = Carrinho();
+    
     useEffect(() => {
         const getInfosUser = JSON.parse(localStorage.getItem("userInfo"));
         const storedCart = JSON.parse(localStorage.getItem("cart_" + getInfosUser.idPublic)) || [];
@@ -73,6 +76,15 @@ function CarrinhoPage() {
                                             <a href={`/products/get/${product.id_public}`} className="btn btn-primary">
                                                 Ver mais
                                             </a>
+
+                                            <a
+                                                className="btn btn-primary" 
+                                                onClick={() => remove(product.id_public, getInfoUser.idPublic)}
+                                            >
+                                                Remove
+                                            </a>
+
+                                        
 
                                         </div>
                                     </div>

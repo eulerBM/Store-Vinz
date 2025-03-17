@@ -2,7 +2,6 @@ import { useState } from "react";
 import NavBar from "../../components/navbar/NavBar";
 import axios from "axios";
 import { convertImageToBytes } from "../../utils/convertToByte";
-import EstadosECidades from "../../utils/EstadosECidades";
 
 function CreateProduct() {
     const [product, setProduct] = useState({
@@ -57,19 +56,14 @@ function CreateProduct() {
             return;
         }
 
-        const estado = localStorage.getItem("estado")
-        const cidade = localStorage.getItem("cidade")
-
         // Criar FormData
         const formData = new FormData();
         formData.append("name", product.name);
         formData.append("description", product.description);
         formData.append("price", numericPrice);
-        formData.append("location", `${cidade}, ${estado}`);
         formData.append("image", product.image); // Adicionando a imagem
 
         try {
-            console.log(formData)
             const token = localStorage.getItem("token");
             await axios.post("http://192.168.3.103:8080/products/criar", formData, {
                 headers: {
@@ -79,9 +73,7 @@ function CreateProduct() {
             });
 
             alert("Produto criado com sucesso!");
-            setProduct({ name: "", description: "", price: "", image: undefined });
-            localStorage.removeItem("estado")
-            localStorage.removeItem("cidade")
+            setProduct({ name: "", description: "", price: "", image: undefined }); // Resetar formulário
         } catch (err) {
             console.error(err.response || err);
             alert("Erro ao criar o produto. Por favor, tente novamente.");
@@ -120,9 +112,6 @@ function CreateProduct() {
                             required
                         ></textarea>
                     </div>
-
-                    <EstadosECidades/>
-
                     <div className="form-group mt-3">
                         <label htmlFor="price">Preço</label>
                         <input

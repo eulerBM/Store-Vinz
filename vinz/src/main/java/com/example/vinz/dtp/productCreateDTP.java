@@ -17,8 +17,6 @@ public record productCreateDTP(
         @NotBlank(message = "O preço deve ser informado")
         String price,
 
-        String location,
-
         MultipartFile image
 
 ) {

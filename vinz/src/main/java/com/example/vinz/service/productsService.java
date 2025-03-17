@@ -84,7 +84,7 @@ public class productsService {
         }
     }
 
-    public ResponseEntity<?> ProductsCreate(String name, String description, String price,String location, MultipartFile image, JwtAuthenticationToken token){
+    public ResponseEntity<?> ProductsCreate(String name, String description, String price, MultipartFile image, JwtAuthenticationToken token){
 
         try {
 
@@ -97,7 +97,7 @@ public class productsService {
 
             Optional<Users> userGet = repositoryUser.findById(userId);
 
-            Product productModel = new Product(name, description, price, location, image.getBytes(), userGet.get());
+            Product productModel = new Product(name, description, price, image.getBytes(), userGet.get());
 
             repositoryProduct.save(productModel);
 

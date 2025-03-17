@@ -46,13 +46,10 @@ public class products {
     public ResponseEntity<?> ProductsCreate (@RequestParam("name") String name,
                                              @RequestParam("description") String description,
                                              @RequestParam("price") String price,
-                                             @RequestParam("location") String location,
                                              @RequestParam("image") MultipartFile image,
-
                                              JwtAuthenticationToken token) throws IOException {
 
-
-        return productsService.ProductsCreate(name, description, price, location, image, token);
+        return productsService.ProductsCreate(name, description, price, image, token);
 
     }
 

@@ -30,6 +30,9 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
+    @Column(name = "endereço")
+    private String location;
+
     @Column(length = 50, nullable = false)
     private LocalDateTime published_data;
 
@@ -41,12 +44,13 @@ public class Product {
     @JsonBackReference
     private Users users;
 
-    public Product(String name, String description, String price, byte[] image, Users user) throws IOException {
+    public Product(String name, String description, String price, String location, byte[] image, Users user) throws IOException {
 
         this.idPublic = UUID.randomUUID();
         this.name = name;
         this.description = description;
         this.price = new BigDecimal(price);
+        this.location = location;
         this.published_data = LocalDateTime.now();
         this.image = image;
         this.users = user;
